@@ -114,7 +114,8 @@ public abstract class GraphProcessLoaderBase {
 	}
 
 	protected void doLoadFile() throws MalformedURLException {
-		view.loadGraph(helpFile.toURI().toURL());
+		//view.loadGraph(helpFile.toURI().toURL());
+		view.loadGraph(helpFile);
 	};
 	
 	public Map<String, Object> sendQueryToCurrentProcess(String query)

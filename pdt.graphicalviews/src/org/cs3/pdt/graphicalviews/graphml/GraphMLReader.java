@@ -12,13 +12,19 @@
  ****************************************************************************/
 
 package org.cs3.pdt.graphicalviews.graphml;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Scanner;
 
 import org.cs3.pdt.graphicalviews.model.GraphDataHolder;
 import org.cs3.pdt.graphicalviews.model.GraphModel;
 import org.cs3.pdt.graphicalviews.model.realizer.nodes.PredicateNodeRealizerSerializer;
+import org.w3c.dom.Document;
+
+import com.mxgraph.io.mxGraphMlCodec;
+import com.mxgraph.util.mxXmlUtils;
 
 import y.io.GraphMLIOHandler;
 import y.io.graphml.KeyScope;
@@ -80,6 +86,18 @@ public class GraphMLReader {
 		core.addInputDataAcceptor("styles", dataHolder.getStylesMap(), KeyScope.ALL, KeyType.STRING);
 		core.addInputDataAcceptor("node_content", dataHolder.getNodeContentMap(), KeyScope.NODE, KeyType.STRING);
 	}
+	
+	private boolean loadFile(File resource){
+		model.clear();
+		try {
+			String gmlXml = new Scanner( resource ).useDelimiter("\\A").next();
+			Document doc = mxXmlUtils.parseXml(gmlXml); 
+			mxGraphMlCodec.decode(doc, model.getGraphJ());
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
 
 	private boolean loadFile(URL resource){
 		model.clear();
@@ -90,23 +108,15 @@ public class GraphMLReader {
 			return false;
 		}
 	}
-
-
-
-	public GraphModel readFile(URL resource){
+	
+	public GraphModel readFile(File resource){
 		loadFile(resource);
 		return model;
 	}
 
-	// For testing:
-	Graph2D readFile(InputStream inputFileStream){
-		model.clear();
-		try {
-			ioHandler.read(model.getGraph(), inputFileStream);
-		} catch (IOException e) {
-			return (Graph2D) graphCopier.copy(DEFAULT_EMPTY_GRAPH);
-		}
-		return model.getGraph();
+	public GraphModel readFile(URL resource){
+		loadFile(resource);
+		return model;
 	}
 
 

@@ -26,6 +26,8 @@ import org.cs3.pdt.graphicalviews.model.realizer.nodes.NodeRealizerBase;
 import org.cs3.pdt.graphicalviews.model.realizer.nodes.PredicateNodeRealizer;
 import org.cs3.pdt.graphicalviews.model.realizer.nodes.UMLClassNodeRealizer;
 
+import com.mxgraph.view.mxGraph;
+
 import y.base.Edge;
 import y.base.EdgeMap;
 import y.base.Node;
@@ -39,6 +41,7 @@ import y.view.hierarchy.GroupNodeRealizer;
 import y.view.hierarchy.HierarchyManager;
 
 public class GraphModel {
+	private mxGraph graphJ = new mxGraph();
 	private Graph2D graph=new Graph2D();
     
 	private GraphDataHolder dataHolder=new GraphDataHolder();
@@ -186,6 +189,10 @@ public class GraphModel {
 		}
 	}
 
+	public mxGraph getGraphJ() {
+		return graphJ; 
+	}
+	
 	public Graph2D getGraph() {
 		return graph;
 	}
