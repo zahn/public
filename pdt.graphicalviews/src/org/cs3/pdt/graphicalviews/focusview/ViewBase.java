@@ -79,7 +79,8 @@ public abstract class ViewBase extends ViewPart {
 	
 	@Override
 	public void createPartControl(final Composite parent) {
-		if (Util.isMacOS()) {
+		boolean isMac = Util.isMacOS();
+		if (isMac) {
 			createNotSupportedLabel(parent);
 			return;
 		}
