@@ -41,7 +41,7 @@ import y.view.hierarchy.GroupNodeRealizer;
 import y.view.hierarchy.HierarchyManager;
 
 public class GraphModel {
-	private mxGraph graphJ = new mxGraph();
+	private mxGraph graphJ;
 	private Graph2D graph=new Graph2D();
     
 	private GraphDataHolder dataHolder=new GraphDataHolder();
@@ -78,8 +78,24 @@ public class GraphModel {
 	}
 	
 	public GraphModel(){
+		graphJ = createGraph();
+		
 		initNodeRealizers();
 		initEdgeRealizers();
+	}
+	
+	private mxGraph createGraph() { 
+		mxGraph graph = new mxGraph();
+		graph.setAllowDanglingEdges(false); //dont allow edges with disconnected terminals
+		graph.setKeepEdgesInForeground(true);
+		graph.setDefaultOverlap(0); //dont allow children overlapping their parents
+		graph.setCellsEditable(false);
+		graph.setCellsCloneable(false);
+		graph.setLabelsClipped(true);
+		graph.setSplitEnabled(false); //dont allow dropping onto edges
+		graph.setDisconnectOnMove(false);
+		graph.setMultigraph(true);
+		return graph;
 	}
 	
 	private void initNodeRealizers() {

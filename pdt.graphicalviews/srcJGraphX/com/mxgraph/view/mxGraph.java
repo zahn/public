@@ -473,13 +473,13 @@ public class mxGraph extends mxEventSource
 	 * Specifies if edges with disconnected terminals are
 	 * allowed in the graph. Default is false.
 	 */
-	protected boolean allowDanglingEdges = false;
+	protected boolean allowDanglingEdges = true;
 
 	/**
 	 * Specifies if edges that are cloned should be validated and only inserted
 	 * if they are valid. Default is true.
 	 */
-	protected boolean cloneInvalidEdges = true;
+	protected boolean cloneInvalidEdges = false;
 
 	/**
 	 * Specifies if edges should be disconnected from their terminals when they
@@ -2498,6 +2498,29 @@ public class mxGraph extends mxEventSource
 		Object edge = createEdge(parent, id, value, source, target, style);
 
 		return addEdge(edge, parent, source, target, null);
+	}
+	
+	/**
+	 * Adds a new edge into the given parent using value as the user object and
+	 * the given source and target as the terminals of the new edge. The Id and
+	 * style are used for the respective properties of the new cell, which is
+	 * returned.
+	 * 
+	 * @param parent Cell that specifies the parent of the new edge.
+	 * @param id Optional string that defines the Id of the new edge.
+	 * @param value Object to be used as the user object.
+	 * @param source Cell that defines the source of the edge.
+	 * @param target Cell that defines the target of the edge.
+	 * @param style Optional string that defines the cell style.
+	 * @param i 
+	 * @return Returns the new edge that has been inserted.
+	 */
+	public Object insertEdge(Object parent, String id, Object value,
+			Object source, Object target, String style, int index)
+	{
+		Object edge = createEdge(parent, id, value, source, target, style);
+
+		return addEdge(edge, parent, source, target, index);
 	}
 
 	/**
@@ -8059,11 +8082,19 @@ public class mxGraph extends mxEventSource
 		System.out.println("mxGraph version \"" + VERSION + "\"");
 	}
 
-	public Object[] getCells() {
-		this.selectAll();
+	public Object[] getRootCells() {
+		this.selectAll(); 
 		Object[] cells = this.getSelectionCells();
 		this.clearSelection();
 		return cells;
+	}
+
+	public void orderCell(boolean back, mxCell cell) {
+		orderCells(back, new Object[] {cell});
+	}
+
+	public void removeCell(mxICell resetEdge) {
+		removeCells(new Object[] {resetEdge});
 	}
 
 }

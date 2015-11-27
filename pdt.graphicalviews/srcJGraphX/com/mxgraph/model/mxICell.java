@@ -3,6 +3,8 @@
  */
 package com.mxgraph.model;
 
+import java.util.List;
+
 /**
  * Defines the requirements for a cell that can be used in an mxGraphModel.
  */
@@ -212,7 +214,16 @@ public interface mxICell
 	void removeFromParent();
 
 	/**
+	 * Returns the number of edges in the source or target edge array.
+	 * @param isSource 
+	 * 
+	 * @return Returns the number of incoming or outgoing edges.
+	 */
+	int getEdgeCount(boolean isSource);
+	
+	/**
 	 * Returns the number of edges in the edge array.
+	 * @param isSource 
 	 * 
 	 * @return Returns the number of edges.
 	 */
@@ -269,5 +280,11 @@ public interface mxICell
 	 * @return Returns a clone of this cell.
 	 */
 	Object clone() throws CloneNotSupportedException;
+
+	double getAbsX();
+
+	void sortEdges();
+
+	int getEdgeIndexSeparated(mxICell resetEdge, boolean isSource);
 
 }

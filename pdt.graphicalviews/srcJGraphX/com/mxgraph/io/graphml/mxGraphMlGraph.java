@@ -4,6 +4,7 @@
 package com.mxgraph.io.graphml;
 
 import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.view.mxConnectionConstraint;
@@ -165,7 +166,8 @@ public class mxGraphMlGraph {
 
 		String keyId = "";
 		HashMap<String, mxGraphMlKey> keyMap = mxGraphMlKeyManager
-				.getInstance().getKeyMap(); // hello: empty
+				.getInstance().getKeyMap(); // hello:
+											// empty
 		// Do all graphml data need a key definition? What about predefined
 		// keys?
 
@@ -308,9 +310,6 @@ public class mxGraphMlGraph {
 					return "red";
 				}
 			}
-		} else {
-			return "lightgrey"; // match it with the background color to not
-								// confuse it with edges
 		}
 		return "black";
 	}
@@ -372,35 +371,37 @@ public class mxGraphMlGraph {
 	private static mxPoint portValue(String source) {
 		mxPoint fromConstraint = null;
 
-		if (source != null && !source.equals("")) {
+		if (source != null) {
+			if (!source.equals("")) {
 
-			if (source.equals("North")) {
-				fromConstraint = new mxPoint(0.5, 0);
-			} else if (source.equals("South")) {
-				fromConstraint = new mxPoint(0.5, 1);
+				if (source.equals("North")) {
+					fromConstraint = new mxPoint(0.5, 0);
+				} else if (source.equals("South")) {
+					fromConstraint = new mxPoint(0.5, 1);
 
-			} else if (source.equals("East")) {
-				fromConstraint = new mxPoint(1, 0.5);
+				} else if (source.equals("East")) {
+					fromConstraint = new mxPoint(1, 0.5);
 
-			} else if (source.equals("West")) {
-				fromConstraint = new mxPoint(0, 0.5);
+				} else if (source.equals("West")) {
+					fromConstraint = new mxPoint(0, 0.5);
 
-			} else if (source.equals("NorthWest")) {
-				fromConstraint = new mxPoint(0, 0);
-			} else if (source.equals("SouthWest")) {
-				fromConstraint = new mxPoint(0, 1);
-			} else if (source.equals("SouthEast")) {
-				fromConstraint = new mxPoint(1, 1);
-			} else if (source.equals("NorthEast")) {
-				fromConstraint = new mxPoint(1, 0);
-			} else {
-				try {
-					String[] s = source.split(",");
-					Double x = Double.valueOf(s[0]);
-					Double y = Double.valueOf(s[1]);
-					fromConstraint = new mxPoint(x, y);
-				} catch (Exception e) {
-					e.printStackTrace();
+				} else if (source.equals("NorthWest")) {
+					fromConstraint = new mxPoint(0, 0);
+				} else if (source.equals("SouthWest")) {
+					fromConstraint = new mxPoint(0, 1);
+				} else if (source.equals("SouthEast")) {
+					fromConstraint = new mxPoint(1, 1);
+				} else if (source.equals("NorthEast")) {
+					fromConstraint = new mxPoint(1, 0);
+				} else {
+					try {
+						String[] s = source.split(",");
+						Double x = Double.valueOf(s[0]);
+						Double y = Double.valueOf(s[1]);
+						fromConstraint = new mxPoint(x, y);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -426,36 +427,48 @@ public class mxGraphMlGraph {
 		mxPoint toConstraint = null;
 		Object source = cellsMap.get(edge.getEdgeSource());
 		Object target = cellsMap.get(edge.getEdgeTarget());
-		String sourcePort = edge.getEdgeSourcePort();
-		String targetPort = edge.getEdgeTargetPort();
-
-		fromConstraint = portValue(sourcePort);
-
-		toConstraint = portValue(targetPort);
 
 		mxGraphMlData data = dataEdgeKey(edge);
 
 		String style = "";
 		String label = "";
 
-		if (data != null) {
+		if (data != null) { // Why is the data null for my call graphs?
 			mxGraphMlShapeEdge shEdge = data.getDataShapeEdge();
-			style = shEdge.getStyle();
-			label = shEdge.getText();
+			if (shEdge != null) {
+				style = shEdge.getStyle();
+				label = shEdge.getText();
+			}
 		} else {
 			HashMap<String, mxGraphMlData> dataMap = edge.getEdgeDataMap();
-			style = // mxConstants.STYLE_ORTHOGONAL + "=1;" //no effect
-			mxConstants.STYLE_BENDABLE + "=0"
-					+ // no effect
-					mxConstants.STYLE_STROKEWIDTH + "="
-					+ getStrokeWidth(dataMap);
+			style = mxConstants.STYLE_EDGE + "="
+					+ // mxConstants.EDGESTYLE_TOPTOBOTTOM
+					mxConstants.EDGESTYLE_ORTHOGONAL
+					/*
+					 * An edge style just takes into account the source and
+					 * target vertices (so it might overlap all other vertices
+					 * and edges), you need a global orthogonal edge router,
+					 * which the Java version doesn't have.
+					 */
+					+ ";" + mxConstants.STYLE_STROKEWIDTH + "="
+					+ getStrokeWidth(dataMap) + ";";
+			//System.out.println(style);
 		}
 
 		// Insert new edge.
 		mxCell e = (mxCell) graph.insertEdge(parent, null, label, source,
 				target, style);
-		graph.setConnectionConstraint(e, source, true,
-				new mxConnectionConstraint(fromConstraint, false));
+		mxICell sourceParent = ((mxCell) source).getParent();
+		mxICell targetParent = ((mxCell) target).getParent();
+		if (sourceParent != targetParent) { // for parent node's rank
+											// computation
+			graph.insertEdge(parent, null, null, sourceParent, targetParent,
+					"strokeColor=white;"); // TODO make it invisible!
+		}
+		// graph.getModel().setVisible(eParent, false); //does not work
+		mxConnectionConstraint ccSource = new mxConnectionConstraint(
+				fromConstraint, false);
+		graph.setConnectionConstraint(e, source, true, ccSource);
 		graph.setConnectionConstraint(e, target, false,
 				new mxConnectionConstraint(toConstraint, false));
 

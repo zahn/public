@@ -81,54 +81,126 @@ public class PDTGraphView extends JPanel {
 
 	boolean navigation = false;
 	private ViewBase focusView;
+	private double xOverhead;
+	private double yOverhead;
 
 	private static final long serialVersionUID = -611433500513523511L;
 
 	protected void updateView() {
 		final mxGraph graph = graphModel.getGraphJ();
-		graph.setAllowDanglingEdges(false);
 
-		mxGraphComponent graphComponent = new mxGraphComponent(graph);
-		graphComponent.setConnectable(false); // disable drag and drop edge creation
+		mxGraphComponent graphComponent = createGraphComponent(graph);
 		
 		add(graphComponent);
 
 		graph.getModel().beginUpdate();
 		try {
 			resizeCells(graph);
-
-			mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
-			layout.setDisableEdgeStyle(false);
-			layout.execute(graph.getDefaultParent());
-
-			// to prevent overlapping root node labels
+			executeHierarchicalLayout(graph);
 			moveChildrenDownAndAdaptRootNodesHeight(graph);
-
-			resetEdges(graph); // to relayout edges by deleting and adding them
-
-			Map<String, Object> EdgeStyle = graph.getStylesheet().getDefaultEdgeStyle();
-			EdgeStyle.put(mxConstants.STYLE_EDGE, mxEdgeStyle.OrthConnector);
-			EdgeStyle.put(mxConstants.STYLE_EDGE, mxEdgeStyle.SegmentConnector);
-
-			mxOrganicLayout edgeLayout = new mxOrganicLayout(graph);
-			edgeLayout.setDisableEdgeStyle(false);
-			edgeLayout.execute(graph.getDefaultParent());
+			normalizeCellCoordinates(graph);
+			resetEdges(graph); // to relayout edges by deleting and adding them and computing ports 
 		} finally {
 			mxMorphing morph = new mxMorphing(graphComponent, 20, 1.2, 20);
-
+			// layout using morphing: changing (or morphing) one image or shape into
+			// another through a seamless transitio
 			morph.addListener(mxEvent.DONE, new mxIEventListener() {
-
 				@Override
 				public void invoke(Object arg0, mxEventObject arg1) {
 					graph.getModel().endUpdate();
+					// fitViewport();
 				}
-
 			});
-
 			morph.startAnimation();
 		}
 	}
+	
+	private mxGraphComponent createGraphComponent(mxGraph graph) {
+		mxGraphComponent graphComponent = new mxGraphComponent(graph);
+		graphComponent.setConnectable(false); // disable drag and drop edge
+		// creation
+		// graphComponent.clearCellOverlays(); //does not prevent cells from
+		// overlaying labels
+		// graphComponent.setSize(50, 50); //does not prevent white space to the
+		// left and top
+		return graphComponent;
+	}
 
+	private void executeHierarchicalLayout(mxGraph graph) {
+		// define layout
+		mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
+		// uneffective:
+		// layout.setParentBorder(100); // The border to be added around the
+		// children if the parent is to be
+		// resized using resizeParent.
+		// layout.setResizeParent(true); // Specifies if the parent should
+		// be resized after the layout so that it contains all the child cells.
+		// layout.setFineTuning(true);
+		// resetEdges(graph); //doesnt affect anything
+		layout.setDisableEdgeStyle(false);
+		layout.execute(graph.getDefaultParent());
+	}
+	
+	private void normalizeCellCoordinates(mxGraph graph) {
+		// position the graph in the top left corner of the window!
+		computeCoordinatesOverhead(graph);
+
+		Object[] cells = graph.getRootCells();
+		graph.getModel().beginUpdate();
+		try {
+			for (Object c : cells) {
+				mxCell cell = (mxCell) c; // cast
+				moveCell(graph, cell);
+			}
+		} finally {
+			graph.getModel().endUpdate();
+		}
+	}
+	
+	private void computeCoordinatesOverhead(mxGraph graph) {
+		// The coordinate system in Java is x is positive to the right and y is
+		// positive downwards
+		double minX = 9999;
+		double minY = 9999;
+		Object[] cells = graph.getRootCells();
+		for (Object c : cells) {
+			mxCell cell = (mxCell) c; // cast
+			if (cell.isEdge()) continue;
+			mxGeometry g = cell.getGeometry();
+			double x = g.getX();
+			// System.out.println(cell.getValue() + " has x: " + x);
+			if (cell.getValue() != null && x < minX) {
+				// System.out.println(minX);
+				minX = x;
+			}
+			double y = g.getY();
+			// System.out.println(cell.getValue() + " has y: " + y);
+			if (cell.getValue() != null && y < minY) {
+				// System.out.println(minY);
+				minY = y;
+			}
+		}
+		xOverhead = minX - 10;
+		yOverhead = minY - 10;
+	}
+	
+	private void moveCell(mxGraph graph, mxCell cell) {
+		// The x,y position of a vertex is its position relative to its parent
+		// container (graph.getDefaultParent()), so in the case of default
+		// grouping (all cells sharing the default parent) the cell positioning
+		// is also the absolute co-ordinates on the graph component.
+
+		// System.out.print("cell: " + cell + " with value: " +
+		// cell.getValue());
+		mxGeometry g = (mxGeometry) cell.getGeometry(); // .clone();
+		double newX = g.getX() - xOverhead;
+		g.setX(newX);
+		double newY = g.getY() - yOverhead; // Move y up
+		g.setY(newY);
+		// System.out.println(" has reduced x: " + newX);
+		// System.out.println(" has reduced y: " + newY);
+	}
+	
 	private void moveCellDownwards(mxGraph graph, mxCell cell) {
 		if (cell.isVertex()) {
 			mxGeometry g = (mxGeometry) cell.getGeometry();
@@ -138,7 +210,7 @@ public class PDTGraphView extends JPanel {
 	}
 
 	private void moveChildrenDownAndAdaptRootNodesHeight(mxGraph graph) {
-		Object[] cells = graph.getCells();
+		Object[] cells = graph.getRootCells();
 		graph.getModel().beginUpdate();
 		try {
 			for (Object c : cells) {
@@ -158,38 +230,80 @@ public class PDTGraphView extends JPanel {
 	}
 
 	private void resetEdges(mxGraph graph) {
-		Object[] cells = graph.getCells();
-		try {
-			ArrayList<Object> oldEdges = new ArrayList<Object>();
-			for (Object c : cells) {
-				mxCell cell = (mxCell) c; // cast
-				int childCount = cell.getChildCount();
-				for (int i = 0; i < childCount; i++) {
-					mxICell child = cell.getChildAt(i);
-					resetEdge(graph, child, oldEdges);
-				}
-				resetEdge(graph, cell, oldEdges);
-			}
-			graph.removeCells(oldEdges.toArray());
-		} finally {
+		Map<String, Object> style = graph.getStylesheet().getDefaultEdgeStyle();
+		style.put(mxConstants.STYLE_EDGE,
+		// mxEdgeStyle.SegmentConnector); //more overlapping
+				mxEdgeStyle.OrthConnector);
+		Object[] roots = graph.getRootCells();
+		Object[] edges = graph.getAllEdges(roots);
+		int n = edges.length;
+		// System.out.println("Number of edges=" + n);
+		n /= 2; // edges will be listed twice as they are referred to in the
+				// source vertex and in the target vertex
+		for (int i = 0; i < n; i++) {
+			mxCell edge = (mxCell) edges[i]; // cast
+			// System.out.println("source: "+ edge.getSource().getValue());
+			resetEdge(graph, edge, i);
 		}
 	}
 
-	private void resetEdge(mxGraph graph, mxICell edge,
-			ArrayList<Object> oldEdges) {
-		if (edge.isEdge()) {
-			oldEdges.add(edge);
+	private void resetEdge(mxGraph graph, mxICell edge, int i) {
+		// Edges have the concept of control points. These are intermediate
+		// points along the edge that the edge is drawn as passing through. The
+		// use of control points is sometimes referred to as edge routing.
+		Object parent = graph.getDefaultParent();
 
+		if (edge.isEdge()) {
 			mxICell source = edge.getTerminal(true);
 			mxICell target = edge.getTerminal(false);
 
-			graph.insertEdge(
-					graph.getDefaultParent(), null, null, source, target);
+			mxICell resetEdge = (mxICell) graph.insertEdge(parent, null, null,
+					source, target, null, 0); // i);
+			graph.removeCell(edge);
+
+			String style = edge.getStyle(); // strokeWidth (and edgeStyle)
+
+			double exitX = computePort(resetEdge, source, true);
+			double entryX = computePort(resetEdge, target, false);
+			style += mxConstants.STYLE_ENTRY_X + "=" + entryX + ";"
+					+ mxConstants.STYLE_EXIT_X + "=" + exitX + ";"
+					+ mxConstants.STYLE_ENTRY_Y + "=" + "0;"
+					+ mxConstants.STYLE_EXIT_Y + "=" + "1;"
+					+ mxConstants.STYLE_ENTRY_PERIMETER + "=0;"
+					+ mxConstants.STYLE_EXIT_PERIMETER + "=0;";
+
+			resetEdge.setStyle(style); // topToBottom is orthogonal
+			System.out.println(source + " to " + target + " style: " + style);
+
+			// graph.orderCell(false, (mxCell) edge); //this affects edgeStyle
+
+			// TODO: set edge points next to the vertices they would cross
+			// how to find out which vertices they cross?
 		}
+	}
+	
+	private double computePort(mxICell resetEdge, mxICell source,
+			boolean isSource) {
+		source.sortEdges();
+
+		// compute x coordinates by connected vertices' x
+		int indexEntry = source.getEdgeIndexSeparated(resetEdge, isSource) + 1;
+		// the port should not be 0
+
+		// System.out.println("indexEntry:" + indexEntry + " indexExit:" +
+		// indexExit);
+		
+		int nSource = source.getEdgeCount(isSource) + 1; 
+		// the port should not be 1
+		
+		// System.out.println("nSource:" + nSource + " nTarget:" + nTarget);
+		
+		double exitX = (double) indexEntry / nSource;
+		return exitX;
 	}
 
 	private void resizeCells(mxGraph graph) {
-		Object[] cells = graph.getCells();
+		Object[] cells = graph.getRootCells();
 		graph.getModel().beginUpdate();
 		try {
 			for (Object c : cells) {
