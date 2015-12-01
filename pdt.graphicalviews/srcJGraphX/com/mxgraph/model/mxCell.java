@@ -659,6 +659,9 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 		outgoingEdges = new ArrayList<Object>();
 		for (int i=0; i<edges.size(); i++) {
 			mxCell iEdge = (mxCell) edges.get(i);
+			if (iEdge.getSource() == iEdge.getTarget()) {
+				continue; //recursive edges always use port x = 0
+			}
 			if (iEdge.getSource() == this) {
 				incomingEdges.add(iEdge);
 			} else {
@@ -699,6 +702,14 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 			x+= parent.getGeometry().getX(); //396 //meta: 756  
 		}
 		return x; //406 //unify: 562/1002 //abc: 522
+	}
+	
+	public double getAbsY() { 
+		double y = getGeometry().getY(); 
+		if (parent.getGeometry() != null) {
+			y += parent.getGeometry().getY();   
+		}
+		return y;
 	}
 
 	@Override

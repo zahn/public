@@ -159,7 +159,7 @@ public class mxConstants
 	/**
 	 * Specifies the default dash pattern, 3 pixels solid, 3 pixels clear.
 	 */
-	public static float[] DEFAULT_DASHED_PATTERN = new float[] {3.0f , 3.0f};
+	public static float[] DEFAULT_DASHED_PATTERN = new float[] {0.01f , 10.0f}; //{3.0f, 3.0f};
 
 	/**
 	 * Specifies the default distance at 1.0 scale that the label curve is 

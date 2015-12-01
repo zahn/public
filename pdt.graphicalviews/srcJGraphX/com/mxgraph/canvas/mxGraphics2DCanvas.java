@@ -512,6 +512,9 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 	{
 		double width = mxUtils
 				.getFloat(style, mxConstants.STYLE_STROKEWIDTH, 1) * scale;
+		if (width == 0) {
+			width = 0.1; //to prevent zero dashes exception
+		}
 		boolean dashed = mxUtils.isTrue(style, mxConstants.STYLE_DASHED);
 		if (dashed)
 		{
@@ -522,7 +525,11 @@ public class mxGraphics2DCanvas extends mxBasicCanvas
 
 			for (int i = 0; i < dashPattern.length; i++)
 			{
-				scaledDashPattern[i] = (float) (dashPattern[i] * scale * width);
+				float scaledDash = (float) (dashPattern[i] * scale * width);
+				scaledDashPattern[i] = scaledDash;
+				//if (scaledDash == 0) {
+					//System.out.println("dash lengths all zero?"); //because of width
+				//}
 			}
 
 			return new BasicStroke((float) width, BasicStroke.CAP_BUTT,

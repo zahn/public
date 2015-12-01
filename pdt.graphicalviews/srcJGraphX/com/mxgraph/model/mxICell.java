@@ -282,6 +282,8 @@ public interface mxICell
 	Object clone() throws CloneNotSupportedException;
 
 	double getAbsX();
+	
+	double getAbsY();
 
 	void sortEdges();
 

@@ -468,16 +468,24 @@ public class mxGraphHierarchyModel
 					mxGraphHierarchyNode cell,
 					mxGraphHierarchyEdge connectingEdge, int layer, int seen)
 			{
-				mxGraphHierarchyNode node = cell;
+				mxGraphHierarchyNode node = cell; 
 
 				if (seen == 0 && node.maxRank < 0 && node.minRank < 0)
 				{
-					rankList[node.temp[0]].add(cell);
-					node.maxRank = node.temp[0];
-					node.minRank = node.temp[0];
+					int iTemp = node.temp[0];
+					if (iTemp < 0) {
+						iTemp = 0; //prevent java.lang.ArrayIndexOutOfBoundsException: -100000001
+					}
+					rankList[iTemp] 
+							.add(cell); 
+					node.maxRank = iTemp; 
+					node.minRank = iTemp; 
 
 					// Set temp[0] to the nodes position in the rank
-					node.temp[0] = rankList[node.maxRank].size() - 1;
+					node.temp[0] = rankList[node.maxRank].size() - 1; 
+					if (node.temp[0] < 0) { //rankList is empty
+						node.temp[0] = 0; //prevent java.lang.ArrayIndexOutOfBoundsException: -1
+					}
 				}
 
 				if (parent != null && connectingEdge != null)

@@ -61,12 +61,10 @@ public class mxGraphMlGraph {
 	 */
 	public mxGraphMlGraph(Element graphElement) {
 		this.id = graphElement.getAttribute(mxGraphMlConstants.ID);
-		this.edgedefault = graphElement
-				.getAttribute(mxGraphMlConstants.EDGE_DEFAULT);
+		this.edgedefault = graphElement.getAttribute(mxGraphMlConstants.EDGE_DEFAULT);
 
 		// Adds node elements
-		List<Element> nodeElements = mxGraphMlUtils.childsTags(graphElement,
-				mxGraphMlConstants.NODE);
+		List<Element> nodeElements = mxGraphMlUtils.childsTags(graphElement, mxGraphMlConstants.NODE);
 
 		for (Element nodeElem : nodeElements) {
 			mxGraphMlNode node = new mxGraphMlNode(nodeElem);
@@ -75,8 +73,7 @@ public class mxGraphMlGraph {
 		}
 
 		// Adds edge elements
-		List<Element> edgeElements = mxGraphMlUtils.childsTags(graphElement,
-				mxGraphMlConstants.EDGE);
+		List<Element> edgeElements = mxGraphMlUtils.childsTags(graphElement, mxGraphMlConstants.EDGE);
 
 		for (Element edgeElem : edgeElements) {
 			mxGraphMlEdge edge = new mxGraphMlEdge(edgeElem);
@@ -84,8 +81,7 @@ public class mxGraphMlGraph {
 			if (edge.getEdgeDirected().equals("")) {
 				if (edgedefault.equals(mxGraphMlConstants.EDGE_DIRECTED)) {
 					edge.setEdgeDirected("true");
-				} else if (edgedefault
-						.equals(mxGraphMlConstants.EDGE_UNDIRECTED)) {
+				} else if (edgedefault.equals(mxGraphMlConstants.EDGE_UNDIRECTED)) {
 					edge.setEdgeDirected("false");
 				}
 			}
@@ -165,9 +161,8 @@ public class mxGraphMlGraph {
 		// This node is rather a whole graph... is the nesting too deep?
 
 		String keyId = "";
-		HashMap<String, mxGraphMlKey> keyMap = mxGraphMlKeyManager
-				.getInstance().getKeyMap(); // hello:
-											// empty
+		HashMap<String, mxGraphMlKey> keyMap = mxGraphMlKeyManager.getInstance().getKeyMap(); // hello:
+																								// empty
 		// Do all graphml data need a key definition? What about predefined
 		// keys?
 
@@ -199,8 +194,7 @@ public class mxGraphMlGraph {
 	 */
 	public static mxGraphMlData dataEdgeKey(mxGraphMlEdge edge) {
 		String keyId = "";
-		HashMap<String, mxGraphMlKey> keyMap = mxGraphMlKeyManager
-				.getInstance().getKeyMap();
+		HashMap<String, mxGraphMlKey> keyMap = mxGraphMlKeyManager.getInstance().getKeyMap();
 		for (mxGraphMlKey key : keyMap.values()) {
 			if (key.getKeyName().equals(mxGraphMlConstants.KEY_EDGE_NAME)) {
 				keyId = key.getKeyId();
@@ -246,26 +240,19 @@ public class mxGraphMlGraph {
 			Double w = Double.valueOf(data.getDataShapeNode().getDataWidth());
 			String label = data.getDataShapeNode().getDataLabel();
 			String style = data.getDataShapeNode().getDataStyle();
-			v1 = (mxCell) graph.insertVertex(parent, id, label, x, y, w, h,
-					style);
+			v1 = (mxCell) graph.insertVertex(parent, id, label, x, y, w, h, style);
 		} else {
 			HashMap<String, mxGraphMlData> dataMap = node.getNodeDataMap();
 			String label = getLabel(dataMap);
 			String style = // mxConstants.STYLE_STARTSIZE + "=10;" + no effect
 			// mxConstants.STYLE_SWIMLANE_FILLCOLOR + "=orange;" + no effect
-			mxConstants.STYLE_OVERFLOW + "=hidden;" + mxConstants.STYLE_SPACING
-					+ "=5;" + mxConstants.STYLE_FOLDABLE + "=0;"
-					+ mxConstants.STYLE_FONTCOLOR + "=black;"
-					+ mxConstants.STYLE_LABEL_BACKGROUNDCOLOR + "="
-					+ getHeaderColor(dataMap) + ";"
-					+ mxConstants.STYLE_VERTICAL_ALIGN + "="
-					+ mxConstants.ALIGN_TOP + ";"
-					+ mxConstants.STYLE_STROKECOLOR + "="
-					+ getStrokeColor(dataMap) + ";" + mxConstants.STYLE_DASHED
-					+ "=" + isDashed(dataMap) + ";"
-					+ mxConstants.STYLE_FILLCOLOR + "=" + getFillColor(dataMap);
-			v1 = (mxCell) graph.insertVertex(parent, id, label, 0, 0, 100, 100,
-					style);
+			mxConstants.STYLE_OVERFLOW + "=hidden;" + mxConstants.STYLE_SPACING + "=5;" + mxConstants.STYLE_FOLDABLE
+					+ "=0;" + mxConstants.STYLE_FONTCOLOR + "=black;" + mxConstants.STYLE_LABEL_BACKGROUNDCOLOR + "="
+					+ getHeaderColor(dataMap) + ";" + mxConstants.STYLE_VERTICAL_ALIGN + "=" + mxConstants.ALIGN_TOP
+					+ ";" + mxConstants.STYLE_STROKECOLOR + "=" + getStrokeColor(dataMap) + ";"
+					+ mxConstants.STYLE_DASHED + "=" + isDashed(dataMap) + ";" + mxConstants.STYLE_FILLCOLOR + "="
+					+ getFillColor(dataMap);
+			v1 = (mxCell) graph.insertVertex(parent, id, label, 0, 0, 100, 100, style);
 			/*
 			 * for (String key : dataMap.keySet()) { v1.setAttribute(key,
 			 * dataMap.get(key).getDataValue()); } String test =
@@ -420,8 +407,7 @@ public class mxGraphMlGraph {
 	 *            Gml Edge
 	 * @return The inserted edge cell.
 	 */
-	private static mxCell addEdge(mxGraph graph, Object parent,
-			mxGraphMlEdge edge) {
+	private static mxCell addEdge(mxGraph graph, Object parent, mxGraphMlEdge edge) {
 		// Get source and target vertex
 		mxPoint fromConstraint = null;
 		mxPoint toConstraint = null;
@@ -441,36 +427,36 @@ public class mxGraphMlGraph {
 			}
 		} else {
 			HashMap<String, mxGraphMlData> dataMap = edge.getEdgeDataMap();
-			style = mxConstants.STYLE_EDGE + "="
-					+ // mxConstants.EDGESTYLE_TOPTOBOTTOM
-					mxConstants.EDGESTYLE_ORTHOGONAL
-					/*
-					 * An edge style just takes into account the source and
-					 * target vertices (so it might overlap all other vertices
-					 * and edges), you need a global orthogonal edge router,
-					 * which the Java version doesn't have.
-					 */
-					+ ";" + mxConstants.STYLE_STROKEWIDTH + "="
-					+ getStrokeWidth(dataMap) + ";";
-			//System.out.println(style);
+			style = /*
+					 * mxConstants.STYLE_EDGE + "=" + //
+					 * mxConstants.EDGESTYLE_TOPTOBOTTOM
+					 * mxConstants.EDGESTYLE_ORTHOGONAL + ";" +
+					 */ // default
+			/*
+			 * An edge style just takes into account the source and target
+			 * vertices (so it might overlap all other vertices and edges), you
+			 * need a global orthogonal edge router, which the Java version
+			 * doesn't have.
+			 */
+			mxConstants.STYLE_STROKEWIDTH + "=" + getStrokeWidth(dataMap) + ";";
+			// System.out.println(style);
 		}
 
 		// Insert new edge.
-		mxCell e = (mxCell) graph.insertEdge(parent, null, label, source,
-				target, style);
+		mxCell e = (mxCell) graph.insertEdge(parent, null, label, source, target, style);
 		mxICell sourceParent = ((mxCell) source).getParent();
 		mxICell targetParent = ((mxCell) target).getParent();
 		if (sourceParent != targetParent) { // for parent node's rank
 											// computation
 			graph.insertEdge(parent, null, null, sourceParent, targetParent,
-					"strokeColor=white;"); // TODO make it invisible!
+					// "strokeWidth=0; //still visible, destroys dashing
+					mxConstants.STYLE_STROKECOLOR + "=white;" + mxConstants.STYLE_DASHED + "=1;" // invisible
+			);
+			// graph.getModel().setVisible(edgeParent, false); //does not work
 		}
-		// graph.getModel().setVisible(eParent, false); //does not work
-		mxConnectionConstraint ccSource = new mxConnectionConstraint(
-				fromConstraint, false);
+		mxConnectionConstraint ccSource = new mxConnectionConstraint(fromConstraint, false);
 		graph.setConnectionConstraint(e, source, true, ccSource);
-		graph.setConnectionConstraint(e, target, false,
-				new mxConnectionConstraint(toConstraint, false));
+		graph.setConnectionConstraint(e, target, false, new mxConnectionConstraint(toConstraint, false));
 
 		return e;
 	}

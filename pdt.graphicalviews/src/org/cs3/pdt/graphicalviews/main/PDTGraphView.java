@@ -23,6 +23,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -98,8 +100,10 @@ public class PDTGraphView extends JPanel {
 			resizeCells(graph);
 			executeHierarchicalLayout(graph);
 			moveChildrenDownAndAdaptRootNodesHeight(graph);
+			setRootCellDistance(graph);
 			normalizeCellCoordinates(graph);
-			resetEdges(graph); // to relayout edges by deleting and adding them and computing ports 
+			resetEdges(graph); // to relayout edges by deleting and adding them
+								// and computing ports
 		} finally {
 			mxMorphing morph = new mxMorphing(graphComponent, 20, 1.2, 20);
 			// layout using morphing: changing (or morphing) one image or shape into
@@ -228,6 +232,226 @@ public class PDTGraphView extends JPanel {
 			graph.getModel().endUpdate();
 		}
 	}
+	
+	/**
+	 * sets the distance between neighbouring root cells
+	 * 
+	 * --> to prevent them from overlapping:
+	 * 
+	 * if neighbours share x- and y-coordinates, move next downwards (increase
+	 * y)
+	 * 
+	 * 
+	 * --> to prevent too much empty space between them:
+	 * 
+	 * if x-neighbours dont share x-coordinates, set the empty space between
+	 * them by moving next (leftwards: reduce x)
+	 * 
+	 * if y-neighbours dont share y-coordinates, set the empty space between
+	 * them by moving next (upwards: reduce y)
+	 * 
+	 * @param graph
+	 */
+	private void setRootCellDistance(mxGraph graph) {
+		setRootCellYDistance(graph);
+		setRootCellXDistance(graph);
+	}
+
+	/**
+	 * sets the x-distance between x-neighbouring root cells
+	 * 
+	 * --> to prevent too much empty space between them:
+	 * 
+	 * if x-neighbours dont share x-coordinates, set the empty space between
+	 * them by moving next (leftwards: reduce x)
+	 * 
+	 * @param graph
+	 */
+	private void setRootCellXDistance(mxGraph graph) {
+		ArrayList<mxCell> list = getXSortedRootVertices(graph);
+		for (int i = 0; i < list.size() - 1; i++) {
+			//System.out.println(i);
+			mxCell cell = list.get(i);
+			Object value = cell.getValue();
+			if (value != null && value.equals("preparser.pl")) {
+				//System.out.println("setting breakpoint");
+			}
+			mxCell nextCell = list.get(i + 1);
+			Object nextValue = nextCell.getValue();
+			if (overlap(cell, nextCell)) {
+				//System.out.println(value + " x-overlapping " + nextValue);
+				if (setNeighboursXDistance(cell, nextCell)) { 
+					//System.out.println(" are set.");
+					list = getXSortedRootVertices(graph);
+					i--;
+				} else {
+					//System.out.println(" had already been set.");
+				}
+			} else if (!sameX(cell, nextCell)) {
+				//System.out.println(value + " x-neighboring " + nextValue);
+				if (setNeighboursXDistance(cell, nextCell)) {
+					//System.out.println("are set.");
+					list = getXSortedRootVertices(graph);
+					i--;
+				} else {
+					//System.out.println("had already been set.");
+				}
+			}
+		}
+	}
+
+	/**
+	 * sets the y-distance between y-neighbouring root cells
+	 * 
+	 * --> to prevent them from overlapping:
+	 * 
+	 * if neighbours share x- and y-coordinates, move next downwards (increase
+	 * y)
+	 * 
+	 * 
+	 * --> to prevent too much empty space between them:
+	 * 
+	 * if y-neighbours dont share y-coordinates, set the empty space between
+	 * them by moving next (upwards: reduce y)
+	 * 
+	 * @param graph
+	 */
+	private void setRootCellYDistance(mxGraph graph) {
+		ArrayList<mxCell> list = getYSortedRootVertices(graph);
+		for (int i = 0; i < list.size() - 1; i++) {
+			//System.out.println(i);
+			mxCell cell = list.get(i);
+			Object value = cell.getValue();
+			mxCell nextCell = list.get(i + 1);
+			Object nextValue = nextCell.getValue();
+			if (overlap(cell, nextCell)) {
+				//System.out.println(value + " y-overlapping " + nextValue);
+				if (setNeighboursYDistance(cell, nextCell)) {
+					//System.out.println(" are set.");
+					list = getYSortedRootVertices(graph);
+					i--;
+				} else {
+					//System.out.println(" had already been set.");
+				}
+			} else if (!sameY(cell, nextCell)) {
+				//System.out.println(value + " y-neighboring " + nextValue);
+				if (setNeighboursYDistance(cell, nextCell)) {
+					//System.out.println(" are set.");
+					list = getYSortedRootVertices(graph);
+					i--;
+				} else {
+					//System.out.println(" had already been set.");
+				}
+			}
+		}
+	}
+
+	private boolean overlap(mxCell cell, mxCell nextCell) {
+		return sameX(cell, nextCell) && sameY(cell, nextCell);
+	}
+
+	private ArrayList<mxCell> getXSortedRootVertices(mxGraph graph) {
+		Object[] cells = graph.getRootCells();
+		ArrayList<mxCell> list = new ArrayList<mxCell>();
+		for (Object o : cells) {
+			mxCell cell = (mxCell) o;
+			if (cell.isVertex()) {
+				list.add(cell);
+			}
+		}
+		Collections.sort(list, new Comparator<mxCell>() {
+			public int compare(mxCell cell1, mxCell cell2) {
+				Double x1 = cell1.getAbsX();
+				return x1.compareTo(cell2.getAbsX());
+			}
+		});
+		return list;
+	}
+
+	private ArrayList<mxCell> getYSortedRootVertices(mxGraph graph) {
+		Object[] cells = graph.getRootCells();
+
+		ArrayList<mxCell> list = new ArrayList<mxCell>();
+		for (Object o : cells) {
+			mxCell cell = (mxCell) o;
+			if (cell.isVertex()) {
+				list.add((mxCell) o);
+			}
+		}
+		Collections.sort(list, new Comparator<mxCell>() {
+			public int compare(mxCell cell1, mxCell cell2) {
+				Double y1 = cell1.getAbsY();
+				return y1.compareTo(cell2.getAbsY());
+			}
+		});
+		return list;
+	}
+
+	private boolean sameX(mxCell cell1, mxCell cell2) {
+		double cell1x = cell1.getAbsX();
+		double cell2x = cell2.getAbsX();
+		if (cell1x < cell2x) {
+			// cell1 starts left from cell2
+			if (cell1x + cell1.getGeometry().getWidth() < cell2x) {
+				// cell1 ends left from cell2
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			// cell2 starts left from cell2
+			if (cell2x + cell2.getGeometry().getWidth() < cell1x) {
+				// cell2 ends left from cell1
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
+
+	private boolean sameY(mxCell cell1, mxCell cell2) {
+		double cell1y = cell1.getAbsY();
+		double cell2y = cell2.getAbsY();
+		if (cell1y < cell2y) {
+			// cell1 starts above cell2
+			if (cell1y + cell1.getGeometry().getHeight() < cell2y) {
+				// cell1 ends above cell2
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			// cell2 starts above cell2
+			if (cell2y + cell2.getGeometry().getHeight() < cell1y) {
+				// cell2 ends above cell1
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
+
+	private boolean setNeighboursXDistance(mxCell left, mxCell right) {
+		double leftEnd = left.getAbsX() + left.getGeometry().getWidth();
+		double rightStart = leftEnd + 10;
+		mxGeometry g = right.getGeometry();
+		if (g.getX() == rightStart) {
+			return false; // has not been set because it is already correct
+		}
+		g.setX(rightStart);
+		return true;
+	}
+
+	private boolean setNeighboursYDistance(mxCell top, mxCell bottom) {
+		double topEnd = top.getAbsY() + top.getGeometry().getHeight();
+		double downStart = topEnd + 10;
+		mxGeometry g = bottom.getGeometry();
+		if (g.getY() != downStart) {
+			g.setY(downStart);
+			return true;
+		}
+		return false; // has not been set because it is already correct
+	}
 
 	private void resetEdges(mxGraph graph) {
 		Map<String, Object> style = graph.getStylesheet().getDefaultEdgeStyle();
@@ -257,23 +481,24 @@ public class PDTGraphView extends JPanel {
 			mxICell source = edge.getTerminal(true);
 			mxICell target = edge.getTerminal(false);
 
-			mxICell resetEdge = (mxICell) graph.insertEdge(parent, null, null,
-					source, target, null, 0); // i);
+			mxICell resetEdge = (mxICell) graph.insertEdge(parent, null, null, source, target, null, 0); // i);
 			graph.removeCell(edge);
 
 			String style = edge.getStyle(); // strokeWidth (and edgeStyle)
 
-			double exitX = computePort(resetEdge, source, true);
-			double entryX = computePort(resetEdge, target, false);
-			style += mxConstants.STYLE_ENTRY_X + "=" + entryX + ";"
-					+ mxConstants.STYLE_EXIT_X + "=" + exitX + ";"
-					+ mxConstants.STYLE_ENTRY_Y + "=" + "0;"
-					+ mxConstants.STYLE_EXIT_Y + "=" + "1;"
-					+ mxConstants.STYLE_ENTRY_PERIMETER + "=0;"
-					+ mxConstants.STYLE_EXIT_PERIMETER + "=0;";
+			double exitX = 1;
+			double entryX = 1;
+			if (source != target) {
+				exitX = computePort(resetEdge, source, true);
+				entryX = computePort(resetEdge, target, false);
+			}
+			style += mxConstants.STYLE_ENTRY_X + "=" + entryX + ";" + mxConstants.STYLE_EXIT_X + "=" + exitX + ";"
+					+ mxConstants.STYLE_ENTRY_Y + "=" + "0;" + mxConstants.STYLE_EXIT_Y + "=" + "1;"
+					+ mxConstants.STYLE_ENTRY_PERIMETER + "=0;" + mxConstants.STYLE_EXIT_PERIMETER + "=0;"
+					;
 
 			resetEdge.setStyle(style); // topToBottom is orthogonal
-			System.out.println(source + " to " + target + " style: " + style);
+			//System.out.println(source.getValue() + " to " + target.getValue() + " style: " + style);
 
 			// graph.orderCell(false, (mxCell) edge); //this affects edgeStyle
 
