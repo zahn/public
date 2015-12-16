@@ -70,7 +70,7 @@ public abstract class ViewCoordinatorBase implements IPartListener, ConsultListe
 						
 						swichFocusView(fileName);
 						
-						if (currentFocusView.isEmpty()){
+						if (currentFocusView.isEmpty()){ 
 							focusView.setStatusText("[Please activate prolog console, set focus on file and press F9 to load graph]");
 						}
 						

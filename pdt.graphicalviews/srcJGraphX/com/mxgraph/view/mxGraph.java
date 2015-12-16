@@ -2384,6 +2384,7 @@ public class mxGraph extends mxEventSource
 	 * @param width Integer that defines the width of the vertex.
 	 * @param height Integer that defines the height of the vertex.
 	 * @param style Optional string that defines the cell style.
+	 * @param pdtId 
 	 * @return Returns the new vertex that has been inserted.
 	 */
 	public Object insertVertex(Object parent, String id, Object value,
@@ -2391,6 +2392,13 @@ public class mxGraph extends mxEventSource
 	{
 		return insertVertex(parent, id, value, x, y, width, height, style,
 				false);
+	}
+	
+	public Object insertVertex(Object parent, String id, Object value,
+			double x, double y, double width, double height, String style, String pdtId)
+	{
+		return insertVertex(parent, id, value, x, y, width, height, style,
+				false, pdtId);
 	}
 
 	/**
@@ -2408,6 +2416,7 @@ public class mxGraph extends mxEventSource
 	 * @param height Integer that defines the height of the vertex.
 	 * @param style Optional string that defines the cell style.
 	 * @param relative Specifies if the geometry should be relative.
+	 * @param pdtId 
 	 * @return Returns the new vertex that has been inserted.
 	 */
 	public Object insertVertex(Object parent, String id, Object value,
@@ -2416,6 +2425,16 @@ public class mxGraph extends mxEventSource
 	{
 		Object vertex = createVertex(parent, id, value, x, y, width, height,
 				style, relative);
+
+		return addCell(vertex, parent);
+	}
+	
+	public Object insertVertex(Object parent, String id, Object value,
+			double x, double y, double width, double height, String style,
+			boolean relative, String pdtId)
+	{
+		Object vertex = createVertex(parent, id, value, x, y, width, height,
+				style, relative, pdtId);
 
 		return addCell(vertex, parent);
 	}
@@ -2452,6 +2471,7 @@ public class mxGraph extends mxEventSource
 	 * @param height Integer that defines the height of the vertex.
 	 * @param style Optional string that defines the cell style.
 	 * @param relative Specifies if the geometry should be relative.
+	 * @param pdtId 
 	 * @return Returns the new vertex to be inserted.
 	 */
 	public Object createVertex(Object parent, String id, Object value,
@@ -2463,6 +2483,22 @@ public class mxGraph extends mxEventSource
 
 		mxCell vertex = new mxCell(value, geometry, style);
 		vertex.setId(id);
+		vertex.setVertex(true);
+		vertex.setConnectable(true);
+
+		return vertex;
+	}
+	
+	public Object createVertex(Object parent, String id, Object value,
+			double x, double y, double width, double height, String style,
+			boolean relative, String pdtId)
+	{
+		mxGeometry geometry = new mxGeometry(x, y, width, height);
+		geometry.setRelative(relative);
+
+		mxCell vertex = new mxCell(value, geometry, style);
+		vertex.setId(id);
+		vertex.setPdtId(pdtId);
 		vertex.setVertex(true);
 		vertex.setConnectable(true);
 
@@ -2495,6 +2531,11 @@ public class mxGraph extends mxEventSource
 	public Object insertEdge(Object parent, String id, Object value,
 			Object source, Object target, String style)
 	{
+		if (id == null) {
+			mxCell sourceCell = (mxCell) source;
+			mxCell targetCell = (mxCell) target;
+			id = sourceCell.getPdtId() + "->" + targetCell.getPdtId();
+		}
 		Object edge = createEdge(parent, id, value, source, target, style);
 
 		return addEdge(edge, parent, source, target, null);
@@ -2542,6 +2583,7 @@ public class mxGraph extends mxEventSource
 		mxCell edge = new mxCell(value, new mxGeometry(), style);
 
 		edge.setId(id);
+		edge.setPdtId(id); 
 		edge.setEdge(true);
 		edge.getGeometry().setRelative(true);
 

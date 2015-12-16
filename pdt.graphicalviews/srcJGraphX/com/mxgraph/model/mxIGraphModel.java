@@ -3,6 +3,8 @@
  */
 package com.mxgraph.model;
 
+import java.util.Map;
+
 import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxUndoableEdit.mxUndoableChange;
 
@@ -332,5 +334,9 @@ public interface mxIGraphModel
 	 * Removes the given listener from the list of listeners.
 	 */
 	void removeListener(mxIEventListener listener, String eventName);
+
+	void save();
+
+	void load();
 
 }

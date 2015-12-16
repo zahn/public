@@ -37,7 +37,7 @@ public class mxGraphTransferable implements Transferable, UIResource,
 	 * Global switch to disable image support in transferables. Set this to false as a workaround
 	 * for Data translation failed: not an image format in Java 1.7 on Mac OS X.
 	 */
-	public static boolean enableImageSupport = true;
+	public static boolean enableImageSupport = false; //true leads to http://stackoverflow.com/questions/11729406/error-message-running-jgraphx-hello-world-example
 
 	/**
 	 * Serialized Data Flavor. Use the following code to switch to local 

@@ -103,7 +103,9 @@ public class PDTGraphView extends JPanel {
 			setRootCellDistance(graph);
 			normalizeCellCoordinates(graph);
 			resetEdges(graph); // to relayout edges by deleting and adding them
-								// and computing ports
+			// and computing ports 
+			
+			graph.getModel().load();
 		} finally {
 			mxMorphing morph = new mxMorphing(graphComponent, 20, 1.2, 20);
 			// layout using morphing: changing (or morphing) one image or shape into
@@ -456,22 +458,27 @@ public class PDTGraphView extends JPanel {
 	private void resetEdges(mxGraph graph) {
 		Map<String, Object> style = graph.getStylesheet().getDefaultEdgeStyle();
 		style.put(mxConstants.STYLE_EDGE,
-		// mxEdgeStyle.SegmentConnector); //more overlapping
+				// mxEdgeStyle.SegmentConnector); //more overlapping
 				mxEdgeStyle.OrthConnector);
 		Object[] roots = graph.getRootCells();
 		Object[] edges = graph.getAllEdges(roots);
 		int n = edges.length;
 		// System.out.println("Number of edges=" + n);
-		n /= 2; // edges will be listed twice as they are referred to in the
-				// source vertex and in the target vertex
 		for (int i = 0; i < n; i++) {
 			mxCell edge = (mxCell) edges[i]; // cast
 			// System.out.println("source: "+ edge.getSource().getValue());
-			resetEdge(graph, edge, i);
+			if (graph.getModel().getParent(edge) != null) { // edges will be
+															// listed twice as
+															// they are referred
+															// to in the
+				// source vertex and in the target vertex -> check whether it
+				// has already been reset
+				resetEdge(graph, edge);
+			}
 		}
 	}
 
-	private void resetEdge(mxGraph graph, mxICell edge, int i) {
+	private void resetEdge(mxGraph graph, mxICell edge) {
 		// Edges have the concept of control points. These are intermediate
 		// points along the edge that the edge is drawn as passing through. The
 		// use of control points is sometimes referred to as edge routing.
@@ -481,7 +488,7 @@ public class PDTGraphView extends JPanel {
 			mxICell source = edge.getTerminal(true);
 			mxICell target = edge.getTerminal(false);
 
-			mxICell resetEdge = (mxICell) graph.insertEdge(parent, null, null, source, target, null, 0); // i);
+			mxICell resetEdge = (mxICell) graph.insertEdge(parent, null, null, source, target, null); // i);
 			graph.removeCell(edge);
 
 			String style = edge.getStyle(); // strokeWidth (and edgeStyle)
@@ -546,7 +553,7 @@ public class PDTGraphView extends JPanel {
 	}
 
 	private void updateCellSize(mxGraph graph, mxCell cell) {
-		System.out.println("cell" + cell.getValue());
+		//System.out.println("cell" + cell.getValue());
 		if (cell.isVertex()) {
 			graph.updateCellSize(cell);
 			// Resize cells' height
@@ -726,8 +733,10 @@ public class PDTGraphView extends JPanel {
 	}
 
 	public boolean isEmpty() {
-		return graphY == null
-				|| graphY.getNodeArray().length == 0;
+		return this.graphModel// .getGraphJ() //NullPointerException
+				== null;
+		//return graphY == null
+				//|| graphY.getNodeArray().length == 0;
 	}
 
 	public void calcLayout() {

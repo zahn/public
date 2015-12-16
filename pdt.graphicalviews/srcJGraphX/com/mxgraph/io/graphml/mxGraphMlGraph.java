@@ -3,19 +3,19 @@
  */
 package com.mxgraph.io.graphml;
 
-import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxICell;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxPoint;
-import com.mxgraph.view.mxConnectionConstraint;
-import com.mxgraph.view.mxGraph;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxICell;
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxPoint;
+import com.mxgraph.view.mxConnectionConstraint;
+import com.mxgraph.view.mxGraph;
 
 /**
  * Represents a Graph element in the GML Structure.
@@ -99,6 +99,8 @@ public class mxGraphMlGraph {
 	 *            Parent of the cells to be added.
 	 */
 	public void addGraph(mxGraph graph, Object parent) {
+		//savedCells = graph.getModel().load();
+		
 		List<mxGraphMlNode> nodeList = getNodes();
 		/*
 		 * nodeList ArrayList<E> (id=207) . elementData Object[10] (id=209) .
@@ -107,7 +109,6 @@ public class mxGraphMlGraph {
 		 * (id=229) . value mxGraphMlData (id=232) . dataValue
 		 * "Application Node 1" (id=236)
 		 */
-
 		for (mxGraphMlNode node : nodeList)
 		/*
 		 * mxGraphMlNode (id=211) . nodeDataMap HashMap<K,V> (id=216) . table
@@ -243,6 +244,8 @@ public class mxGraphMlGraph {
 			v1 = (mxCell) graph.insertVertex(parent, id, label, x, y, w, h, style);
 		} else {
 			HashMap<String, mxGraphMlData> dataMap = node.getNodeDataMap();
+			String pdtId = getPdtId(dataMap);
+			
 			String label = getLabel(dataMap);
 			String style = // mxConstants.STYLE_STARTSIZE + "=10;" + no effect
 			// mxConstants.STYLE_SWIMLANE_FILLCOLOR + "=orange;" + no effect
@@ -252,16 +255,12 @@ public class mxGraphMlGraph {
 					+ ";" + mxConstants.STYLE_STROKECOLOR + "=" + getStrokeColor(dataMap) + ";"
 					+ mxConstants.STYLE_DASHED + "=" + isDashed(dataMap) + ";" + mxConstants.STYLE_FILLCOLOR + "="
 					+ getFillColor(dataMap);
-			v1 = (mxCell) graph.insertVertex(parent, id, label, 0, 0, 100, 100, style);
-			/*
-			 * for (String key : dataMap.keySet()) { v1.setAttribute(key,
-			 * dataMap.get(key).getDataValue()); } String test =
-			 * v1.getAttribute("kind"); if
-			 * (getStrokeColor(dataMap).equals("red")) {
-			 * System.out.println("test:" + test); }
-			 */// instead:
-			v1.setDataMap(dataMap);
+			v1 = (mxCell) graph.insertVertex(parent, id, label, 0, 0, 100, 100, style, pdtId);
+			//v1.setPdtId(pdtId); //too late
 		}
+		
+		//loadGeometry(v1); //if we load the geometry now, the layouters will overwrite it
+		
 		cellsMap.put(id, v1);
 		List<mxGraphMlGraph> graphs = node.getNodeGraph();
 
@@ -270,6 +269,15 @@ public class mxGraphMlGraph {
 		}
 		return v1;
 	}
+
+	/*private void loadGeometry(mxCell v1) { 
+		String pdtId = v1.getPdtId();
+		Object savedCellObject = savedCells.get(pdtId); 
+		if (savedCellObject != null) { 
+			mxCell savedCell = (mxCell) savedCellObject;
+			v1.setGeometry(savedCell.getGeometry());
+		}
+	}*/ //this function has moved to the model
 
 	private String getHeaderColor(HashMap<String, mxGraphMlData> dataMap) {
 		String kindValue = dataMap.get("kind").getDataValue();
@@ -344,56 +352,66 @@ public class mxGraphMlGraph {
 		}
 		return label;
 	}
-
-	/**
-	 * Returns the point represented for the port name. The specials names
-	 * North, NorthWest, NorthEast, East, West, South, SouthEast and SouthWest.
-	 * are accepted. Else, the values accepted follow the pattern
-	 * "double,double". where double must be in the range 0..1
-	 * 
-	 * @param source
-	 *            Port Name.
-	 * @return point that represent the port value.
-	 */
-	private static mxPoint portValue(String source) {
-		mxPoint fromConstraint = null;
-
-		if (source != null) {
-			if (!source.equals("")) {
-
-				if (source.equals("North")) {
-					fromConstraint = new mxPoint(0.5, 0);
-				} else if (source.equals("South")) {
-					fromConstraint = new mxPoint(0.5, 1);
-
-				} else if (source.equals("East")) {
-					fromConstraint = new mxPoint(1, 0.5);
-
-				} else if (source.equals("West")) {
-					fromConstraint = new mxPoint(0, 0.5);
-
-				} else if (source.equals("NorthWest")) {
-					fromConstraint = new mxPoint(0, 0);
-				} else if (source.equals("SouthWest")) {
-					fromConstraint = new mxPoint(0, 1);
-				} else if (source.equals("SouthEast")) {
-					fromConstraint = new mxPoint(1, 1);
-				} else if (source.equals("NorthEast")) {
-					fromConstraint = new mxPoint(1, 0);
-				} else {
-					try {
-						String[] s = source.split(",");
-						Double x = Double.valueOf(s[0]);
-						Double y = Double.valueOf(s[1]);
-						fromConstraint = new mxPoint(x, y);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
+	
+	private String getPdtId(HashMap<String, mxGraphMlData> dataMap) {
+		String label = "";
+		mxGraphMlData dataEntry = dataMap.get("id"); //"pdtId" ?
+		if (dataEntry != null) {
+			label = dataEntry.getDataValue();
 		}
-		return fromConstraint;
+		return label;
 	}
+
+// this function is not used anymore because of a custom implementation
+//	/**
+//	 * Returns the point represented for the port name. The specials names
+//	 * North, NorthWest, NorthEast, East, West, South, SouthEast and SouthWest.
+//	 * are accepted. Else, the values accepted follow the pattern
+//	 * "double,double". where double must be in the range 0..1
+//	 * 
+//	 * @param source
+//	 *            Port Name.
+//	 * @return point that represent the port value.
+//	 */
+//	private static mxPoint portValue(String source) { 
+//		mxPoint fromConstraint = null;
+//
+//		if (source != null) {
+//			if (!source.equals("")) {
+//
+//				if (source.equals("North")) {
+//					fromConstraint = new mxPoint(0.5, 0);
+//				} else if (source.equals("South")) {
+//					fromConstraint = new mxPoint(0.5, 1);
+//
+//				} else if (source.equals("East")) {
+//					fromConstraint = new mxPoint(1, 0.5);
+//
+//				} else if (source.equals("West")) {
+//					fromConstraint = new mxPoint(0, 0.5);
+//
+//				} else if (source.equals("NorthWest")) {
+//					fromConstraint = new mxPoint(0, 0);
+//				} else if (source.equals("SouthWest")) {
+//					fromConstraint = new mxPoint(0, 1);
+//				} else if (source.equals("SouthEast")) {
+//					fromConstraint = new mxPoint(1, 1);
+//				} else if (source.equals("NorthEast")) {
+//					fromConstraint = new mxPoint(1, 0);
+//				} else {
+//					try {
+//						String[] s = source.split(",");
+//						Double x = Double.valueOf(s[0]);
+//						Double y = Double.valueOf(s[1]);
+//						fromConstraint = new mxPoint(x, y);
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//		}
+//		return fromConstraint;
+//	}
 
 	/**
 	 * Adds the edge represented for the gml edge into the graph with the given
@@ -449,8 +467,11 @@ public class mxGraphMlGraph {
 		if (sourceParent != targetParent) { // for parent node's rank
 											// computation
 			graph.insertEdge(parent, null, null, sourceParent, targetParent,
-					// "strokeWidth=0; //still visible, destroys dashing
-					mxConstants.STYLE_STROKECOLOR + "=white;" + mxConstants.STYLE_DASHED + "=1;" // invisible
+					//mxConstants.STYLE_STROKEWIDTH + "=0; //still visible, destroys dashing
+					//mxConstants.ARROW_SIZE + "=100;" + //no effect
+					//mxConstants.ARROW_WIDTH + "=10;" + //no effect
+					mxConstants.STYLE_STROKECOLOR + "=EEEEEE;" + //use the back ground color
+					mxConstants.STYLE_DASHED + "=1;" // invisible
 			);
 			// graph.getModel().setVisible(edgeParent, false); //does not work
 		}
