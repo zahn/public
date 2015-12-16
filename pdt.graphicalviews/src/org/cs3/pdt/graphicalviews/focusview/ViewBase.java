@@ -79,11 +79,11 @@ public abstract class ViewBase extends ViewPart {
 	
 	@Override
 	public void createPartControl(final Composite parent) {
-		boolean isMac = Util.isMacOS();
+		/*boolean isMac = Util.isMacOS();
 		if (isMac) {
-			createNotSupportedLabel(parent);
+			createNotSupportedLabel(parent); //TODO: Team - Show in History to inspect the inserting commit on changes that might cause freezing Mac
 			return;
-		}
+		}*/
 		try {
 			FormLayout layout = new FormLayout();
 			parent.setLayout(layout);
