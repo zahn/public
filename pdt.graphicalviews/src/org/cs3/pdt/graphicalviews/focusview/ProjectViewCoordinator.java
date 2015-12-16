@@ -42,7 +42,7 @@ public class ProjectViewCoordinator extends ViewCoordinatorBase {
 			currentFocusView = views.get(project.getName());
 			
 			if (currentFocusView == null) {
-				PDTGraphView pdtGraphView = new PDTGraphView(focusView);
+				PDTGraphView pdtGraphView = new PDTGraphView(focusView, path);
 				GraphProcessLoaderBase loader = focusView.createGraphProcessLoader(pdtGraphView);
 				loader.setCurrentPath(path);
 				

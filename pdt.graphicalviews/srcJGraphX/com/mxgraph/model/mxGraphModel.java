@@ -77,7 +77,7 @@ import com.mxgraph.util.mxUndoableEdit;
  */
 public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 
-	private static final String fileName = "cells.ser";
+	private String fileName;
 	// TODO the fileName should depend on the graph... how to identify it? let
 	// pdt generate a graph identifier
 
@@ -2514,9 +2514,9 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 		}
 	}
 
-	@Override
-	public void load() {
-
+	public void load(String focusFilePath) {
+		computeFileName(focusFilePath);
+		
 		Map<String, Object> map = null;
 		try {
 			FileInputStream fin = new FileInputStream(fileName);
@@ -2548,5 +2548,11 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 				System.out.println(computedCell.isEdge());
 			}
 		}
+	}
+
+	private void computeFileName(String focusFilePath) {
+		fileName = focusFilePath.replace('\\', '-'); //the slashes of the path will be -
+		fileName = fileName.substring(0, fileName.indexOf('.'));
+		fileName += ".ser"; //serialisations file extension
 	}
 }

@@ -85,6 +85,7 @@ public class PDTGraphView extends JPanel {
 	private ViewBase focusView;
 	private double xOverhead;
 	private double yOverhead;
+	private String focusFilePath;
 
 	private static final long serialVersionUID = -611433500513523511L;
 
@@ -105,7 +106,7 @@ public class PDTGraphView extends JPanel {
 			resetEdges(graph); // to relayout edges by deleting and adding them
 			// and computing ports 
 			
-			graph.getModel().load();
+			graph.getModel().load(focusFilePath);
 		} finally {
 			mxMorphing morph = new mxMorphing(graphComponent, 20, 1.2, 20);
 			// layout using morphing: changing (or morphing) one image or shape into
@@ -574,8 +575,10 @@ public class PDTGraphView extends JPanel {
 		}
 	}
 
-	public PDTGraphView(ViewBase focusView)
+	public PDTGraphView(ViewBase focusView, String path)
 	{
+		focusFilePath = path;
+		
 		setLayout(new BorderLayout());
 
 		this.focusView = focusView;

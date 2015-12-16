@@ -337,6 +337,6 @@ public interface mxIGraphModel
 
 	void save();
 
-	void load();
+	void load(String focusFilePath);
 
 }
