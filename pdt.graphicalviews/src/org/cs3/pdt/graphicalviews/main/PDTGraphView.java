@@ -101,7 +101,7 @@ public class PDTGraphView extends JPanel {
 			resizeCells(graph);
 			executeHierarchicalLayout(graph);
 			moveChildrenDownAndAdaptRootNodesHeight(graph);
-			setRootCellDistance(graph);
+			setRootVerticesDistance(graph);
 			normalizeCellCoordinates(graph);
 			resetEdges(graph); // to relayout edges by deleting and adding them
 			// and computing ports 
@@ -255,9 +255,9 @@ public class PDTGraphView extends JPanel {
 	 * 
 	 * @param graph
 	 */
-	private void setRootCellDistance(mxGraph graph) {
-		setRootCellYDistance(graph);
-		setRootCellXDistance(graph);
+	private void setRootVerticesDistance(mxGraph graph) {
+		setRootVerticesYDistance(graph);
+		setRootVerticesXDistance(graph);
 	}
 
 	/**
@@ -270,8 +270,9 @@ public class PDTGraphView extends JPanel {
 	 * 
 	 * @param graph
 	 */
-	private void setRootCellXDistance(mxGraph graph) {
-		ArrayList<mxCell> list = getXSortedRootVertices(graph);
+	private void setRootVerticesXDistance(mxGraph graph) {
+		Object[] cells = graph.getRootCells();
+		ArrayList<mxCell> list = getXSortedRootVertices(cells);
 		for (int i = 0; i < list.size() - 1; i++) {
 			//System.out.println(i);
 			mxCell cell = list.get(i);
@@ -280,12 +281,11 @@ public class PDTGraphView extends JPanel {
 				//System.out.println("setting breakpoint");
 			}
 			mxCell nextCell = list.get(i + 1);
-			Object nextValue = nextCell.getValue();
 			if (overlap(cell, nextCell)) {
 				//System.out.println(value + " x-overlapping " + nextValue);
 				if (setNeighboursXDistance(cell, nextCell)) { 
 					//System.out.println(" are set.");
-					list = getXSortedRootVertices(graph);
+					list = getXSortedRootVertices(cells);
 					i--;
 				} else {
 					//System.out.println(" had already been set.");
@@ -294,13 +294,23 @@ public class PDTGraphView extends JPanel {
 				//System.out.println(value + " x-neighboring " + nextValue);
 				if (setNeighboursXDistance(cell, nextCell)) {
 					//System.out.println("are set.");
-					list = getXSortedRootVertices(graph);
+					list = getXSortedRootVertices(cells);
 					i--;
 				} else {
 					//System.out.println("had already been set.");
 				}
 			}
 		}
+		/*
+		 * for (int i = 0; i < cellQueue.size() - 1; i++) { mxCell cell =
+		 * cellQueue.poll(); Object value = cell.getValue(); if (value != null
+		 * && value.equals("preparser.pl")) { System.out.println(
+		 * "setting breakpoint"); } mxCell nextCell = cellQueue.peek(); if
+		 * (!sameY(cell, nextCell)) { setNeighboursXDistance(cell, nextCell);
+		 * //cellQueue.add(nextCell); } else if (sameX(cell, nextCell)) {
+		 * setNeighboursYDistance(cell, nextCell); //cellQueue.add(nextCell); }
+		 * }
+		 */
 	}
 
 	/**
@@ -319,19 +329,18 @@ public class PDTGraphView extends JPanel {
 	 * 
 	 * @param graph
 	 */
-	private void setRootCellYDistance(mxGraph graph) {
-		ArrayList<mxCell> list = getYSortedRootVertices(graph);
+	private void setRootVerticesYDistance(mxGraph graph) {
+		Object[] cells = graph.getRootCells();
+		ArrayList<mxCell> list = getYSortedRootVertices(cells);
 		for (int i = 0; i < list.size() - 1; i++) {
 			//System.out.println(i);
 			mxCell cell = list.get(i);
-			Object value = cell.getValue();
 			mxCell nextCell = list.get(i + 1);
-			Object nextValue = nextCell.getValue();
 			if (overlap(cell, nextCell)) {
 				//System.out.println(value + " y-overlapping " + nextValue);
 				if (setNeighboursYDistance(cell, nextCell)) {
 					//System.out.println(" are set.");
-					list = getYSortedRootVertices(graph);
+					list = getYSortedRootVertices(cells);
 					i--;
 				} else {
 					//System.out.println(" had already been set.");
@@ -340,7 +349,7 @@ public class PDTGraphView extends JPanel {
 				//System.out.println(value + " y-neighboring " + nextValue);
 				if (setNeighboursYDistance(cell, nextCell)) {
 					//System.out.println(" are set.");
-					list = getYSortedRootVertices(graph);
+					list = getYSortedRootVertices(cells);
 					i--;
 				} else {
 					//System.out.println(" had already been set.");
@@ -353,8 +362,12 @@ public class PDTGraphView extends JPanel {
 		return sameX(cell, nextCell) && sameY(cell, nextCell);
 	}
 
-	private ArrayList<mxCell> getXSortedRootVertices(mxGraph graph) {
-		Object[] cells = graph.getRootCells();
+	private ArrayList<mxCell> getXSortedRootVertices(Object[] cells) {		/*
+		 * PriorityQueue<mxCell> cellQueue = new PriorityQueue<mxCell>(10, new
+		 * Comparator<mxCell>() { public int compare(mxCell cell1, mxCell cell2)
+		 * { Double x1 = cell1.getAbsX(); return x1.compareTo(cell2.getAbsX());
+		 * } }); for (Object o : cells) { cellQueue.add((mxCell) o); }
+		 */
 		ArrayList<mxCell> list = new ArrayList<mxCell>();
 		for (Object o : cells) {
 			mxCell cell = (mxCell) o;
@@ -371,9 +384,7 @@ public class PDTGraphView extends JPanel {
 		return list;
 	}
 
-	private ArrayList<mxCell> getYSortedRootVertices(mxGraph graph) {
-		Object[] cells = graph.getRootCells();
-
+	private ArrayList<mxCell> getYSortedRootVertices(Object[] cells) {
 		ArrayList<mxCell> list = new ArrayList<mxCell>();
 		for (Object o : cells) {
 			mxCell cell = (mxCell) o;
