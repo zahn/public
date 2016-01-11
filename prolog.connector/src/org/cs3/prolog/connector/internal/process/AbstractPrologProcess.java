@@ -63,6 +63,7 @@ public abstract class AbstractPrologProcess implements PrologProcess {
 	private int timeout;
 
 	private HashMap<String, Object> attributes = new HashMap<String, Object>();
+	private boolean isConsulted;
 
 	public AbstractPrologProcess() {
 		this(null);
@@ -626,14 +627,14 @@ public abstract class AbstractPrologProcess implements PrologProcess {
 	
 	/**
 	 * Wrapper for {@link PrologSession#queryOnce(String)}
-	 * Executes queryOnce for every predicate given in predicates.
+	 * Executes queryOnce for every predicate given in predicates. Not only after user consults. 
 	 * 
 	 * @param predicates
 	 * @return result Map of the last predicate queried 
 	 * @throws PrologProcessException
 	 */
 	@Override
-	public Map<String, Object> queryOnce(int flag, String... predicates) throws PrologProcessException {
+	public Map<String, Object> queryOnce(int flag, String... predicates) throws PrologProcessException { 
 		
 		StringBuffer buf = new StringBuffer();
 		boolean first = true;
@@ -659,13 +660,19 @@ public abstract class AbstractPrologProcess implements PrologProcess {
 	}
 
 	@Override
-	public void consult(File file) throws PrologProcessException {
+	public void consult(File file) throws PrologProcessException { //never executed
 		String fileName = QueryUtils.prologFileNameQuoted(file);
 		String query = QueryUtils.bT("consult", fileName);
 		queryOnce(query);
 	}
-
 	
+	public boolean isConsulted() {
+		return isConsulted;
+	}
+	
+	public void setConsulted(boolean isConsulted) {
+		this.isConsulted = isConsulted;
+	}
 
 }
 

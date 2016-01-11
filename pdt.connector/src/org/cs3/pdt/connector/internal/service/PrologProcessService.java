@@ -306,6 +306,8 @@ public class PrologProcessService implements IPrologProcessService {
 			}
 		}
 		monitor.done();
+	
+		this.activePrologProcess.setConsulted(true);
 	}
 	
 	private List<String> collectConsultedFiles(PrologProcess process, IProgressMonitor monitor) throws PrologProcessException {

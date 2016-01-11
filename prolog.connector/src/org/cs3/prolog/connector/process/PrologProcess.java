@@ -521,6 +521,10 @@ public interface PrologProcess {
 	 * @throws PrologProcessException
 	 */
 	public void consult(File file) throws PrologProcessException;
+
+	public abstract boolean isConsulted();
+
+	public abstract void setConsulted(boolean b);
 	
 }
 

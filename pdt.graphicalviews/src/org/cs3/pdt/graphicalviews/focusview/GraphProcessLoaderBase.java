@@ -37,7 +37,8 @@ public abstract class GraphProcessLoaderBase {
 	protected File helpFile;
 	protected PDTGraphView view;
 	private PrologProcess process;
-	//private ExecutorService executor = Executors.newCachedThreadPool();
+
+	// private ExecutorService executor = Executors.newCachedThreadPool();
 
 	public GraphProcessLoaderBase(PDTGraphView view, String helpFileName) {
 		this.view = view;
@@ -45,7 +46,7 @@ public abstract class GraphProcessLoaderBase {
 	}
 
 	protected abstract String generateQuery(File helpFile);
-	
+
 	public Map<String, Object> loadGraph() {
 
 		try {
@@ -54,24 +55,28 @@ public abstract class GraphProcessLoaderBase {
 			if (process != null) {
 				String query = generateQuery(helpFile);
 				Map<String, Object> output = sendQueryToCurrentProcess(query);
-					
+
 				// query =
 				// "collect_ids_for_focus_file(FocusId,Files,CalledPredicates,Calls)";
 				// Map<String, Object> result = sendQueryToCurrentProcess(query);
 				// result.get("FocusId");
 
-				new UIJob("Layouting") {
-					@Override
-					public IStatus runInUIThread(IProgressMonitor monitor) {
-						try {
-							doLoadFile();
-						} catch (MalformedURLException e) {
-							Debug.rethrow(e);
+				if (process.isConsulted()) {
+
+					new UIJob("Layouting") {
+						@Override
+						public IStatus runInUIThread(IProgressMonitor monitor) {
+							try {
+								doLoadFile();
+							} catch (MalformedURLException e) {
+								Debug.rethrow(e);
+							}
+							return Status.OK_STATUS;
 						}
-						return Status.OK_STATUS;
-					}
-				}.schedule();
-				
+					}.schedule();
+
+				}
+
 				return output;
 			}
 		} catch (PrologException e1) {
@@ -88,14 +93,14 @@ public abstract class GraphProcessLoaderBase {
 		if (!PredicateVisibilityPreferences.showPDTPredicates())
 			settings.add("hide_pdt_predicates");
 
-//		if (!PredicateVisibilityPreferences.showPDTMetapredicates())
-//			settings.add("hide_pdt_metapredicates");
+		// if (!PredicateVisibilityPreferences.showPDTMetapredicates())
+		// settings.add("hide_pdt_metapredicates");
 
 		if (!PredicateVisibilityPreferences.showSWIPredicates())
 			settings.add("hide_swi_predicates");
 
-//		if (!PredicateVisibilityPreferences.showSWIMetapredicates())
-//			settings.add("hide_swi_metapredicates");
+		// if (!PredicateVisibilityPreferences.showSWIMetapredicates())
+		// settings.add("hide_swi_metapredicates");
 
 		if (settings.size() == 0)
 			return "[]";
@@ -114,13 +119,13 @@ public abstract class GraphProcessLoaderBase {
 	}
 
 	protected void doLoadFile() throws MalformedURLException {
-		//view.loadGraph(helpFile.toURI().toURL());
+		// view.loadGraph(helpFile.toURI().toURL());
 		view.loadGraph(helpFile);
 	};
-	
+
 	public Map<String, Object> sendQueryToCurrentProcess(String query)
-		throws PrologProcessException {
-	
+			throws PrologProcessException {
+
 		PrologSession session = process.getSession(PrologProcess.DEFAULT);
 		Map<String, Object> result = session.queryOnce(query);
 		return result;
