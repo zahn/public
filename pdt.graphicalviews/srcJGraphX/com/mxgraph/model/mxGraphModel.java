@@ -6,14 +6,13 @@ package com.mxgraph.model;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-//mxGraphModel is the underlying object that stores the data structure of your graph
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -76,10 +75,9 @@ import com.mxgraph.util.mxUndoableEdit;
  * <code>edit</code> property contains the current mxUndoableEdit.
  */
 public class mxGraphModel extends mxEventSource implements mxIGraphModel {
+//mxGraphModel is the underlying object that stores the data structure of your graph
 
 	private String fileName;
-	// TODO the fileName should depend on the graph... how to identify it? let
-	// pdt generate a graph identifier
 
 	/**
 	 * Holds the root cell, which in turn contains the cells that represent the
@@ -2545,14 +2543,36 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 			if (computedCell != null) {
 				mxGeometry value = ((mxCell) mentry.getValue()).getGeometry();
 				computedCell.setGeometry(value);
-				System.out.println(computedCell.isEdge());
+				//System.out.println(computedCell.isEdge());
 			}
 		}
 	}
 
 	private void computeFileName(String focusFilePath) {
-		fileName = focusFilePath.replace('\\', '-'); //the slashes of the path will be -
+		/* fileName = focusFilePath.replace('\\', '-'); //the slashes of the path will be -
 		fileName = fileName.substring(0, fileName.indexOf('.'));
-		fileName += ".ser"; //serialisations file extension
+		fileName += ".ser"; //serialisations file extension*/ //problem: what about global views?
+
+		ArrayList<String> filenames = new ArrayList<String>();
+		for (String key : cells.keySet()) {
+			mxCell cell = (mxCell) cells.get(key);
+			String value = (String) cell.getValue();
+			if (value == null) {
+				continue;
+			}
+			// cut the file extension
+			int index = value.indexOf('.');
+			if (index > 0) {
+				filenames.add(value.substring(0, index));
+			}
+		}
+
+		Collections.sort(filenames); // to have a deterministic order
+
+		String filenamesString = filenames.toString();
+		filenamesString = filenamesString.substring(1, filenamesString.length() - 1); // [...]
+		filenamesString = filenamesString.replace(", ", "-");
+		fileName = filenamesString + ".ser";
+		//System.out.println(fileName);
 	}
 }
