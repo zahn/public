@@ -88,7 +88,7 @@ public class GraphMLReader {
 	}
 	
 	private boolean loadFile(File resource){
-		model.clear();
+		model.clearJ();
 		try {
 			String gmlXml = new Scanner( resource ).useDelimiter("\\A").next();
 			Document doc = mxXmlUtils.parseXml(gmlXml); 

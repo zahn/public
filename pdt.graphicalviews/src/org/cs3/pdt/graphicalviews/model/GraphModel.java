@@ -241,6 +241,10 @@ public class GraphModel {
 	public void clear(){
 		this.graph.clear();
 	}
+	
+	public void clearJ(){
+		this.graphJ.clear();
+	}
 
 	public String getLabelTextForNode(Node node){
 		return dataHolder.getLabelTextForNode(node);

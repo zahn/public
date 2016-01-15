@@ -8139,4 +8139,8 @@ public class mxGraph extends mxEventSource
 		removeCells(new Object[] {resetEdge});
 	}
 
+	public void clear() {
+		removeCells(getChildVertices(getDefaultParent()));
+	}
+
 }
