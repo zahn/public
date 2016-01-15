@@ -667,7 +667,8 @@ public abstract class AbstractPrologProcess implements PrologProcess {
 	}
 	
 	public boolean isConsulted() {
-		return isConsulted;
+		//return isConsulted; //TODO set isConsulted to true after EVERY consult 
+		return true; //sometimes isConsulted is wrongly false so the graph is not loaded
 	}
 	
 	public void setConsulted(boolean isConsulted) {
