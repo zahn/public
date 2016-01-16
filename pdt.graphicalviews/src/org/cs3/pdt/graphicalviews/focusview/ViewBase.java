@@ -19,13 +19,13 @@ import org.cs3.pdt.common.PDTCommonUtil;
 import org.cs3.pdt.graphicalviews.internal.ImageRepository;
 import org.cs3.pdt.graphicalviews.internal.ui.ToolBarAction;
 import org.cs3.pdt.graphicalviews.main.PDTGraphView;
-import org.cs3.pdt.graphicalviews.main.PDTGraphViews;
 import org.cs3.pdt.graphicalviews.preferences.MainPreferencePage;
 import org.cs3.pdt.graphicalviews.preferences.PredicateLayoutPreferences;
 import org.cs3.pdt.graphicalviews.preferences.PreferenceConstants;
 import org.cs3.pdt.graphicalviews.view.modes.MouseHandler;
 import org.cs3.pdt.graphicalviews.view.modes.OpenInEditorViewMode;
 import org.cs3.prolog.connector.common.Debug;
+import org.cs3.prolog.connector.common.Util;
 import org.eclipse.albireo.core.SwingControl;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -431,7 +431,7 @@ public abstract class ViewBase extends ViewPart {
 
 		@Override
 		protected JComponent createSwingComponent() {
-			return pdtGraphView; 
+			return pdtGraphView;
 		}
 
 		@Override

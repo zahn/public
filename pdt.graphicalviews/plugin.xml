@@ -4,20 +4,6 @@
 
    <extension
          point="org.eclipse.ui.views">
-         
-      <view
-            name="PDT New Context View"
-            category="org.cs3.pdt"
-            class="org.cs3.pdt.graphicalviews.focusview.NewFocusView" 
-            id="pdt.view.focus.new">
-      </view> <!-- class should extend ViewPart -->
-      
-      <view
-            name="PDT New Global View"
-            category="org.cs3.pdt"
-            class="org.cs3.pdt.graphicalviews.focusview.NewGlobalView"
-            id="pdt.view.global.new">
-      </view>
 
       <view
             name="PDT Context View"
