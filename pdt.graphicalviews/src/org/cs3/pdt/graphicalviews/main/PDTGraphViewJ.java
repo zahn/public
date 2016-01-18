@@ -551,24 +551,14 @@ public class PDTGraphViewJ extends PDTGraphView  {
 			resizeCells(graph);
 			executeHierarchicalLayout(graph);
 			moveChildrenDownAndAdaptRootNodesHeight(graph);
-			setRootVerticesDistance(graph);
+			setRootVerticesDistance(graph); 
 			normalizeCellCoordinates(graph);
 			resetEdges(graph); // to relayout edges by deleting and adding them
 			// and computing ports 
 			
 			graph.getModel().load(focusFilePath);
 		} finally {
-			mxMorphing morph = new mxMorphing(graphComponent, 20, 1.2, 20);
-			// layout using morphing: changing (or morphing) one image or shape into
-			// another through a seamless transitio
-			morph.addListener(mxEvent.DONE, new mxIEventListener() {
-				@Override
-				public void invoke(Object arg0, mxEventObject arg1) {
-					graph.getModel().endUpdate();
-					// fitViewport();
-				}
-			});
-			morph.startAnimation();
+			graph.getModel().endUpdate();
 		}
 	}
 
