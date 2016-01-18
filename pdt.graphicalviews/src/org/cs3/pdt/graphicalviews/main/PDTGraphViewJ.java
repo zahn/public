@@ -21,10 +21,7 @@ import java.util.Map;
 
 import org.cs3.pdt.graphicalviews.focusview.CallGraphViewBase;
 import org.cs3.pdt.graphicalviews.focusview.ViewBase;
-import org.cs3.pdt.graphicalviews.graphml.GraphMLReader;
-import org.cs3.pdt.graphicalviews.model.GraphLayout;
 import org.cs3.pdt.graphicalviews.model.GraphModel;
-import org.cs3.pdt.graphicalviews.view.modes.WheelScroller;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.model.mxCell;
@@ -43,19 +40,11 @@ import com.mxgraph.view.mxGraph;
 public class PDTGraphViewJ extends PDTGraphView  {
 
 	private static final long serialVersionUID = -611433500513523511L;
+	
 	private String focusFilePath;
-
-	private ViewBase focusView;
 
 	private double xOverhead;
 	private double yOverhead;
-	
-	GraphModel graphModel;
-	GraphLayout layoutModel;
-	
-	boolean navigation = false;
-	GraphMLReader reader;
-	WheelScroller wheelScroller;
 	
 	public PDTGraphViewJ(ViewBase focusView, String path) {
 		super(focusView, path);
