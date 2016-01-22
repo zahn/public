@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
@@ -432,9 +434,25 @@ public class mxGraphActions
 		public void actionPerformed(ActionEvent e)
 		{
 			mxGraph graph = getGraph(e);
+			if (graph != null) {
+				mxIGraphModel model = graph.getModel();
+				// if selected cells are only edges, just reset them
+				Object[] cells = graph.getSelectionCells();
+				model.beginUpdate();
+				try {
+					for (int i = 0; i < cells.length; i++) {
+						mxCell cell = (mxCell) cells[i];
+						if (cell.isEdge()) {
+							graph.resetEdge(cell);
+						} else {
+							break;
+						}
+					}
+				} finally {
+					model.endUpdate();
+					model.save();
+				}
 
-			if (graph != null)
-			{
 				graph.removeCells();
 			}
 		}
