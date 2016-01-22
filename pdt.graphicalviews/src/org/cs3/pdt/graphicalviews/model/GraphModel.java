@@ -84,19 +84,33 @@ public class GraphModel {
 		initEdgeRealizers();
 	}
 	
-	private mxGraph createGraph() { 
+	private mxGraph createGraph() {
 		mxGraph graph = new mxGraph();
-		graph.setAllowDanglingEdges(false); //dont allow edges with disconnected terminals
+		graph.setAllowDanglingEdges(false); // dont allow edges with
+											// disconnected terminals
 		graph.setKeepEdgesInForeground(true);
-		graph.setDefaultOverlap(0); //dont allow children overlapping their parents
+		graph.setDefaultOverlap(0); // dont allow children overlapping their
+									// parents
 		graph.setCellsEditable(false);
 		graph.setCellsCloneable(false);
-		graph.setLabelsClipped(true);
-		graph.setSplitEnabled(false); //dont allow dropping onto edges
+		graph.setCellsDisconnectable(false); // prevent edges from disconnecting
 		graph.setDisconnectOnMove(false);
+		graph.setLabelsClipped(true);
+		graph.setSplitEnabled(false); // dont allow dropping onto edges
 		graph.setMultigraph(true);
+
+		graph.setGridEnabled(true); // Use the Grid (but don't make it Visible)
+		graph.setGridSize(3); // pixel
+
+		// Set the Tolerance to 2 Pixel
+		// graph.setTolerance(2); //does not exist
+		// Accept edits if click on background
+		// graph.setInvokesStopCellEditing(true); //does not exist
+		// Allows control-drag
+		// graph.setCloneable(true); //does not exist
 		return graph;
 	}
+
 	
 	private void initNodeRealizers() {
 		filegroupNodeRealizer = new FileGroupNodeRealizer(this);
