@@ -28,6 +28,7 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.swing.handler.mxKeyboardHandler;
 import com.mxgraph.swing.util.mxMorphing;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxEvent;
@@ -119,6 +120,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		// overlaying labels
 		// graphComponent.setSize(50, 50); //does not prevent white space to the
 		// left and top
+		new mxKeyboardHandler(graphComponent); //to enable resetting edges by (Fn) DEL
 		return graphComponent;
 	}
 
