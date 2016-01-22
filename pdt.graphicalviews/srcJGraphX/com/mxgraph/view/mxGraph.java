@@ -1662,7 +1662,7 @@ public class mxGraph extends mxEventSource
 
 						if (isResetEdgesOnMove())
 						{
-							resetEdges(new Object[] { cells[i] });
+							removeEdgesControlPoints(new Object[] { cells[i] });
 						}
 					}
 				}
@@ -1707,7 +1707,7 @@ public class mxGraph extends mxEventSource
 				}
 
 				// Removes all existing control points
-				resetEdge(edge);
+				removeEdgeControlPoints(edge);
 				fireEvent(new mxEventObject(mxEvent.FLIP_EDGE, "edge", edge));
 			}
 			finally
@@ -3729,7 +3729,7 @@ public class mxGraph extends mxEventSource
 
 				if (isResetEdgesOnResize())
 				{
-					resetEdges(cells);
+					removeEdgesControlPoints(cells);
 				}
 
 				// RENAME BOUNDSARRAY TO BOUNDS
@@ -3896,7 +3896,7 @@ public class mxGraph extends mxEventSource
 
 				if (isResetEdgesOnMove())
 				{
-					resetEdges(cells);
+					removeEdgesControlPoints(cells);
 				}
 
 				fireEvent(new mxEventObject(mxEvent.CELLS_MOVED, "cells",
@@ -4068,7 +4068,7 @@ public class mxGraph extends mxEventSource
 	 * @param cells Array of mxCells for which the connected edges should be
 	 * reset.
 	 */
-	public void resetEdges(Object[] cells)
+	public void removeEdgesControlPoints(Object[] cells)
 	{
 		if (cells != null)
 		{
@@ -4097,12 +4097,12 @@ public class mxGraph extends mxEventSource
 							// Checks if one of the terminals is not in the given array
 							if (!set.contains(source) || !set.contains(target))
 							{
-								resetEdge(edges[j]);
+								removeEdgeControlPoints(edges[j]);
 							}
 						}
 					}
 
-					resetEdges(mxGraphModel.getChildren(model, cells[i]));
+					removeEdgesControlPoints(mxGraphModel.getChildren(model, cells[i]));
 				}
 			}
 			finally
@@ -4115,7 +4115,7 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Resets the control points of the given edge.
 	 */
-	public Object resetEdge(Object edge)
+	public Object removeEdgeControlPoints(Object edge)
 	{
 		mxGeometry geo = model.getGeometry(edge);
 
@@ -4371,7 +4371,7 @@ public class mxGraph extends mxEventSource
 
 				if (isResetEdgesOnConnect())
 				{
-					resetEdge(edge);
+					removeEdgeControlPoints(edge);
 				}
 
 				fireEvent(new mxEventObject(mxEvent.CELL_CONNECTED, "edge",

@@ -398,7 +398,7 @@ public class mxFastOrganicLayout extends mxGraphLayout
 				{
 					if (isResetEdges())
 					{
-						graph.resetEdge(edges[k]);
+						graph.removeEdgeControlPoints(edges[k]);
 					}
 
 					if (isDisableEdgeStyle())

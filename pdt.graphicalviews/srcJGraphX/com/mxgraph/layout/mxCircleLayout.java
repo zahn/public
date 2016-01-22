@@ -216,7 +216,7 @@ public class mxCircleLayout extends mxGraphLayout
 				{
 					if (isResetEdges())
 					{
-						graph.resetEdge(cell);
+						graph.removeEdgeControlPoints(cell);
 					}
 	
 					if (isDisableEdgeStyle())
