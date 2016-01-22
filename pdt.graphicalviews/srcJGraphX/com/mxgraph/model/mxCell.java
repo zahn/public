@@ -744,4 +744,29 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 		return outgoingEdges.indexOf(edge);
 	}
 
+	/**
+	 * sorts edges and then divides the index of edge through all
+	 * incoming/outgoing edges
+	 * 
+	 * @param edge
+	 *            that is connected to this cell
+	 * @param isSource
+	 *            describes whether this cell is its source or target
+	 * @return 0 < x < 1 describes a point of the cell's border
+	 */
+	public double computePort(mxICell edge, boolean isSource) {
+		sortEdges();
+
+		// compute x coordinates by connected vertices' x
+		int indexEntry = getEdgeIndexSeparated(edge, isSource) + 1;
+		// the port should not be 0
+
+		int nSource = getEdgeCount(isSource) + 1;
+		// the port should not be 1
+
+		double exitX = (double) indexEntry / nSource;
+		return exitX;
+	}
+
+	
 }

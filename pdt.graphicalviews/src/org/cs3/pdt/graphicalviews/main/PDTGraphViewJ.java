@@ -111,26 +111,6 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		yOverhead = minY - 10;
 	}
 	
-	private double computePort(mxICell resetEdge, mxICell source,
-			boolean isSource) {
-		source.sortEdges();
-
-		// compute x coordinates by connected vertices' x
-		int indexEntry = source.getEdgeIndexSeparated(resetEdge, isSource) + 1;
-		// the port should not be 0
-
-		// System.out.println("indexEntry:" + indexEntry + " indexExit:" +
-		// indexExit);
-		
-		int nSource = source.getEdgeCount(isSource) + 1; 
-		// the port should not be 1
-		
-		// System.out.println("nSource:" + nSource + " nTarget:" + nTarget);
-		
-		double exitX = (double) indexEntry / nSource;
-		return exitX;
-	}
-	
 	private mxGraphComponent createGraphComponent(mxGraph graph) {
 		mxGraphComponent graphComponent = new mxGraphComponent(graph);
 		graphComponent.setConnectable(false); // disable drag and drop edge
@@ -268,10 +248,11 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		Object parent = graph.getDefaultParent();
 
 		if (edge.isEdge()) {
-			mxICell source = edge.getTerminal(true);
-			mxICell target = edge.getTerminal(false);
+			mxCell source = (mxCell) edge.getTerminal(true);
+			mxCell target = (mxCell) edge.getTerminal(false);
 
-			mxICell resetEdge = (mxICell) graph.insertEdge(parent, null, null, source, target, null); // i);
+			mxICell resetEdge = (mxICell) graph.insertEdge(parent, null, null,
+					source, target, null); // i);
 			graph.removeCell(edge);
 
 			String style = edge.getStyle(); // strokeWidth (and edgeStyle)
@@ -279,16 +260,19 @@ public class PDTGraphViewJ extends PDTGraphView  {
 			double exitX = 1;
 			double entryX = 1;
 			if (source != target) {
-				exitX = computePort(resetEdge, source, true);
-				entryX = computePort(resetEdge, target, false);
+				exitX = source.computePort(resetEdge, true);
+				entryX = target.computePort(resetEdge, false);
 			}
-			style += mxConstants.STYLE_ENTRY_X + "=" + entryX + ";" + mxConstants.STYLE_EXIT_X + "=" + exitX + ";"
-					+ mxConstants.STYLE_ENTRY_Y + "=" + "0;" + mxConstants.STYLE_EXIT_Y + "=" + "1;"
-					+ mxConstants.STYLE_ENTRY_PERIMETER + "=0;" + mxConstants.STYLE_EXIT_PERIMETER + "=0;"
-					;
+			style += mxConstants.STYLE_ENTRY_X + "=" + entryX + ";"
+					+ mxConstants.STYLE_EXIT_X + "=" + exitX + ";"
+					+ mxConstants.STYLE_ENTRY_Y + "=" + "0;"
+					+ mxConstants.STYLE_EXIT_Y + "=" + "1;"
+					+ mxConstants.STYLE_ENTRY_PERIMETER + "=0;"
+					+ mxConstants.STYLE_EXIT_PERIMETER + "=0;";
 
 			resetEdge.setStyle(style); // topToBottom is orthogonal
-			//System.out.println(source.getValue() + " to " + target.getValue() + " style: " + style);
+			// System.out.println(source.getValue() + " to " + target.getValue()
+			// + " style: " + style);
 
 			// graph.orderCell(false, (mxCell) edge); //this affects edgeStyle
 
@@ -296,6 +280,8 @@ public class PDTGraphViewJ extends PDTGraphView  {
 			// how to find out which vertices they cross?
 		}
 	}
+	
+	
 
 	private void resetEdges(mxGraph graph) {
 		Map<String, Object> style = graph.getStylesheet().getDefaultEdgeStyle();
