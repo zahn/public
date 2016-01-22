@@ -241,48 +241,6 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		return sameX(cell, nextCell) && sameY(cell, nextCell);
 	}
 
-	private void resetEdge(mxGraph graph, mxICell edge) {
-		// Edges have the concept of control points. These are intermediate
-		// points along the edge that the edge is drawn as passing through. The
-		// use of control points is sometimes referred to as edge routing.
-		Object parent = graph.getDefaultParent();
-
-		if (edge.isEdge()) {
-			mxCell source = (mxCell) edge.getTerminal(true);
-			mxCell target = (mxCell) edge.getTerminal(false);
-
-			mxICell resetEdge = (mxICell) graph.insertEdge(parent, null, null,
-					source, target, null); // i);
-			graph.removeCell(edge);
-
-			String style = edge.getStyle(); // strokeWidth (and edgeStyle)
-
-			double exitX = 1;
-			double entryX = 1;
-			if (source != target) {
-				exitX = source.computePort(resetEdge, true);
-				entryX = target.computePort(resetEdge, false);
-			}
-			style += mxConstants.STYLE_ENTRY_X + "=" + entryX + ";"
-					+ mxConstants.STYLE_EXIT_X + "=" + exitX + ";"
-					+ mxConstants.STYLE_ENTRY_Y + "=" + "0;"
-					+ mxConstants.STYLE_EXIT_Y + "=" + "1;"
-					+ mxConstants.STYLE_ENTRY_PERIMETER + "=0;"
-					+ mxConstants.STYLE_EXIT_PERIMETER + "=0;";
-
-			resetEdge.setStyle(style); // topToBottom is orthogonal
-			// System.out.println(source.getValue() + " to " + target.getValue()
-			// + " style: " + style);
-
-			// graph.orderCell(false, (mxCell) edge); //this affects edgeStyle
-
-			// TODO: set edge points next to the vertices they would cross
-			// how to find out which vertices they cross?
-		}
-	}
-	
-	
-
 	private void resetEdges(mxGraph graph) {
 		Map<String, Object> style = graph.getStylesheet().getDefaultEdgeStyle();
 		style.put(mxConstants.STYLE_EDGE,
@@ -301,7 +259,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 															// to in the
 				// source vertex and in the target vertex -> check whether it
 				// has already been reset
-				resetEdge(graph, edge);
+				graph.resetEdge(edge);
 			}
 		}
 	}
