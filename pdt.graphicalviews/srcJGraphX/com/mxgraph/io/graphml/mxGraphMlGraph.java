@@ -340,15 +340,20 @@ public class mxGraphMlGraph {
 
 	private String getLabel(HashMap<String, mxGraphMlData> dataMap) {
 		String label = "";
+		String arity = "";
 		mxGraphMlData dataEntry = dataMap.get("value");
 		if (dataEntry == null) {
 			dataEntry = dataMap.get("label");
 		}
 		if (dataEntry == null) {
 			dataEntry = dataMap.get("functor");
+			mxGraphMlData arityEntry = dataMap.get("arity");
+			if (arityEntry != null) {
+				arity = " / " + arityEntry.getDataValue();
+			}
 		}
 		if (dataEntry != null) {
-			label = dataEntry.getDataValue();
+			label = dataEntry.getDataValue() + arity;
 		}
 		return label;
 	}
