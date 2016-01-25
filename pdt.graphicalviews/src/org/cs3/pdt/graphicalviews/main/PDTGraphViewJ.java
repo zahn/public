@@ -139,7 +139,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		layout.execute(graph.getDefaultParent());
 	}
 	
-	private ArrayList<mxCell> getXSortedRootVertices(Object[] cells) {		/*
+	private ArrayList<mxCell> sortByX(Object[] cells) {		/*
 		 * PriorityQueue<mxCell> cellQueue = new PriorityQueue<mxCell>(10, new
 		 * Comparator<mxCell>() { public int compare(mxCell cell1, mxCell cell2)
 		 * { Double x1 = cell1.getAbsX(); return x1.compareTo(cell2.getAbsX());
@@ -161,7 +161,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		return list;
 	}
 
-	private ArrayList<mxCell> getYSortedRootVertices(Object[] cells) {
+	private ArrayList<mxCell> sortByY(Object[] cells) {
 		ArrayList<mxCell> list = new ArrayList<mxCell>();
 		for (Object o : cells) {
 			mxCell cell = (mxCell) o;
@@ -332,10 +332,13 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		double leftEnd = left.getAbsX() + left.getGeometry().getWidth();
 		double rightStart = leftEnd + 10;
 		mxGeometry g = right.getGeometry();
-		if (g.getX() == rightStart) {
+		double start = g.getX();
+		if (start <= rightStart) {
+			// System.out.println("had already been set.");
 			return false; // has not been set because it is already correct
 		}
 		g.setX(rightStart);
+		// System.out.println("are set from " + start + " to " + rightStart);
 		return true;
 	}
 
@@ -349,6 +352,8 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		}
 		return false; // has not been set because it is already correct
 	}
+
+	
 
 	/**
 	 * sets the distance between neighbouring root cells
@@ -369,9 +374,42 @@ public class PDTGraphViewJ extends PDTGraphView  {
 	 * 
 	 * @param graph
 	 */
-	private void setRootVerticesDistance(mxGraph graph) {
+	private void setRootVerticesDistance(mxGraph graph) { 
 		setRootVerticesYDistance(graph);
 		setRootVerticesXDistance(graph);
+	}
+
+	private void setRootVerticesXDistance(mxGraph graph) {
+		Object[] cells = graph.getRootCells();
+		ArrayList<mxCell> list = sortByX(cells);
+		setVerticesXDistance(list);
+		/*
+		 * for (int i = 0; i < cellQueue.size() - 1; i++) { mxCell cell =
+		 * cellQueue.poll(); Object value = cell.getValue(); if (value != null
+		 * && value.equals("preparser.pl")) { System.out.println(
+		 * "setting breakpoint"); } mxCell nextCell = cellQueue.peek(); if
+		 * (!sameY(cell, nextCell)) { setNeighboursXDistance(cell, nextCell);
+		 * //cellQueue.add(nextCell); } else if (sameX(cell, nextCell)) {
+		 * setNeighboursYDistance(cell, nextCell); //cellQueue.add(nextCell); }
+		 * }
+		 */
+	}
+
+	private void setChildVerticesXDistance(mxGraph graph) {
+		Object[] cells = graph.getRootCells();
+		/*
+		 * for (int i = 0; i < cellQueue.size() - 1; i++) { mxCell cell =
+		 * cellQueue.poll(); Object value = cell.getValue(); if (value != null
+		 * && value.equals("preparser.pl")) { System.out.println(
+		 * "setting breakpoint"); } mxCell nextCell = cellQueue.peek(); if
+		 * (!sameY(cell, nextCell)) { setNeighboursXDistance(cell, nextCell);
+		 * //cellQueue.add(nextCell); } else if (sameX(cell, nextCell)) {
+		 * setNeighboursYDistance(cell, nextCell); //cellQueue.add(nextCell); }
+		 * }
+		 */
+		for (int i = 0; i < cells.length; i++) {
+			setChildVerticesXDistance((mxCell) cells[i]);
+		}
 	}
 
 	/**
@@ -384,37 +422,15 @@ public class PDTGraphViewJ extends PDTGraphView  {
 	 * 
 	 * @param graph
 	 */
-	private void setRootVerticesXDistance(mxGraph graph) {
-		Object[] cells = graph.getRootCells();
-		ArrayList<mxCell> list = getXSortedRootVertices(cells);
-		for (int i = 0; i < list.size() - 1; i++) {
-			//System.out.println(i);
-			mxCell cell = list.get(i);
-			Object value = cell.getValue();
-			if (value != null && value.equals("preparser.pl")) {
-				//System.out.println("setting breakpoint");
-			}
-			mxCell nextCell = list.get(i + 1);
-			if (overlap(cell, nextCell)) {
-				//System.out.println(value + " x-overlapping " + nextValue);
-				if (setNeighboursXDistance(cell, nextCell)) { 
-					//System.out.println(" are set.");
-					list = getXSortedRootVertices(cells);
-					i--;
-				} else {
-					//System.out.println(" had already been set.");
-				}
-			} else if (!sameX(cell, nextCell)) {
-				//System.out.println(value + " x-neighboring " + nextValue);
-				if (setNeighboursXDistance(cell, nextCell)) {
-					//System.out.println("are set.");
-					list = getXSortedRootVertices(cells);
-					i--;
-				} else {
-					//System.out.println("had already been set.");
-				}
-			}
+	private void setChildVerticesXDistance(mxCell parent) {
+		int n = parent.getChildCount();
+		Object[] cells = new Object[n];
+		for (int i = 0; i < n; i++) {
+			cells[i] = parent.getChildAt(i);
 		}
+		ArrayList<mxCell> list = sortByX(cells);
+
+		setVerticesXDistance(list);
 		/*
 		 * for (int i = 0; i < cellQueue.size() - 1; i++) { mxCell cell =
 		 * cellQueue.poll(); Object value = cell.getValue(); if (value != null
@@ -425,6 +441,33 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		 * setNeighboursYDistance(cell, nextCell); //cellQueue.add(nextCell); }
 		 * }
 		 */
+	}
+
+	/**
+	 * @param list
+	 */
+	private void setVerticesXDistance(ArrayList<mxCell> list) {
+		Object[] cells;
+		cells = list.toArray();
+		list = sortByX(cells);
+		for (int i = 0; i < list.size() - 1; i++) {
+			//System.out.println(i);
+			mxCell cell = list.get(i);
+			mxCell nextCell = list.get(i + 1);
+			if (overlap(cell, nextCell)) {
+				//System.out.println(cell.getValue() + " x-overlapping "	+ nextCell.getValue());
+				if (setNeighboursXDistance(cell, nextCell)) {
+					list = sortByX(cells);
+					i--;
+				}
+			} else if (!sameX(cell, nextCell)) {
+				//System.out.println(cell.getValue() + " x-neighboring "	+ nextCell.getValue());
+				if (setNeighboursXDistance(cell, nextCell)) {
+					list = sortByX(cells);
+					i--;
+				}
+			}
+		}
 	}
 
 	/**
@@ -445,28 +488,32 @@ public class PDTGraphViewJ extends PDTGraphView  {
 	 */
 	private void setRootVerticesYDistance(mxGraph graph) {
 		Object[] cells = graph.getRootCells();
-		ArrayList<mxCell> list = getYSortedRootVertices(cells);
+		ArrayList<mxCell> list = sortByY(cells);
 		for (int i = 0; i < list.size() - 1; i++) {
-			//System.out.println(i);
+			// System.out.println(i);
 			mxCell cell = list.get(i);
 			mxCell nextCell = list.get(i + 1);
 			if (overlap(cell, nextCell)) {
-				//System.out.println(value + " y-overlapping " + nextValue);
+				// System.out.println(value + " y-overlapping " + nextValue);
 				if (setNeighboursYDistance(cell, nextCell)) {
-					//System.out.println(" are set.");
-					list = getYSortedRootVertices(cells);
+					// System.out.println(" are set.");
+					list = sortByY(cells);
 					i--;
 				} else {
-					//System.out.println(" had already been set.");
+					// System.out.println(" had already been set.");
 				}
 			} else if (!sameY(cell, nextCell)) {
-				//System.out.println(value + " y-neighboring " + nextValue);
-				if (setNeighboursYDistance(cell, nextCell)) {
-					//System.out.println(" are set.");
-					list = getYSortedRootVertices(cells);
-					i--;
-				} else {
-					//System.out.println(" had already been set.");
+				// System.out.println(cell.getValue() + " y-neighboring "
+				// + nextCell.getValue());
+				// additional check to not break the hierarchy:
+				if (i == 0 || !sameY(nextCell, list.get(i - 1))) {
+					if (setNeighboursYDistance(cell, nextCell)) {
+						// System.out.println(" are set.");
+						list = sortByY(cells);
+						i--;
+					} else {
+						// System.out.println(" had already been set.");
+					}
 				}
 			}
 		}
@@ -488,21 +535,26 @@ public class PDTGraphViewJ extends PDTGraphView  {
 	protected void updateView() {
 		final mxGraph graph = graphModel.getGraphJ();
 
+		System.out.println("creating graph component");
 		mxGraphComponent graphComponent = createGraphComponent(graph);
-		
 		add(graphComponent);
 
 		graph.getModel().beginUpdate();
 		try {
 			resizeCells(graph);
 			executeHierarchicalLayout(graph);
+			
+			setRootVerticesXDistance(graph);
+			setChildVerticesXDistance(graph);
+			graph.updateGroupBounds(graph.getRootCells(), 10);
 			moveChildrenDownAndAdaptRootNodesHeight(graph);
-			setRootVerticesDistance(graph); 
+			setRootVerticesYDistance(graph);
+
 			normalizeCellCoordinates(graph);
 			resetEdges(graph); // to relayout edges by deleting and adding them
-			// and computing ports 
-			
-			graph.getModel().load(focusFilePath);
+			// and computing ports
+
+			//graph.getModel().load(focusFilePath);
 		} finally {
 			graph.getModel().endUpdate();
 		}
