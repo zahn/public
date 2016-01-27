@@ -2572,7 +2572,7 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 		String filenamesString = filenames.toString();
 		filenamesString = filenamesString.substring(1, filenamesString.length() - 1); // [...]
 		filenamesString = filenamesString.replace(", ", "-");
-		fileName = filenamesString + ".ser";
+		fileName = filenamesString.hashCode() + ".ser";
 		//System.out.println(fileName);
 	}
 }
