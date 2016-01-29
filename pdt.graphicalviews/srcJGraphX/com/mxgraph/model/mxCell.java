@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.mxgraph.io.graphml.mxGraphMlData;
+import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxRectangle;
 
 /**
@@ -781,5 +782,14 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	public void setToolTip(String toolTip) {
 		this.toolTip = toolTip;
 		//System.out.println("setToolTip:" + toolTip);
+	}
+
+	public mxPoint getTerminalPoint(boolean isSource) {
+		mxCell terminalCell = (mxCell) getTerminal(isSource);
+		double port = terminalCell.computePort(this, isSource);
+		double width = terminalCell.getGeometry().getWidth();
+		double x = terminalCell.getAbsX() + port * width;
+		double y = terminalCell.getAbsY();
+		return new mxPoint(x, y);
 	}
 }
