@@ -91,6 +91,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
 	private List<Object> outgoingEdges;
 
+	private String toolTip;
+
 	/**
 	 * Constructs a new cell with an empty user object.
 	 */
@@ -768,5 +770,13 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 		return exitX;
 	}
 
-	
+	public String getToolTip() {
+		//System.out.println("getToolTip:" + toolTip);
+		return this.toolTip;
+	}
+
+	public void setToolTip(String toolTip) {
+		this.toolTip = toolTip;
+		//System.out.println("setToolTip:" + toolTip);
+	}
 }

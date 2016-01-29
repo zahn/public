@@ -120,6 +120,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		// overlaying labels
 		// graphComponent.setSize(50, 50); //does not prevent white space to the
 		// left and top
+		graphComponent.setToolTips(true);
 		new mxKeyboardHandler(graphComponent); //to enable resetting edges by (Fn) DEL
 		return graphComponent;
 	}
@@ -533,12 +534,13 @@ public class PDTGraphViewJ extends PDTGraphView  {
 	}
 
 	protected void updateView() {
+		//removeAll(); //only adding new graphComponents works better
+		
 		final mxGraph graph = graphModel.getGraphJ();
-
-		System.out.println("creating graph component");
+		
 		mxGraphComponent graphComponent = createGraphComponent(graph);
 		add(graphComponent);
-
+		
 		graph.getModel().beginUpdate();
 		try {
 			resizeCells(graph);

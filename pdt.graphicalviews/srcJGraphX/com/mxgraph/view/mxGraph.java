@@ -5351,7 +5351,7 @@ public class mxGraph extends mxEventSource
 	 */
 	public String getToolTipForCell(Object cell)
 	{
-		return convertValueToString(cell);
+		return ((mxCell) cell).getToolTip();
 	}
 
 	/**
@@ -8153,11 +8153,13 @@ public class mxGraph extends mxEventSource
 			mxCell source = (mxCell) edge.getTerminal(true);
 			mxCell target = (mxCell) edge.getTerminal(false);
 
-			mxICell resetEdge = (mxICell) insertEdge(parent, null, null,
+			mxCell resetEdge = (mxCell) insertEdge(parent, null, null,
 					source, target, null); // i);
 			removeCell(edge);
 
-			String style = edge.getStyle(); // strokeWidth (and edgeStyle) and more?
+			String style = edge.getStyle(); // strokeWidth (and edgeStyle) and
+											// more?
+			String toolTip = edge.getToolTip();
 			if (!style.contains(mxConstants.STYLE_ENTRY_X)) { 
 				double exitX = 1;
 				double entryX = 1;
@@ -8173,6 +8175,7 @@ public class mxGraph extends mxEventSource
 					+ mxConstants.STYLE_EXIT_PERIMETER + "=0;"; 
 			}
 			resetEdge.setStyle(style); // topToBottom is orthogonal
+			resetEdge.setToolTip(toolTip);
 
 			// graph.orderCell(false, (mxCell) edge); //this affects edgeStyle
 

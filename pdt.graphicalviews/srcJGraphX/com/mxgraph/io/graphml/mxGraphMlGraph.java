@@ -241,26 +241,37 @@ public class mxGraphMlGraph {
 			Double w = Double.valueOf(data.getDataShapeNode().getDataWidth());
 			String label = data.getDataShapeNode().getDataLabel();
 			String style = data.getDataShapeNode().getDataStyle();
-			v1 = (mxCell) graph.insertVertex(parent, id, label, x, y, w, h, style);
+			v1 = (mxCell) graph.insertVertex(parent, id, label, x, y, w, h,
+					style);
 		} else {
 			HashMap<String, mxGraphMlData> dataMap = node.getNodeDataMap();
 			String pdtId = getPdtId(dataMap);
-			
+
 			String label = getLabel(dataMap);
 			String style = // mxConstants.STYLE_STARTSIZE + "=10;" + no effect
 			// mxConstants.STYLE_SWIMLANE_FILLCOLOR + "=orange;" + no effect
-			mxConstants.STYLE_OVERFLOW + "=hidden;" + mxConstants.STYLE_SPACING + "=5;" + mxConstants.STYLE_FOLDABLE
-					+ "=0;" + mxConstants.STYLE_FONTCOLOR + "=black;" + mxConstants.STYLE_LABEL_BACKGROUNDCOLOR + "="
-					+ getHeaderColor(dataMap) + ";" + mxConstants.STYLE_VERTICAL_ALIGN + "=" + mxConstants.ALIGN_TOP
-					+ ";" + mxConstants.STYLE_STROKECOLOR + "=" + getStrokeColor(dataMap) + ";"
-					+ mxConstants.STYLE_DASHED + "=" + isDashed(dataMap) + ";" + mxConstants.STYLE_FILLCOLOR + "="
-					+ getFillColor(dataMap);
-			v1 = (mxCell) graph.insertVertex(parent, id, label, 0, 0, 100, 100, style, pdtId);
-			//v1.setPdtId(pdtId); //too late
+			mxConstants.STYLE_OVERFLOW + "=hidden;" + mxConstants.STYLE_SPACING
+					+ "=5;" + mxConstants.STYLE_FOLDABLE + "=0;"
+					+ mxConstants.STYLE_FONTCOLOR + "=black;"
+					+ mxConstants.STYLE_LABEL_BACKGROUNDCOLOR + "="
+					+ getHeaderColor(dataMap) + ";"
+					+ mxConstants.STYLE_VERTICAL_ALIGN + "="
+					+ mxConstants.ALIGN_TOP + ";"
+					+ mxConstants.STYLE_STROKECOLOR + "="
+					+ getBorderColor(dataMap) + ";" + mxConstants.STYLE_DASHED
+					+ "=" + isDashed(dataMap) + ";"
+					+ mxConstants.STYLE_FILLCOLOR + "=" + getFillColor(dataMap);
+			v1 = (mxCell) graph.insertVertex(parent, id, label, 0, 0, 100, 100,
+					style, pdtId);
+			// v1.setPdtId(pdtId); //too late
+
+			String toolTip = getToolTip(dataMap);
+			v1.setToolTip(toolTip);
 		}
-		
-		//loadGeometry(v1); //if we load the geometry now, the layouters will overwrite it
-		
+
+		// loadGeometry(v1); //if we load the geometry now, the layouters will
+		// overwrite it
+
 		cellsMap.put(id, v1);
 		List<mxGraphMlGraph> graphs = node.getNodeGraph();
 
@@ -270,75 +281,154 @@ public class mxGraphMlGraph {
 		return v1;
 	}
 
-	/*private void loadGeometry(mxCell v1) { 
-		String pdtId = v1.getPdtId();
-		Object savedCellObject = savedCells.get(pdtId); 
-		if (savedCellObject != null) { 
-			mxCell savedCell = (mxCell) savedCellObject;
-			v1.setGeometry(savedCell.getGeometry());
-		}
-	}*/ //this function has moved to the model
+	private String getToolTip(HashMap<String, mxGraphMlData> dataMap) {
+		StringBuilder sb = new StringBuilder();
+		/*if (isModule(dataMap)) {
+			sb.append("Module: ");
+		} else if (isFile(dataMap)) {
+			sb.append("File: ");
+		} else if (isPredicate(dataMap)) {
+			sb.append("Predicate: ");
+		}*/ //not shown
 
-	private String getHeaderColor(HashMap<String, mxGraphMlData> dataMap) {
+		sb.append(getLabel(dataMap));
+
+		if (isExported(dataMap)) {
+			sb.append(" [Exported]");
+		}
+
+		if (isDynamicNode(dataMap)) {
+			sb.append(" [Dynamic]");
+		}
+
+		if (isUnusedLocal(dataMap)) {
+			sb.append(" [Unused]");
+		}
+		
+		if (isMetaCall(dataMap)) {
+			sb.append(getLabel(dataMap)); //aspect_action(...,...,grossvater(...,...))
+		}
+
+		/*
+		 * if ("inferred".equals(getMetaPredType(dataMap))) {
+		 * setLabelText(model.getLabelTextForNode() + " [Inferred]"); }
+		 */ 
+		return sb.toString();
+	}
+
+	private static boolean isMetaCall(HashMap<String, mxGraphMlData> dataMap) {
+		mxGraphMlData metadataEntry = dataMap.get("metadata");
+		if (metadataEntry != null) {
+			if (metadataEntry.getDataValue().equals("metacall")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isFile(HashMap<String, mxGraphMlData> dataMap) {
 		String kindValue = dataMap.get("kind").getDataValue();
 		if (kindValue.equals("file")) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isModule(HashMap<String, mxGraphMlData> dataMap) {
+		if (isFile(dataMap)) {
 			mxGraphMlData moduleEntry = dataMap.get("module");
 			if (moduleEntry != null) {
 				String moduleValue = moduleEntry.getDataValue();
 				if (!moduleValue.equals("user")) {
-					return "grey";
-				} else {
-					return "white";
+					return true;
 				}
 			}
+		}
+		return false;
+	}
+
+	private String getHeaderColor(HashMap<String, mxGraphMlData> dataMap) {
+		if (isModule(dataMap)) {
+			return "grey";
+		}
+		String kindValue = dataMap.get("kind").getDataValue();
+		if (kindValue.equals("file")) {
+			return "white";
 		}
 		return "none";
 	}
 
-	private String getStrokeColor(HashMap<String, mxGraphMlData> dataMap) {
+	private boolean isPredicate(HashMap<String, mxGraphMlData> dataMap) {
 		String kindValue = dataMap.get("kind").getDataValue();
 		if (kindValue.equals("predicate")) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isUnusedLocal(HashMap<String, mxGraphMlData> dataMap) {
+		if (isPredicate(dataMap)) {
 			mxGraphMlData isUnusedLocalEntry = dataMap.get("isUnusedLocal");
 			if (isUnusedLocalEntry != null) {
 				String isUnusedLocalValue = isUnusedLocalEntry.getDataValue();
 				if (isUnusedLocalValue.equals("true")) {
-					return "red";
+					return true;
 				}
 			}
+		}
+		return false;
+	}
+
+	private String getBorderColor(HashMap<String, mxGraphMlData> dataMap) {
+		if (isUnusedLocal(dataMap)) {
+			return "red";
 		}
 		return "black";
 	}
 
-	private String isDashed(HashMap<String, mxGraphMlData> dataMap) {
-		String kindValue = dataMap.get("kind").getDataValue();
-		if (kindValue.equals("predicate")) {
+	private boolean isDynamicNode(HashMap<String, mxGraphMlData> dataMap) {
+		if (isPredicate(dataMap)) {
 			mxGraphMlData isDynamicEntry = dataMap.get("isDynamic");
 			if (isDynamicEntry != null) {
 				String isDynamicValue = isDynamicEntry.getDataValue();
 				if (isDynamicValue.equals("true")) {
-					return "1";
+					return true;
 				}
 			}
 		}
-		return "0";
+		return false;
 	}
 
-	private String getFillColor(HashMap<String, mxGraphMlData> dataMap) {
-		String kindValue = dataMap.get("kind").getDataValue();
-		if (!kindValue.equals("predicate")) {
-			return "white";
+	private String isDashed(HashMap<String, mxGraphMlData> dataMap) {
+		if (isDynamicNode(dataMap)) {
+			return "1";
+		} else {
+			return "0";
 		}
+	}
+
+	private boolean isExported(HashMap<String, mxGraphMlData> dataMap) {
 		mxGraphMlData isExportedEntry = dataMap.get("isExported");
 		if (isExportedEntry != null) {
 			String isExportedValue = isExportedEntry.getDataValue();
 			if (isExportedValue.equals("true")) {
-				return "green";
+				return true;
 			}
+		}
+		return false;
+	}
+
+	private String getFillColor(HashMap<String, mxGraphMlData> dataMap) {
+		if (!isPredicate(dataMap)) {
+			return "white";
+		}
+		if (isExported(dataMap)) {
+			return "green";
 		}
 		return "yellow";
 	}
 
-	private String getLabel(HashMap<String, mxGraphMlData> dataMap) {
+	private static String getLabel(HashMap<String, mxGraphMlData> dataMap) {
 		String label = "";
 		String arity = "";
 		mxGraphMlData dataEntry = dataMap.get("value");
@@ -357,66 +447,67 @@ public class mxGraphMlGraph {
 		}
 		return label;
 	}
-	
+
 	private String getPdtId(HashMap<String, mxGraphMlData> dataMap) {
 		String label = "";
-		mxGraphMlData dataEntry = dataMap.get("id"); //"pdtId" ?
+		mxGraphMlData dataEntry = dataMap.get("id"); // "pdtId" ?
 		if (dataEntry != null) {
 			label = dataEntry.getDataValue();
 		}
 		return label;
 	}
 
-// this function is not used anymore because of a custom implementation
-//	/**
-//	 * Returns the point represented for the port name. The specials names
-//	 * North, NorthWest, NorthEast, East, West, South, SouthEast and SouthWest.
-//	 * are accepted. Else, the values accepted follow the pattern
-//	 * "double,double". where double must be in the range 0..1
-//	 * 
-//	 * @param source
-//	 *            Port Name.
-//	 * @return point that represent the port value.
-//	 */
-//	private static mxPoint portValue(String source) { 
-//		mxPoint fromConstraint = null;
-//
-//		if (source != null) {
-//			if (!source.equals("")) {
-//
-//				if (source.equals("North")) {
-//					fromConstraint = new mxPoint(0.5, 0);
-//				} else if (source.equals("South")) {
-//					fromConstraint = new mxPoint(0.5, 1);
-//
-//				} else if (source.equals("East")) {
-//					fromConstraint = new mxPoint(1, 0.5);
-//
-//				} else if (source.equals("West")) {
-//					fromConstraint = new mxPoint(0, 0.5);
-//
-//				} else if (source.equals("NorthWest")) {
-//					fromConstraint = new mxPoint(0, 0);
-//				} else if (source.equals("SouthWest")) {
-//					fromConstraint = new mxPoint(0, 1);
-//				} else if (source.equals("SouthEast")) {
-//					fromConstraint = new mxPoint(1, 1);
-//				} else if (source.equals("NorthEast")) {
-//					fromConstraint = new mxPoint(1, 0);
-//				} else {
-//					try {
-//						String[] s = source.split(",");
-//						Double x = Double.valueOf(s[0]);
-//						Double y = Double.valueOf(s[1]);
-//						fromConstraint = new mxPoint(x, y);
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//		}
-//		return fromConstraint;
-//	}
+	// this function is not used anymore because of a custom implementation
+	// /**
+	// * Returns the point represented for the port name. The specials names
+	// * North, NorthWest, NorthEast, East, West, South, SouthEast and
+	// SouthWest.
+	// * are accepted. Else, the values accepted follow the pattern
+	// * "double,double". where double must be in the range 0..1
+	// *
+	// * @param source
+	// * Port Name.
+	// * @return point that represent the port value.
+	// */
+	// private static mxPoint portValue(String source) {
+	// mxPoint fromConstraint = null;
+	//
+	// if (source != null) {
+	// if (!source.equals("")) {
+	//
+	// if (source.equals("North")) {
+	// fromConstraint = new mxPoint(0.5, 0);
+	// } else if (source.equals("South")) {
+	// fromConstraint = new mxPoint(0.5, 1);
+	//
+	// } else if (source.equals("East")) {
+	// fromConstraint = new mxPoint(1, 0.5);
+	//
+	// } else if (source.equals("West")) {
+	// fromConstraint = new mxPoint(0, 0.5);
+	//
+	// } else if (source.equals("NorthWest")) {
+	// fromConstraint = new mxPoint(0, 0);
+	// } else if (source.equals("SouthWest")) {
+	// fromConstraint = new mxPoint(0, 1);
+	// } else if (source.equals("SouthEast")) {
+	// fromConstraint = new mxPoint(1, 1);
+	// } else if (source.equals("NorthEast")) {
+	// fromConstraint = new mxPoint(1, 0);
+	// } else {
+	// try {
+	// String[] s = source.split(",");
+	// Double x = Double.valueOf(s[0]);
+	// Double y = Double.valueOf(s[1]);
+	// fromConstraint = new mxPoint(x, y);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// }
+	// }
+	// return fromConstraint;
+	// }
 
 	/**
 	 * Adds the edge represented for the gml edge into the graph with the given
@@ -430,7 +521,8 @@ public class mxGraphMlGraph {
 	 *            Gml Edge
 	 * @return The inserted edge cell.
 	 */
-	private static mxCell addEdge(mxGraph graph, Object parent, mxGraphMlEdge edge) {
+	private static mxCell addEdge(mxGraph graph, Object parent,
+			mxGraphMlEdge edge) {
 		// Get source and target vertex
 		mxPoint fromConstraint = null;
 		mxPoint toConstraint = null;
@@ -442,6 +534,7 @@ public class mxGraphMlGraph {
 		String style = "";
 		String label = "";
 
+		String toolTip = "";
 		if (data != null) { // Why is the data null for my call graphs?
 			mxGraphMlShapeEdge shEdge = data.getDataShapeEdge();
 			if (shEdge != null) {
@@ -454,40 +547,68 @@ public class mxGraphMlGraph {
 					 * mxConstants.STYLE_EDGE + "=" + //
 					 * mxConstants.EDGESTYLE_TOPTOBOTTOM
 					 * mxConstants.EDGESTYLE_ORTHOGONAL + ";" +
-					 */ // default
+					 */// default
 			/*
 			 * An edge style just takes into account the source and target
 			 * vertices (so it might overlap all other vertices and edges), you
 			 * need a global orthogonal edge router, which the Java version
 			 * doesn't have.
 			 */
-			mxConstants.STYLE_STROKEWIDTH + "=" + getStrokeWidth(dataMap) + ";";
+			mxConstants.STYLE_STROKEWIDTH + "=" + getStrokeWidth(dataMap) + ";"
+			/*+ mxConstants.STYLE_DASH_PATTERN + "=" 
+			+ mxConstants.DEFAULT_DASHED_PATTERN + ";"
+			+ mxConstants.STYLE_DASHED + "=1;" */ //buggy default dashed pattern
+			+ mxConstants.STYLE_STROKECOLOR + "=" + getEdgeColor(dataMap) + ";"
+			;
 			// System.out.println(style);
+			
+			toolTip = getLabel(dataMap);
 		}
-
 		// Insert new edge.
-		mxCell e = (mxCell) graph.insertEdge(parent, null, label, source, target, style);
+		mxCell e = (mxCell) graph.insertEdge(parent, null, label, source,
+				target, style);
+		e.setToolTip(toolTip);
 		mxICell sourceParent = ((mxCell) source).getParent();
 		mxICell targetParent = ((mxCell) target).getParent();
 		if (sourceParent != targetParent) { // for parent node's rank
 											// computation
 			graph.insertEdge(parent, null, null, sourceParent, targetParent,
-					//mxConstants.STYLE_STROKEWIDTH + "=0; //still visible, destroys dashing
-					//mxConstants.ARROW_SIZE + "=100;" + //no effect
-					//mxConstants.ARROW_WIDTH + "=10;" + //no effect
-					mxConstants.STYLE_STROKECOLOR + "=EEEEEE;" + //use the back ground color
-					mxConstants.STYLE_DASHED + "=1;" // invisible
+			// mxConstants.STYLE_STROKEWIDTH + "=0; //still visible, destroys
+			// dashing
+			// mxConstants.ARROW_SIZE + "=100;" + //no effect
+			// mxConstants.ARROW_WIDTH + "=10;" + //no effect
+					mxConstants.STYLE_STROKECOLOR + "=EEEEEE;" + // use the back
+																	// ground
+																	// color
+							mxConstants.STYLE_DASHED + "=1;" // invisible
 			);
 			// graph.getModel().setVisible(edgeParent, false); //does not work
 		}
-		mxConnectionConstraint ccSource = new mxConnectionConstraint(fromConstraint, false);
+		mxConnectionConstraint ccSource = new mxConnectionConstraint(
+				fromConstraint, false);
 		graph.setConnectionConstraint(e, source, true, ccSource);
-		graph.setConnectionConstraint(e, target, false, new mxConnectionConstraint(toConstraint, false));
+		graph.setConnectionConstraint(e, target, false,
+				new mxConnectionConstraint(toConstraint, false));
 
 		return e;
 	}
 
+	private static String getEdgeColor(HashMap<String, mxGraphMlData> dataMap) {
+		if (isMetaCall(dataMap)) {
+			return "grey";
+		}
+		return "black";
+	}
+
 	private static String getStrokeWidth(HashMap<String, mxGraphMlData> dataMap) {
+		return getFrequency(dataMap);
+	}
+
+	/**
+	 * @param dataMap
+	 * @return 
+	 */
+	private static  String getFrequency(HashMap<String, mxGraphMlData> dataMap) {
 		mxGraphMlData frequencyEntry = dataMap.get("frequency");
 		if (frequencyEntry != null) {
 			return frequencyEntry.getDataValue();
