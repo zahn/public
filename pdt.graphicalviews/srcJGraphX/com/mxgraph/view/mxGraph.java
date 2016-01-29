@@ -54,12 +54,9 @@ import com.mxgraph.util.mxUndoableEdit.mxUndoableChange;
 import com.mxgraph.util.mxUtils;
 
 /**
- * Implements a graph object that allows to create diagrams from a graph model
- * and stylesheet.
+ * Implements a graph object that allows to create diagrams from a graph model and stylesheet.
  * 
- * <h3>Images</h3>
- * To create an image from a graph, use the following code for a given
- * XML document (doc) and File (file):
+ * <h3>Images</h3> To create an image from a graph, use the following code for a given XML document (doc) and File (file):
  * 
  * <code>
  * Image img = mxCellRenderer.createBufferedImage(
@@ -67,112 +64,61 @@ import com.mxgraph.util.mxUtils;
  * ImageIO.write(img, "png", file);
  * </code>
  * 
- * If the XML is given as a string rather than a document, the document can
- * be obtained using mxUtils.parse.
+ * If the XML is given as a string rather than a document, the document can be obtained using mxUtils.parse.
  * 
  * This class fires the following events:
  * 
- * mxEvent.ROOT fires if the root in the model has changed. This event has no
- * properties.
+ * mxEvent.ROOT fires if the root in the model has changed. This event has no properties.
  * 
- * mxEvent.ALIGN_CELLS fires between begin- and endUpdate in alignCells. The
- * <code>cells</code> and <code>align</code> properties contain the respective
- * arguments that were passed to alignCells.
+ * mxEvent.ALIGN_CELLS fires between begin- and endUpdate in alignCells. The <code>cells</code> and <code>align</code> properties contain the respective arguments that were passed to alignCells.
  * 
- * mxEvent.FLIP_EDGE fires between begin- and endUpdate in flipEdge. The
- * <code>edge</code> property contains the edge passed to flipEdge.
+ * mxEvent.FLIP_EDGE fires between begin- and endUpdate in flipEdge. The <code>edge</code> property contains the edge passed to flipEdge.
  * 
- * mxEvent.ORDER_CELLS fires between begin- and endUpdate in orderCells. The
- * <code>cells</code> and <code>back</code> properties contain the respective
- * arguments that were passed to orderCells.
+ * mxEvent.ORDER_CELLS fires between begin- and endUpdate in orderCells. The <code>cells</code> and <code>back</code> properties contain the respective arguments that were passed to orderCells.
  *
- * mxEvent.CELLS_ORDERED fires between begin- and endUpdate in cellsOrdered.
- * The <code>cells</code> and <code>back</code> arguments contain the
- * respective arguments that were passed to cellsOrdered.
+ * mxEvent.CELLS_ORDERED fires between begin- and endUpdate in cellsOrdered. The <code>cells</code> and <code>back</code> arguments contain the respective arguments that were passed to cellsOrdered.
  * 
- * mxEvent.GROUP_CELLS fires between begin- and endUpdate in groupCells. The
- * <code>group</code>, <code>cells</code> and <code>border</code> arguments
- * contain the respective arguments that were passed to groupCells.
+ * mxEvent.GROUP_CELLS fires between begin- and endUpdate in groupCells. The <code>group</code>, <code>cells</code> and <code>border</code> arguments contain the respective arguments that were passed to groupCells.
  * 
- * mxEvent.UNGROUP_CELLS fires between begin- and endUpdate in ungroupCells.
- * The <code>cells</code> property contains the array of cells that was passed
- * to ungroupCells.
+ * mxEvent.UNGROUP_CELLS fires between begin- and endUpdate in ungroupCells. The <code>cells</code> property contains the array of cells that was passed to ungroupCells.
  * 
- * mxEvent.REMOVE_CELLS_FROM_PARENT fires between begin- and endUpdate in
- * removeCellsFromParent. The <code>cells</code> property contains the array of
- * cells that was passed to removeCellsFromParent.
+ * mxEvent.REMOVE_CELLS_FROM_PARENT fires between begin- and endUpdate in removeCellsFromParent. The <code>cells</code> property contains the array of cells that was passed to removeCellsFromParent.
  * 
- * mxEvent.ADD_CELLS fires between begin- and endUpdate in addCells. The
- * <code>cells</code>, <code>parent</code>, <code>index</code>,
- * <code>source</code> and <code>target</code> properties contain the
- * respective arguments that were passed to addCells.
+ * mxEvent.ADD_CELLS fires between begin- and endUpdate in addCells. The <code>cells</code>, <code>parent</code>, <code>index</code>, <code>source</code> and <code>target</code> properties contain the respective arguments that were passed to
+ * addCells.
  * 
- * mxEvent.CELLS_ADDED fires between begin- and endUpdate in cellsAdded. The
- * <code>cells</code>, <code>parent</code>, <code>index</code>,
- * <code>source</code>, <code>target</code> and <code>absolute</code>
- * properties contain the respective arguments that were passed to cellsAdded.
+ * mxEvent.CELLS_ADDED fires between begin- and endUpdate in cellsAdded. The <code>cells</code>, <code>parent</code>, <code>index</code>, <code>source</code>, <code>target</code> and <code>absolute</code> properties contain the respective arguments
+ * that were passed to cellsAdded.
  * 
- * mxEvent.REMOVE_CELLS fires between begin- and endUpdate in removeCells. The
- * <code>cells</code> and <code>includeEdges</code> arguments contain the
- * respective arguments that were passed to removeCells.
+ * mxEvent.REMOVE_CELLS fires between begin- and endUpdate in removeCells. The <code>cells</code> and <code>includeEdges</code> arguments contain the respective arguments that were passed to removeCells.
  * 
- * mxEvent.CELLS_REMOVED fires between begin- and endUpdate in cellsRemoved.
- * The <code>cells</code> argument contains the array of cells that was
- * removed.
+ * mxEvent.CELLS_REMOVED fires between begin- and endUpdate in cellsRemoved. The <code>cells</code> argument contains the array of cells that was removed.
  * 
- * mxEvent.SPLIT_EDGE fires between begin- and endUpdate in splitEdge. The
- * <code>edge</code> property contains the edge to be splitted, the
- * <code>cells</code>, <code>newEdge</code>, <code>dx</code> and
- * <code>dy</code> properties contain the respective arguments that were passed
- * to splitEdge.
+ * mxEvent.SPLIT_EDGE fires between begin- and endUpdate in splitEdge. The <code>edge</code> property contains the edge to be splitted, the <code>cells</code>, <code>newEdge</code>, <code>dx</code> and <code>dy</code> properties contain the
+ * respective arguments that were passed to splitEdge.
  * 
- * mxEvent.TOGGLE_CELLS fires between begin- and endUpdate in toggleCells. The
- * <code>show</code>, <code>cells</code> and <code>includeEdges</code>
- * properties contain the respective arguments that were passed to toggleCells.
+ * mxEvent.TOGGLE_CELLS fires between begin- and endUpdate in toggleCells. The <code>show</code>, <code>cells</code> and <code>includeEdges</code> properties contain the respective arguments that were passed to toggleCells.
  * 
- * mxEvent.FOLD_CELLS fires between begin- and endUpdate in foldCells. The
- * <code>collapse</code>, <code>cells</code> and <code>recurse</code>
- * properties contain the respective arguments that were passed to foldCells.
+ * mxEvent.FOLD_CELLS fires between begin- and endUpdate in foldCells. The <code>collapse</code>, <code>cells</code> and <code>recurse</code> properties contain the respective arguments that were passed to foldCells.
  * 
- * mxEvent.CELLS_FOLDED fires between begin- and endUpdate in cellsFolded. The
- * <code>collapse</code>, <code>cells</code> and <code>recurse</code>
- * properties contain the respective arguments that were passed to cellsFolded.
+ * mxEvent.CELLS_FOLDED fires between begin- and endUpdate in cellsFolded. The <code>collapse</code>, <code>cells</code> and <code>recurse</code> properties contain the respective arguments that were passed to cellsFolded.
  * 
- * mxEvent.UPDATE_CELL_SIZE fires between begin- and endUpdate in
- * updateCellSize. The <code>cell</code> and <code>ignoreChildren</code>
- * properties contain the respective arguments that were passed to
- * updateCellSize.
+ * mxEvent.UPDATE_CELL_SIZE fires between begin- and endUpdate in updateCellSize. The <code>cell</code> and <code>ignoreChildren</code> properties contain the respective arguments that were passed to updateCellSize.
  * 
- * mxEvent.RESIZE_CELLS fires between begin- and endUpdate in resizeCells. The
- * <code>cells</code> and <code>bounds</code> properties contain the respective
- * arguments that were passed to resizeCells.
+ * mxEvent.RESIZE_CELLS fires between begin- and endUpdate in resizeCells. The <code>cells</code> and <code>bounds</code> properties contain the respective arguments that were passed to resizeCells.
  * 
- * mxEvent.CELLS_RESIZED fires between begin- and endUpdate in cellsResized.
- * The <code>cells</code> and <code>bounds</code> properties contain the
- * respective arguments that were passed to cellsResized.
+ * mxEvent.CELLS_RESIZED fires between begin- and endUpdate in cellsResized. The <code>cells</code> and <code>bounds</code> properties contain the respective arguments that were passed to cellsResized.
  * 
- * mxEvent.MOVE_CELLS fires between begin- and endUpdate in moveCells. The
- * <code>cells</code>, <code>dx</code>, <code>dy</code>, <code>clone</code>,
- * <code>target</code> and <code>location</code> properties contain the
- * respective arguments that were passed to moveCells.
+ * mxEvent.MOVE_CELLS fires between begin- and endUpdate in moveCells. The <code>cells</code>, <code>dx</code>, <code>dy</code>, <code>clone</code>, <code>target</code> and <code>location</code> properties contain the respective arguments that were
+ * passed to moveCells.
  * 
- * mxEvent.CELLS_MOVED fires between begin- and endUpdate in cellsMoved. The
- * <code>cells</code>, <code>dx</code>, <code>dy</code> and
- * <code>disconnect</code> properties contain the respective arguments that
- * were passed to cellsMoved.
+ * mxEvent.CELLS_MOVED fires between begin- and endUpdate in cellsMoved. The <code>cells</code>, <code>dx</code>, <code>dy</code> and <code>disconnect</code> properties contain the respective arguments that were passed to cellsMoved.
  * 
- * mxEvent.CONNECT_CELL fires between begin- and endUpdate in connectCell. The
- * <code>edge</code>, <code>terminal</code> and <code>source</code> properties
- * contain the respective arguments that were passed to connectCell.
+ * mxEvent.CONNECT_CELL fires between begin- and endUpdate in connectCell. The <code>edge</code>, <code>terminal</code> and <code>source</code> properties contain the respective arguments that were passed to connectCell.
  * 
- * mxEvent.CELL_CONNECTED fires between begin- and endUpdate in cellConnected.
- * The <code>edge</code>, <code>terminal</code> and <code>source</code>
- * properties contain the respective arguments that were passed to
- * cellConnected.
+ * mxEvent.CELL_CONNECTED fires between begin- and endUpdate in cellConnected. The <code>edge</code>, <code>terminal</code> and <code>source</code> properties contain the respective arguments that were passed to cellConnected.
  * 
- * mxEvent.REPAINT fires if a repaint was requested by calling repaint. The
- * <code>region</code> property contains the optional mxRectangle that was
- * passed to repaint to define the dirty region.
+ * mxEvent.REPAINT fires if a repaint was requested by calling repaint. The <code>region</code> property contains the optional mxRectangle that was passed to repaint to define the dirty region.
  */
 public class mxGraph extends mxEventSource
 {
@@ -185,16 +131,14 @@ public class mxGraph extends mxEventSource
 		try
 		{
 			mxResources.add("com.mxgraph.resources.graph");
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// ignore
 		}
 	}
 
 	/**
-	 * Holds the version number of this release. Current version
-	 * is 3.4.0.0.
+	 * Holds the version number of this release. Current version is 3.4.0.0.
 	 */
 	public static final String VERSION = "3.4.0.0";
 
@@ -250,28 +194,23 @@ public class mxGraph extends mxEventSource
 	protected boolean gridEnabled = true;
 
 	/**
-	 * Specifies if ports are enabled. This is used in <cellConnected> to update
-	 * the respective style. Default is true.
+	 * Specifies if ports are enabled. This is used in <cellConnected> to update the respective style. Default is true.
 	 */
 	protected boolean portsEnabled = true;
 
 	/**
-	 * Value returned by getOverlap if isAllowOverlapParent returns
-	 * true for the given cell. getOverlap is used in keepInside if
-	 * isKeepInsideParentOnMove returns true. The value specifies the
-	 * portion of the child which is allowed to overlap the parent.
+	 * Value returned by getOverlap if isAllowOverlapParent returns true for the given cell. getOverlap is used in keepInside if isKeepInsideParentOnMove returns true. The value specifies the portion of the child which is allowed to overlap the
+	 * parent.
 	 */
 	protected double defaultOverlap = 0.5;
 
 	/**
-	 * Specifies the default parent to be used to insert new cells.
-	 * This is used in getDefaultParent. Default is null.
+	 * Specifies the default parent to be used to insert new cells. This is used in getDefaultParent. Default is null.
 	 */
 	protected Object defaultParent;
 
 	/**
-	 * Specifies the alternate edge style to be used if the main control point
-	 * on an edge is being doubleclicked. Default is null.
+	 * Specifies the alternate edge style to be used if the main control point on an edge is being doubleclicked. Default is null.
 	 */
 	protected String alternateEdgeStyle;
 
@@ -321,8 +260,7 @@ public class mxGraph extends mxEventSource
 	protected boolean cellsCloneable = true;
 
 	/**
-	 * Specifies the return value for isCellDisconntableFromTerminal. Default
-	 * is true.
+	 * Specifies the return value for isCellDisconntableFromTerminal. Default is true.
 	 */
 	protected boolean cellsDisconnectable = true;
 
@@ -352,46 +290,37 @@ public class mxGraph extends mxEventSource
 	protected boolean splitEnabled = true;
 
 	/**
-	 * Specifies if the graph should automatically update the cell size
-	 * after an edit. This is used in isAutoSizeCell. Default is false.
+	 * Specifies if the graph should automatically update the cell size after an edit. This is used in isAutoSizeCell. Default is false.
 	 */
 	protected boolean autoSizeCells = false;
 
 	/**
-	 * <mxRectangle> that specifies the area in which all cells in the
-	 * diagram should be placed. Uses in getMaximumGraphBounds. Use a width
-	 * or height of 0 if you only want to give a upper, left corner.
+	 * <mxRectangle> that specifies the area in which all cells in the diagram should be placed. Uses in getMaximumGraphBounds. Use a width or height of 0 if you only want to give a upper, left corner.
 	 */
 	protected mxRectangle maximumGraphBounds = null;
 
 	/**
-	 * mxRectangle that specifies the minimum size of the graph canvas inside
-	 * the scrollpane.
+	 * mxRectangle that specifies the minimum size of the graph canvas inside the scrollpane.
 	 */
 	protected mxRectangle minimumGraphSize = null;
 
 	/**
-	 * Border to be added to the bottom and right side when the container is
-	 * being resized after the graph has been changed. Default is 0.
+	 * Border to be added to the bottom and right side when the container is being resized after the graph has been changed. Default is 0.
 	 */
 	protected int border = 0;
 
 	/**
-	 * Specifies if edges should appear in the foreground regardless of their
-	 * order in the model. This has precendence over keepEdgeInBackground
-	 * Default is false.
+	 * Specifies if edges should appear in the foreground regardless of their order in the model. This has precendence over keepEdgeInBackground Default is false.
 	 */
 	protected boolean keepEdgesInForeground = false;
 
 	/**
-	 * Specifies if edges should appear in the background regardless of their
-	 * order in the model. Default is false.
+	 * Specifies if edges should appear in the background regardless of their order in the model. Default is false.
 	 */
 	protected boolean keepEdgesInBackground = false;
 
 	/**
-	 * Specifies if the cell size should be changed to the preferred size when
-	 * a cell is first collapsed. Default is true.
+	 * Specifies if the cell size should be changed to the preferred size when a cell is first collapsed. Default is true.
 	 */
 	protected boolean collapseToPreferredSize = true;
 
@@ -406,44 +335,37 @@ public class mxGraph extends mxEventSource
 	protected boolean constrainChildren = true;
 
 	/**
-	 * Specifies if a parent should contain the child bounds after a resize of
-	 * the child. Default is true.
+	 * Specifies if a parent should contain the child bounds after a resize of the child. Default is true.
 	 */
 	protected boolean extendParents = true;
 
 	/**
-	 * Specifies if parents should be extended according to the <extendParents>
-	 * switch if cells are added. Default is true.
+	 * Specifies if parents should be extended according to the <extendParents> switch if cells are added. Default is true.
 	 */
 	protected boolean extendParentsOnAdd = true;
 
 	/**
-	 * Specifies if the scale and translate should be reset if
-	 * the root changes in the model. Default is true.
+	 * Specifies if the scale and translate should be reset if the root changes in the model. Default is true.
 	 */
 	protected boolean resetViewOnRootChange = true;
 
 	/**
-	 * Specifies if loops (aka self-references) are allowed.
-	 * Default is false.
+	 * Specifies if loops (aka self-references) are allowed. Default is false.
 	 */
 	protected boolean resetEdgesOnResize = false;
 
 	/**
-	 * Specifies if edge control points should be reset after
-	 * the move of a connected cell. Default is false.
+	 * Specifies if edge control points should be reset after the move of a connected cell. Default is false.
 	 */
 	protected boolean resetEdgesOnMove = false;
 
 	/**
-	 * Specifies if edge control points should be reset after
-	 * the the edge has been reconnected. Default is true.
+	 * Specifies if edge control points should be reset after the the edge has been reconnected. Default is true.
 	 */
 	protected boolean resetEdgesOnConnect = true;
 
 	/**
-	 * Specifies if loops (aka self-references) are allowed.
-	 * Default is false.
+	 * Specifies if loops (aka self-references) are allowed. Default is false.
 	 */
 	protected boolean allowLoops = false;
 
@@ -458,38 +380,32 @@ public class mxGraph extends mxEventSource
 	protected mxEdgeStyle.mxEdgeStyleFunction defaultLoopStyle = mxEdgeStyle.Loop;
 
 	/**
-	 * Specifies if multiple edges in the same direction between
-	 * the same pair of vertices are allowed. Default is true.
+	 * Specifies if multiple edges in the same direction between the same pair of vertices are allowed. Default is true.
 	 */
 	protected boolean multigraph = true;
 
 	/**
-	 * Specifies if edges are connectable. Default is false.
-	 * This overrides the connectable field in edges.
+	 * Specifies if edges are connectable. Default is false. This overrides the connectable field in edges.
 	 */
 	protected boolean connectableEdges = false;
 
 	/**
-	 * Specifies if edges with disconnected terminals are
-	 * allowed in the graph. Default is false.
+	 * Specifies if edges with disconnected terminals are allowed in the graph. Default is false.
 	 */
 	protected boolean allowDanglingEdges = true;
 
 	/**
-	 * Specifies if edges that are cloned should be validated and only inserted
-	 * if they are valid. Default is true.
+	 * Specifies if edges that are cloned should be validated and only inserted if they are valid. Default is true.
 	 */
 	protected boolean cloneInvalidEdges = false;
 
 	/**
-	 * Specifies if edges should be disconnected from their terminals when they
-	 * are moved. Default is true.
+	 * Specifies if edges should be disconnected from their terminals when they are moved. Default is true.
 	 */
 	protected boolean disconnectOnMove = true;
 
 	/**
-	 * Specifies if labels should be visible. This is used in
-	 * getLabel. Default is true.
+	 * Specifies if labels should be visible. This is used in getLabel. Default is true.
 	 */
 	protected boolean labelsVisible = true;
 
@@ -504,15 +420,13 @@ public class mxGraph extends mxEventSource
 	protected boolean swimlaneNesting = true;
 
 	/**
-	 * Specifies the maximum number of changes that should be processed to find
-	 * the dirty region. If the number of changes is larger, then the complete
-	 * grah is repainted. A value of zero will always compute the dirty region
-	 * for any number of changes. Default is 1000.
+	 * Specifies the maximum number of changes that should be processed to find the dirty region. If the number of changes is larger, then the complete grah is repainted. A value of zero will always compute the dirty region for any number of changes.
+	 * Default is 1000.
 	 */
 	protected int changesRepaintThreshold = 1000;
 
 	/**
-	 * Specifies if the origin should be automatically updated. 
+	 * Specifies if the origin should be automatically updated.
 	 */
 	protected boolean autoOrigin = false;
 
@@ -566,8 +480,7 @@ public class mxGraph extends mxEventSource
 	};
 
 	/**
-	 * Constructs a new graph with an empty
-	 * {@link com.mxgraph.model.mxGraphModel}.
+	 * Constructs a new graph with an empty {@link com.mxgraph.model.mxGraphModel}.
 	 */
 	public mxGraph()
 	{
@@ -575,11 +488,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Constructs a new graph for the specified model. If no model is
-	 * specified, then a new, empty {@link com.mxgraph.model.mxGraphModel} is
-	 * used.
+	 * Constructs a new graph for the specified model. If no model is specified, then a new, empty {@link com.mxgraph.model.mxGraphModel} is used.
 	 * 
-	 * @param model Model that contains the graph data
+	 * @param model
+	 *            Model that contains the graph data
 	 */
 	public mxGraph(mxIGraphModel model)
 	{
@@ -587,11 +499,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Constructs a new graph for the specified model. If no model is
-	 * specified, then a new, empty {@link com.mxgraph.model.mxGraphModel} is
-	 * used.
+	 * Constructs a new graph for the specified model. If no model is specified, then a new, empty {@link com.mxgraph.model.mxGraphModel} is used.
 	 * 
-	 * @param stylesheet The stylesheet to use for the graph.
+	 * @param stylesheet
+	 *            The stylesheet to use for the graph.
 	 */
 	public mxGraph(mxStylesheet stylesheet)
 	{
@@ -599,11 +510,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Constructs a new graph for the specified model. If no model is
-	 * specified, then a new, empty {@link com.mxgraph.model.mxGraphModel} is
-	 * used.
+	 * Constructs a new graph for the specified model. If no model is specified, then a new, empty {@link com.mxgraph.model.mxGraphModel} is used.
 	 * 
-	 * @param model Model that contains the graph data
+	 * @param model
+	 *            Model that contains the graph data
 	 */
 	public mxGraph(mxIGraphModel model, mxStylesheet stylesheet)
 	{
@@ -648,10 +558,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the graph model that contains the data, and fires an
-	 * mxEvent.CHANGE followed by an mxEvent.REPAINT event.
+	 * Sets the graph model that contains the data, and fires an mxEvent.CHANGE followed by an mxEvent.REPAINT event.
 	 * 
-	 * @param value Model that contains the graph data
+	 * @param value
+	 *            Model that contains the graph data
 	 */
 	public void setModel(mxIGraphModel value)
 	{
@@ -686,7 +596,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets the view that contains the cell states.
 	 * 
-	 * @param value View that contains the cell states
+	 * @param value
+	 *            View that contains the cell states
 	 */
 	public void setView(mxGraphView value)
 	{
@@ -729,7 +640,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets the stylesheet that provides the style.
 	 * 
-	 * @param value Stylesheet that provides the style.
+	 * @param value
+	 *            Stylesheet that provides the style.
 	 */
 	public void setStylesheet(mxStylesheet value)
 	{
@@ -790,8 +702,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Called when the graph model changes. Invokes processChange on each
-	 * item of the given array to update the view accordingly.
+	 * Called when the graph model changes. Invokes processChange on each item of the given array to update the view accordingly.
 	 */
 	public mxRectangle graphModelChanged(mxIGraphModel sender,
 			List<mxUndoableChange> changes)
@@ -845,11 +756,9 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Extends the canvas by doing another validation with a shifted
-	 * global translation if the bounds of the graph are below (0,0).
+	 * Extends the canvas by doing another validation with a shifted global translation if the bounds of the graph are below (0,0).
 	 * 
-	 * The first validation is required to compute the bounds of the graph
-	 * while the second validation is required to apply the new translate.
+	 * The first validation is required to compute the bounds of the graph while the second validation is required to apply the new translate.
 	 */
 	protected void updateOrigin()
 	{
@@ -926,9 +835,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Processes the changes and returns the minimal rectangle to be
-	 * repainted in the buffer. A return value of null means no repaint
-	 * is required.
+	 * Processes the changes and returns the minimal rectangle to be repainted in the buffer. A return value of null means no repaint is required.
 	 */
 	public mxRectangle processChanges(List<mxUndoableChange> changes,
 			boolean invalidate, boolean ignoreDirty)
@@ -954,9 +861,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Processes the given change and invalidates the respective cached data
-	 * in <view>. This fires a <root> event if the root has changed in the
-	 * model.
+	 * Processes the given change and invalidates the respective cached data in <view>. This fires a <root> event if the root has changed in the model.
 	 */
 	public mxRectangle processChange(mxUndoableChange change,
 			boolean invalidate, boolean ignoreDirty)
@@ -979,8 +884,7 @@ public class mxGraph extends mxEventSource
 					try
 					{
 						view.scaleAndTranslate(1, 0, 0);
-					}
-					finally
+					} finally
 					{
 						view.setEventsEnabled(true);
 					}
@@ -1138,10 +1042,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Removes all cached information for the given cell and its descendants.
-	 * This is called when a cell was removed from the model.
+	 * Removes all cached information for the given cell and its descendants. This is called when a cell was removed from the model.
 	 * 
-	 * @param cell Cell that was removed from the model.
+	 * @param cell
+	 *            Cell that was removed from the model.
 	 */
 	protected void removeStateForCell(Object cell)
 	{
@@ -1161,12 +1065,10 @@ public class mxGraph extends mxEventSource
 	//
 
 	/**
-	 * Returns an array of key, value pairs representing the cell style for the
-	 * given cell. If no string is defined in the model that specifies the
-	 * style, then the default style for the cell is returned or <EMPTY_ARRAY>,
-	 * if not style can be found.
+	 * Returns an array of key, value pairs representing the cell style for the given cell. If no string is defined in the model that specifies the style, then the default style for the cell is returned or <EMPTY_ARRAY>, if not style can be found.
 	 * 
-	 * @param cell Cell whose style should be returned.
+	 * @param cell
+	 *            Cell whose style should be returned.
 	 * @return Returns the style of the cell.
 	 */
 	public Map<String, Object> getCellStyle(Object cell)
@@ -1190,9 +1092,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Tries to resolve the value for the image style in the image bundles and
-	 * turns short data URIs as defined in mxImageBundle to data URIs as
-	 * defined in RFC 2397 of the IETF.
+	 * Tries to resolve the value for the image style in the image bundles and turns short data URIs as defined in mxImageBundle to data URIs as defined in RFC 2397 of the IETF.
 	 */
 	protected Map<String, Object> postProcessCellStyle(Map<String, Object> style)
 	{
@@ -1231,7 +1131,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets the style of the selection cells to the given value.
 	 * 
-	 * @param style String representing the new style of the cells.
+	 * @param style
+	 *            String representing the new style of the cells.
 	 */
 	public Object[] setCellStyle(String style)
 	{
@@ -1239,12 +1140,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the style of the specified cells. If no cells are given, then the
-	 * selection cells are changed.
+	 * Sets the style of the specified cells. If no cells are given, then the selection cells are changed.
 	 * 
-	 * @param style String representing the new style of the cells.
-	 * @param cells Optional array of <mxCells> to set the style for. Default is the
-	 * selection cells.
+	 * @param style
+	 *            String representing the new style of the cells.
+	 * @param cells
+	 *            Optional array of <mxCells> to set the style for. Default is the selection cells.
 	 */
 	public Object[] setCellStyle(String style, Object[] cells)
 	{
@@ -1262,8 +1163,7 @@ public class mxGraph extends mxEventSource
 				{
 					model.setStyle(cells[i], style);
 				}
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -1273,13 +1173,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Toggles the boolean value for the given key in the style of the
-	 * given cell. If no cell is specified then the selection cell is
-	 * used.
+	 * Toggles the boolean value for the given key in the style of the given cell. If no cell is specified then the selection cell is used.
 	 * 
-	 * @param key Key for the boolean value to be toggled.
-	 * @param defaultValue Default boolean value if no value is defined.
-	 * @param cell Cell whose style should be modified.
+	 * @param key
+	 *            Key for the boolean value to be toggled.
+	 * @param defaultValue
+	 *            Default boolean value if no value is defined.
+	 * @param cell
+	 *            Cell whose style should be modified.
 	 */
 	public Object toggleCellStyle(String key, boolean defaultValue, Object cell)
 	{
@@ -1287,11 +1188,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Toggles the boolean value for the given key in the style of the
-	 * selection cells.
+	 * Toggles the boolean value for the given key in the style of the selection cells.
 	 * 
-	 * @param key Key for the boolean value to be toggled.
-	 * @param defaultValue Default boolean value if no value is defined.
+	 * @param key
+	 *            Key for the boolean value to be toggled.
+	 * @param defaultValue
+	 *            Default boolean value if no value is defined.
 	 */
 	public Object[] toggleCellStyles(String key, boolean defaultValue)
 	{
@@ -1299,14 +1201,15 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Toggles the boolean value for the given key in the style of the given
-	 * cells. If no cells are specified, then the selection cells are used. For
-	 * example, this can be used to toggle mxConstants.STYLE_ROUNDED or any
-	 * other style with a boolean value.
+	 * Toggles the boolean value for the given key in the style of the given cells. If no cells are specified, then the selection cells are used. For example, this can be used to toggle mxConstants.STYLE_ROUNDED or any other style with a boolean
+	 * value.
 	 * 
-	 * @param key String representing the key of the boolean style to be toggled.
-	 * @param defaultValue Default boolean value if no value is defined.
-	 * @param cells Cells whose styles should be modified.
+	 * @param key
+	 *            String representing the key of the boolean style to be toggled.
+	 * @param defaultValue
+	 *            Default boolean value if no value is defined.
+	 * @param cells
+	 *            Cells whose styles should be modified.
 	 */
 	public Object[] toggleCellStyles(String key, boolean defaultValue,
 			Object[] cells)
@@ -1336,8 +1239,10 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets the key to value in the styles of the selection cells.
 	 *
-	 * @param key String representing the key to be assigned.
-	 * @param value String representing the new value for the key.
+	 * @param key
+	 *            String representing the key to be assigned.
+	 * @param value
+	 *            String representing the new value for the key.
 	 */
 	public Object[] setCellStyles(String key, String value)
 	{
@@ -1345,15 +1250,15 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the key to value in the styles of the given cells. This will modify
-	 * the existing cell styles in-place and override any existing assignment
-	 * for the given key. If no cells are specified, then the selection cells
-	 * are changed. If no value is specified, then the respective key is
-	 * removed from the styles.
+	 * Sets the key to value in the styles of the given cells. This will modify the existing cell styles in-place and override any existing assignment for the given key. If no cells are specified, then the selection cells are changed. If no value is
+	 * specified, then the respective key is removed from the styles.
 	 * 
-	 * @param key String representing the key to be assigned.
-	 * @param value String representing the new value for the key.
-	 * @param cells Array of cells to change the style for.
+	 * @param key
+	 *            String representing the key to be assigned.
+	 * @param value
+	 *            String representing the new value for the key.
+	 * @param cells
+	 *            Array of cells to change the style for.
 	 */
 	public Object[] setCellStyles(String key, String value, Object[] cells)
 	{
@@ -1368,11 +1273,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Toggles the given bit for the given key in the styles of the selection
-	 * cells.
+	 * Toggles the given bit for the given key in the styles of the selection cells.
 	 * 
-	 * @param key String representing the key to toggle the flag in.
-	 * @param flag Integer that represents the bit to be toggled.
+	 * @param key
+	 *            String representing the key to toggle the flag in.
+	 * @param flag
+	 *            Integer that represents the bit to be toggled.
 	 */
 	public Object[] toggleCellStyleFlags(String key, int flag)
 	{
@@ -1380,13 +1286,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Toggles the given bit for the given key in the styles of the specified
-	 * cells.
+	 * Toggles the given bit for the given key in the styles of the specified cells.
 	 * 
-	 * @param key String representing the key to toggle the flag in.
-	 * @param flag Integer that represents the bit to be toggled.
-	 * @param cells Optional array of <mxCells> to change the style for. Default is
-	 * the selection cells.
+	 * @param key
+	 *            String representing the key to toggle the flag in.
+	 * @param flag
+	 *            Integer that represents the bit to be toggled.
+	 * @param cells
+	 *            Optional array of <mxCells> to change the style for. Default is the selection cells.
 	 */
 	public Object[] toggleCellStyleFlags(String key, int flag, Object[] cells)
 	{
@@ -1394,13 +1301,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets or toggles the given bit for the given key in the styles of the
-	 * selection cells.
+	 * Sets or toggles the given bit for the given key in the styles of the selection cells.
 	 * 
-	 * @param key String representing the key to toggle the flag in.
-	 * @param flag Integer that represents the bit to be toggled.
-	 * @param value Boolean value to be used or null if the value should be
-	 * toggled.
+	 * @param key
+	 *            String representing the key to toggle the flag in.
+	 * @param flag
+	 *            Integer that represents the bit to be toggled.
+	 * @param value
+	 *            Boolean value to be used or null if the value should be toggled.
 	 */
 	public Object[] setCellStyleFlags(String key, int flag, boolean value)
 	{
@@ -1408,15 +1316,16 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets or toggles the given bit for the given key in the styles of the
-	 * specified cells.
+	 * Sets or toggles the given bit for the given key in the styles of the specified cells.
 	 * 
-	 * @param key String representing the key to toggle the flag in.
-	 * @param flag Integer that represents the bit to be toggled.
-	 * @param value Boolean value to be used or null if the value should be
-	 * toggled.
-	 * @param cells Optional array of cells to change the style for. If no
-	 * cells are specified then the selection cells are used.
+	 * @param key
+	 *            String representing the key to toggle the flag in.
+	 * @param flag
+	 *            Integer that represents the bit to be toggled.
+	 * @param value
+	 *            Boolean value to be used or null if the value should be toggled.
+	 * @param cells
+	 *            Optional array of cells to change the style for. If no cells are specified then the selection cells are used.
 	 */
 	public Object[] setCellStyleFlags(String key, int flag, Boolean value,
 			Object[] cells)
@@ -1464,8 +1373,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Searches all bundles for the specified key and returns the value for the
-	 * first match or null if the key is not found.
+	 * Searches all bundles for the specified key and returns the value for the first match or null if the key is not found.
 	 */
 	public String getImageFromBundles(String key)
 	{
@@ -1508,11 +1416,10 @@ public class mxGraph extends mxEventSource
 	//
 
 	/**
-	 * Aligns the selection cells vertically or horizontally according to the
-	 * given alignment.
+	 * Aligns the selection cells vertically or horizontally according to the given alignment.
 	 * 
-	 * @param align Specifies the alignment. Possible values are all constants
-	 * in mxConstants with an ALIGN prefix.
+	 * @param align
+	 *            Specifies the alignment. Possible values are all constants in mxConstants with an ALIGN prefix.
 	 */
 	public Object[] alignCells(String align)
 	{
@@ -1520,12 +1427,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Aligns the given cells vertically or horizontally according to the given
-	 * alignment.
+	 * Aligns the given cells vertically or horizontally according to the given alignment.
 	 * 
-	 * @param align Specifies the alignment. Possible values are all constants
-	 * in mxConstants with an ALIGN prefix.
-	 * @param cells Array of cells to be aligned.
+	 * @param align
+	 *            Specifies the alignment. Possible values are all constants in mxConstants with an ALIGN prefix.
+	 * @param cells
+	 *            Array of cells to be aligned.
 	 */
 	public Object[] alignCells(String align, Object[] cells)
 	{
@@ -1533,13 +1440,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Aligns the given cells vertically or horizontally according to the given
-	 * alignment using the optional parameter as the coordinate.
+	 * Aligns the given cells vertically or horizontally according to the given alignment using the optional parameter as the coordinate.
 	 * 
-	 * @param align Specifies the alignment. Possible values are all constants
-	 * in mxConstants with an ALIGN prefix.
-	 * @param cells Array of cells to be aligned.
-	 * @param param Optional coordinate for the alignment.
+	 * @param align
+	 *            Specifies the alignment. Possible values are all constants in mxConstants with an ALIGN prefix.
+	 * @param cells
+	 *            Array of cells to be aligned.
+	 * @param param
+	 *            Optional coordinate for the alignment.
 	 */
 	public Object[] alignCells(String align, Object[] cells, Object param)
 	{
@@ -1669,8 +1577,7 @@ public class mxGraph extends mxEventSource
 
 				fireEvent(new mxEventObject(mxEvent.ALIGN_CELLS, "cells",
 						cells, "align", align));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -1680,12 +1587,11 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Called when the main control point of the edge is double-clicked. This
-	 * implementation switches between null (default) and alternateEdgeStyle
-	 * and resets the edges control points. Finally, a flip event is fired
-	 * before endUpdate is called on the model.
+	 * Called when the main control point of the edge is double-clicked. This implementation switches between null (default) and alternateEdgeStyle and resets the edges control points. Finally, a flip event is fired before endUpdate is called on the
+	 * model.
 	 * 
-	 * @param edge Cell that represents the edge to be flipped.
+	 * @param edge
+	 *            Cell that represents the edge to be flipped.
 	 * @return Returns the edge that has been flipped.
 	 */
 	public Object flipEdge(Object edge)
@@ -1709,8 +1615,7 @@ public class mxGraph extends mxEventSource
 				// Removes all existing control points
 				removeEdgeControlPoints(edge);
 				fireEvent(new mxEventObject(mxEvent.FLIP_EDGE, "edge", edge));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -1726,7 +1631,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Moves the selection cells to the front or back. This is a shortcut method.
 	 * 
-	 * @param back Specifies if the cells should be moved to back.
+	 * @param back
+	 *            Specifies if the cells should be moved to back.
 	 */
 	public Object[] orderCells(boolean back)
 	{
@@ -1734,13 +1640,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Moves the given cells to the front or back. The change is carried out
-	 * using cellsOrdered. This method fires mxEvent.ORDER_CELLS while the
-	 * transaction is in progress.
+	 * Moves the given cells to the front or back. The change is carried out using cellsOrdered. This method fires mxEvent.ORDER_CELLS while the transaction is in progress.
 	 * 
-	 * @param back Specifies if the cells should be moved to back.
-	 * @param cells Array of cells whose order should be changed. If null is
-	 * specified then the selection cells are used.
+	 * @param back
+	 *            Specifies if the cells should be moved to back.
+	 * @param cells
+	 *            Array of cells whose order should be changed. If null is specified then the selection cells are used.
 	 */
 	public Object[] orderCells(boolean back, Object[] cells)
 	{
@@ -1755,8 +1660,7 @@ public class mxGraph extends mxEventSource
 			cellsOrdered(cells, back);
 			fireEvent(new mxEventObject(mxEvent.ORDER_CELLS, "cells", cells,
 					"back", back));
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -1765,11 +1669,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Moves the given cells to the front or back. This method fires
-	 * mxEvent.CELLS_ORDERED while the transaction is in progress.
+	 * Moves the given cells to the front or back. This method fires mxEvent.CELLS_ORDERED while the transaction is in progress.
 	 * 
-	 * @param cells Array of cells whose order should be changed.
-	 * @param back Specifies if the cells should be moved to back.
+	 * @param cells
+	 *            Array of cells whose order should be changed.
+	 * @param back
+	 *            Specifies if the cells should be moved to back.
 	 */
 	public void cellsOrdered(Object[] cells, boolean back)
 	{
@@ -1795,8 +1700,7 @@ public class mxGraph extends mxEventSource
 
 				fireEvent(new mxEventObject(mxEvent.CELLS_ORDERED, "cells",
 						cells, "back", back));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -1818,8 +1722,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Groups the selection cells and adds them to the given group. This is a
-	 * shortcut method.
+	 * Groups the selection cells and adds them to the given group. This is a shortcut method.
 	 * 
 	 * @return Returns the new group.
 	 */
@@ -1829,8 +1732,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Groups the selection cells and adds them to the given group. This is a
-	 * shortcut method.
+	 * Groups the selection cells and adds them to the given group. This is a shortcut method.
 	 * 
 	 * @return Returns the new group.
 	 */
@@ -1840,18 +1742,15 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Adds the cells into the given group. The change is carried out using
-	 * cellsAdded, cellsMoved and cellsResized. This method fires
-	 * mxEvent.GROUP_CELLS while the transaction is in progress. Returns the
-	 * new group. A group is only created if there is at least one entry in the
-	 * given array of cells.
+	 * Adds the cells into the given group. The change is carried out using cellsAdded, cellsMoved and cellsResized. This method fires mxEvent.GROUP_CELLS while the transaction is in progress. Returns the new group. A group is only created if there
+	 * is at least one entry in the given array of cells.
 	 * 
-	 * @param group Cell that represents the target group. If null is specified
-	 * then a new group is created using createGroupCell.
-	 * @param border Integer that specifies the border between the child area
-	 * and the group bounds.
-	 * @param cells Optional array of cells to be grouped. If null is specified
-	 * then the selection cells are used.
+	 * @param group
+	 *            Cell that represents the target group. If null is specified then a new group is created using createGroupCell.
+	 * @param border
+	 *            Integer that specifies the border between the child area and the group bounds.
+	 * @param cells
+	 *            Optional array of cells to be grouped. If null is specified then the selection cells are used.
 	 */
 	public Object groupCells(Object group, double border, Object[] cells)
 	{
@@ -1903,8 +1802,7 @@ public class mxGraph extends mxEventSource
 
 				fireEvent(new mxEventObject(mxEvent.GROUP_CELLS, "group",
 						group, "cells", cells, "border", border));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -1914,8 +1812,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the cells with the same parent as the first cell
-	 * in the given array.
+	 * Returns the cells with the same parent as the first cell in the given array.
 	 */
 	public Object[] getCellsForGroup(Object[] cells)
 	{
@@ -1940,10 +1837,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the bounds to be used for the given group and children. This
-	 * implementation computes the bounding box of the geometries of all
-	 * vertices in the given children array. Edges are ignored. If the group
-	 * cell is a swimlane the title region is added to the bounds.
+	 * Returns the bounds to be used for the given group and children. This implementation computes the bounding box of the geometries of all vertices in the given children array. Edges are ignored. If the group cell is a swimlane the title region is
+	 * added to the bounds.
 	 */
 	public mxRectangle getBoundsForGroup(Object group, Object[] children,
 			double border)
@@ -1973,11 +1868,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Hook for creating the group cell to hold the given array of <mxCells> if
-	 * no group cell was given to the <group> function. The children are just
-	 * for informational purpose, they will be added to the returned group
-	 * later. Note that the returned group should have a geometry. The
-	 * coordinates of which are later overridden.
+	 * Hook for creating the group cell to hold the given array of <mxCells> if no group cell was given to the <group> function. The children are just for informational purpose, they will be added to the returned group later. Note that the returned
+	 * group should have a geometry. The coordinates of which are later overridden.
 	 * 
 	 * @param cells
 	 * @return Returns a new group cell.
@@ -2000,11 +1892,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Ungroups the given cells by moving the children the children to their
-	 * parents parent and removing the empty groups.
+	 * Ungroups the given cells by moving the children the children to their parents parent and removing the empty groups.
 	 * 
-	 * @param cells Array of cells to be ungrouped. If null is specified then
-	 * the selection cells are used.
+	 * @param cells
+	 *            Array of cells to be ungrouped. If null is specified then the selection cells are used.
 	 * @return Returns the children that have been removed from the groups.
 	 */
 	public Object[] ungroupCells(Object[] cells)
@@ -2052,8 +1943,7 @@ public class mxGraph extends mxEventSource
 				cellsRemoved(addAllEdges(cells));
 				fireEvent(new mxEventObject(mxEvent.UNGROUP_CELLS, "cells",
 						cells));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -2063,8 +1953,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Removes the selection cells from their parents and adds them to the
-	 * default parent returned by getDefaultParent.
+	 * Removes the selection cells from their parents and adds them to the default parent returned by getDefaultParent.
 	 */
 	public Object[] removeCellsFromParent()
 	{
@@ -2072,10 +1961,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Removes the specified cells from their parents and adds them to the
-	 * default parent.
+	 * Removes the specified cells from their parents and adds them to the default parent.
 	 * 
-	 * @param cells Array of cells to be removed from their parents.
+	 * @param cells
+	 *            Array of cells to be removed from their parents.
 	 * @return Returns the cells that were removed from their parents.
 	 */
 	public Object[] removeCellsFromParent(Object[] cells)
@@ -2094,8 +1983,7 @@ public class mxGraph extends mxEventSource
 			cellsAdded(cells, parent, index, null, null, true);
 			fireEvent(new mxEventObject(mxEvent.REMOVE_CELLS_FROM_PARENT,
 					"cells", cells));
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -2104,8 +1992,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Updates the bounds of the given array of groups so that it includes
-	 * all child vertices.
+	 * Updates the bounds of the given array of groups so that it includes all child vertices.
 	 */
 	public Object[] updateGroupBounds()
 	{
@@ -2113,10 +2000,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Updates the bounds of the given array of groups so that it includes
-	 * all child vertices.
+	 * Updates the bounds of the given array of groups so that it includes all child vertices.
 	 * 
-	 * @param cells The groups whose bounds should be updated.
+	 * @param cells
+	 *            The groups whose bounds should be updated.
 	 */
 	public Object[] updateGroupBounds(Object[] cells)
 	{
@@ -2124,11 +2011,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Updates the bounds of the given array of groups so that it includes
-	 * all child vertices.
+	 * Updates the bounds of the given array of groups so that it includes all child vertices.
 	 * 
-	 * @param cells The groups whose bounds should be updated.
-	 * @param border The border to be added in the group.
+	 * @param cells
+	 *            The groups whose bounds should be updated.
+	 * @param border
+	 *            The border to be added in the group.
 	 */
 	public Object[] updateGroupBounds(Object[] cells, int border)
 	{
@@ -2136,12 +2024,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Updates the bounds of the given array of groups so that it includes
-	 * all child vertices.
+	 * Updates the bounds of the given array of groups so that it includes all child vertices.
 	 * 
-	 * @param cells The groups whose bounds should be updated.
-	 * @param border The border to be added in the group.
-	 * @param moveParent Specifies if the group should be moved.
+	 * @param cells
+	 *            The groups whose bounds should be updated.
+	 * @param border
+	 *            The border to be added in the group.
+	 * @param moveParent
+	 *            Specifies if the group should be moved.
 	 */
 	public Object[] updateGroupBounds(Object[] cells, int border,
 			boolean moveParent)
@@ -2196,8 +2086,7 @@ public class mxGraph extends mxEventSource
 					}
 				}
 			}
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -2210,16 +2099,13 @@ public class mxGraph extends mxEventSource
 	//
 
 	/**
-	 * Clones all cells in the given array. To clone all children in a cell and
-	 * add them to another graph:
+	 * Clones all cells in the given array. To clone all children in a cell and add them to another graph:
 	 * 
 	 * <code>
 	 * graph2.addCells(graph.cloneCells(new Object[] { parent }));
 	 * </code>
 	 * 
-	 * To clone all children in a graph layer if graph g1 and put them into the
-	 * default parent (typically default layer) of another graph g2, the
-	 * following code is used:
+	 * To clone all children in a graph layer if graph g1 and put them into the default parent (typically default layer) of another graph g2, the following code is used:
 	 * 
 	 * <code>
 	 * g2.addCells(g1.cloneCells(g1.cloneCells(g1.getChildCells(g1.getDefaultParent()));
@@ -2232,14 +2118,11 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the clones for the given cells. If the terminal of an edge is
-	 * not in the given array, then the respective end is assigned a terminal
-	 * point and the terminal is removed. If a cloned edge is invalid and
-	 * allowInvalidEdges is false, then a null pointer will be at this position
-	 * in the returned array. Use getCloneableCells on the input array to only
-	 * clone the cells where isCellCloneable returns true.
+	 * Returns the clones for the given cells. If the terminal of an edge is not in the given array, then the respective end is assigned a terminal point and the terminal is removed. If a cloned edge is invalid and allowInvalidEdges is false, then a
+	 * null pointer will be at this position in the returned array. Use getCloneableCells on the input array to only clone the cells where isCellCloneable returns true.
 	 * 
-	 * @param cells Array of mxCells to be cloned.
+	 * @param cells
+	 *            Array of mxCells to be cloned.
 	 * @return Returns the clones of the given cells.
 	 */
 	public Object[] cloneCells(Object[] cells, boolean allowInvalidEdges)
@@ -2371,20 +2254,25 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Adds a new vertex into the given parent using value as the user object
-	 * and the given coordinates as the geometry of the new vertex. The id and
-	 * style are used for the respective properties of the new cell, which is
-	 * returned.
+	 * Adds a new vertex into the given parent using value as the user object and the given coordinates as the geometry of the new vertex. The id and style are used for the respective properties of the new cell, which is returned.
 	 * 
-	 * @param parent Cell that specifies the parent of the new vertex.
-	 * @param id Optional string that defines the Id of the new vertex.
-	 * @param value Object to be used as the user object.
-	 * @param x Integer that defines the x coordinate of the vertex.
-	 * @param y Integer that defines the y coordinate of the vertex.
-	 * @param width Integer that defines the width of the vertex.
-	 * @param height Integer that defines the height of the vertex.
-	 * @param style Optional string that defines the cell style.
-	 * @param pdtId 
+	 * @param parent
+	 *            Cell that specifies the parent of the new vertex.
+	 * @param id
+	 *            Optional string that defines the Id of the new vertex.
+	 * @param value
+	 *            Object to be used as the user object.
+	 * @param x
+	 *            Integer that defines the x coordinate of the vertex.
+	 * @param y
+	 *            Integer that defines the y coordinate of the vertex.
+	 * @param width
+	 *            Integer that defines the width of the vertex.
+	 * @param height
+	 *            Integer that defines the height of the vertex.
+	 * @param style
+	 *            Optional string that defines the cell style.
+	 * @param pdtId
 	 * @return Returns the new vertex that has been inserted.
 	 */
 	public Object insertVertex(Object parent, String id, Object value,
@@ -2393,7 +2281,7 @@ public class mxGraph extends mxEventSource
 		return insertVertex(parent, id, value, x, y, width, height, style,
 				false);
 	}
-	
+
 	public Object insertVertex(Object parent, String id, Object value,
 			double x, double y, double width, double height, String style, String pdtId)
 	{
@@ -2402,21 +2290,27 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Adds a new vertex into the given parent using value as the user object
-	 * and the given coordinates as the geometry of the new vertex. The id and
-	 * style are used for the respective properties of the new cell, which is
-	 * returned.
+	 * Adds a new vertex into the given parent using value as the user object and the given coordinates as the geometry of the new vertex. The id and style are used for the respective properties of the new cell, which is returned.
 	 * 
-	 * @param parent Cell that specifies the parent of the new vertex.
-	 * @param id Optional string that defines the Id of the new vertex.
-	 * @param value Object to be used as the user object.
-	 * @param x Integer that defines the x coordinate of the vertex.
-	 * @param y Integer that defines the y coordinate of the vertex.
-	 * @param width Integer that defines the width of the vertex.
-	 * @param height Integer that defines the height of the vertex.
-	 * @param style Optional string that defines the cell style.
-	 * @param relative Specifies if the geometry should be relative.
-	 * @param pdtId 
+	 * @param parent
+	 *            Cell that specifies the parent of the new vertex.
+	 * @param id
+	 *            Optional string that defines the Id of the new vertex.
+	 * @param value
+	 *            Object to be used as the user object.
+	 * @param x
+	 *            Integer that defines the x coordinate of the vertex.
+	 * @param y
+	 *            Integer that defines the y coordinate of the vertex.
+	 * @param width
+	 *            Integer that defines the width of the vertex.
+	 * @param height
+	 *            Integer that defines the height of the vertex.
+	 * @param style
+	 *            Optional string that defines the cell style.
+	 * @param relative
+	 *            Specifies if the geometry should be relative.
+	 * @param pdtId
 	 * @return Returns the new vertex that has been inserted.
 	 */
 	public Object insertVertex(Object parent, String id, Object value,
@@ -2428,7 +2322,7 @@ public class mxGraph extends mxEventSource
 
 		return addCell(vertex, parent);
 	}
-	
+
 	public Object insertVertex(Object parent, String id, Object value,
 			double x, double y, double width, double height, String style,
 			boolean relative, String pdtId)
@@ -2442,14 +2336,22 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Hook method that creates the new vertex for insertVertex.
 	 * 
-	 * @param parent Cell that specifies the parent of the new vertex.
-	 * @param id Optional string that defines the Id of the new vertex.
-	 * @param value Object to be used as the user object.
-	 * @param x Integer that defines the x coordinate of the vertex.
-	 * @param y Integer that defines the y coordinate of the vertex.
-	 * @param width Integer that defines the width of the vertex.
-	 * @param height Integer that defines the height of the vertex.
-	 * @param style Optional string that defines the cell style.
+	 * @param parent
+	 *            Cell that specifies the parent of the new vertex.
+	 * @param id
+	 *            Optional string that defines the Id of the new vertex.
+	 * @param value
+	 *            Object to be used as the user object.
+	 * @param x
+	 *            Integer that defines the x coordinate of the vertex.
+	 * @param y
+	 *            Integer that defines the y coordinate of the vertex.
+	 * @param width
+	 *            Integer that defines the width of the vertex.
+	 * @param height
+	 *            Integer that defines the height of the vertex.
+	 * @param style
+	 *            Optional string that defines the cell style.
 	 * @return Returns the new vertex to be inserted.
 	 */
 	public Object createVertex(Object parent, String id, Object value,
@@ -2462,16 +2364,25 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Hook method that creates the new vertex for insertVertex.
 	 * 
-	 * @param parent Cell that specifies the parent of the new vertex.
-	 * @param id Optional string that defines the Id of the new vertex.
-	 * @param value Object to be used as the user object.
-	 * @param x Integer that defines the x coordinate of the vertex.
-	 * @param y Integer that defines the y coordinate of the vertex.
-	 * @param width Integer that defines the width of the vertex.
-	 * @param height Integer that defines the height of the vertex.
-	 * @param style Optional string that defines the cell style.
-	 * @param relative Specifies if the geometry should be relative.
-	 * @param pdtId 
+	 * @param parent
+	 *            Cell that specifies the parent of the new vertex.
+	 * @param id
+	 *            Optional string that defines the Id of the new vertex.
+	 * @param value
+	 *            Object to be used as the user object.
+	 * @param x
+	 *            Integer that defines the x coordinate of the vertex.
+	 * @param y
+	 *            Integer that defines the y coordinate of the vertex.
+	 * @param width
+	 *            Integer that defines the width of the vertex.
+	 * @param height
+	 *            Integer that defines the height of the vertex.
+	 * @param style
+	 *            Optional string that defines the cell style.
+	 * @param relative
+	 *            Specifies if the geometry should be relative.
+	 * @param pdtId
 	 * @return Returns the new vertex to be inserted.
 	 */
 	public Object createVertex(Object parent, String id, Object value,
@@ -2488,7 +2399,7 @@ public class mxGraph extends mxEventSource
 
 		return vertex;
 	}
-	
+
 	public Object createVertex(Object parent, String id, Object value,
 			double x, double y, double width, double height, String style,
 			boolean relative, String pdtId)
@@ -2515,17 +2426,20 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Adds a new edge into the given parent using value as the user object and
-	 * the given source and target as the terminals of the new edge. The Id and
-	 * style are used for the respective properties of the new cell, which is
-	 * returned.
+	 * Adds a new edge into the given parent using value as the user object and the given source and target as the terminals of the new edge. The Id and style are used for the respective properties of the new cell, which is returned.
 	 * 
-	 * @param parent Cell that specifies the parent of the new edge.
-	 * @param id Optional string that defines the Id of the new edge.
-	 * @param value Object to be used as the user object.
-	 * @param source Cell that defines the source of the edge.
-	 * @param target Cell that defines the target of the edge.
-	 * @param style Optional string that defines the cell style.
+	 * @param parent
+	 *            Cell that specifies the parent of the new edge.
+	 * @param id
+	 *            Optional string that defines the Id of the new edge.
+	 * @param value
+	 *            Object to be used as the user object.
+	 * @param source
+	 *            Cell that defines the source of the edge.
+	 * @param target
+	 *            Cell that defines the target of the edge.
+	 * @param style
+	 *            Optional string that defines the cell style.
 	 * @return Returns the new edge that has been inserted.
 	 */
 	public Object insertEdge(Object parent, String id, Object value,
@@ -2540,20 +2454,23 @@ public class mxGraph extends mxEventSource
 
 		return addEdge(edge, parent, source, target, null);
 	}
-	
+
 	/**
-	 * Adds a new edge into the given parent using value as the user object and
-	 * the given source and target as the terminals of the new edge. The Id and
-	 * style are used for the respective properties of the new cell, which is
-	 * returned.
+	 * Adds a new edge into the given parent using value as the user object and the given source and target as the terminals of the new edge. The Id and style are used for the respective properties of the new cell, which is returned.
 	 * 
-	 * @param parent Cell that specifies the parent of the new edge.
-	 * @param id Optional string that defines the Id of the new edge.
-	 * @param value Object to be used as the user object.
-	 * @param source Cell that defines the source of the edge.
-	 * @param target Cell that defines the target of the edge.
-	 * @param style Optional string that defines the cell style.
-	 * @param i 
+	 * @param parent
+	 *            Cell that specifies the parent of the new edge.
+	 * @param id
+	 *            Optional string that defines the Id of the new edge.
+	 * @param value
+	 *            Object to be used as the user object.
+	 * @param source
+	 *            Cell that defines the source of the edge.
+	 * @param target
+	 *            Cell that defines the target of the edge.
+	 * @param style
+	 *            Optional string that defines the cell style.
+	 * @param i
 	 * @return Returns the new edge that has been inserted.
 	 */
 	public Object insertEdge(Object parent, String id, Object value,
@@ -2565,16 +2482,20 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Hook method that creates the new edge for insertEdge. This
-	 * implementation does not set the source and target of the edge, these
-	 * are set when the edge is added to the model.
+	 * Hook method that creates the new edge for insertEdge. This implementation does not set the source and target of the edge, these are set when the edge is added to the model.
 	 * 
-	 * @param parent Cell that specifies the parent of the new edge.
-	 * @param id Optional string that defines the Id of the new edge.
-	 * @param value Object to be used as the user object.
-	 * @param source Cell that defines the source of the edge.
-	 * @param target Cell that defines the target of the edge.
-	 * @param style Optional string that defines the cell style.
+	 * @param parent
+	 *            Cell that specifies the parent of the new edge.
+	 * @param id
+	 *            Optional string that defines the Id of the new edge.
+	 * @param value
+	 *            Object to be used as the user object.
+	 * @param source
+	 *            Cell that defines the source of the edge.
+	 * @param target
+	 *            Cell that defines the target of the edge.
+	 * @param style
+	 *            Optional string that defines the cell style.
 	 * @return Returns the new edge to be inserted.
 	 */
 	public Object createEdge(Object parent, String id, Object value,
@@ -2583,7 +2504,7 @@ public class mxGraph extends mxEventSource
 		mxCell edge = new mxCell(value, new mxGeometry(), style);
 
 		edge.setId(id);
-		edge.setPdtId(id); 
+		edge.setPdtId(id);
 		edge.setEdge(true);
 		edge.getGeometry().setRelative(true);
 
@@ -2591,15 +2512,18 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Adds the edge to the parent and connects it to the given source and
-	 * target terminals. This is a shortcut method.
+	 * Adds the edge to the parent and connects it to the given source and target terminals. This is a shortcut method.
 	 * 
-	 * @param edge Edge to be inserted into the given parent.
-	 * @param parent Object that represents the new parent. If no parent is
-	 * given then the default parent is used.
-	 * @param source Optional cell that represents the source terminal.
-	 * @param target Optional cell that represents the target terminal.
-	 * @param index Optional index to insert the cells at. Default is to append.
+	 * @param edge
+	 *            Edge to be inserted into the given parent.
+	 * @param parent
+	 *            Object that represents the new parent. If no parent is given then the default parent is used.
+	 * @param source
+	 *            Optional cell that represents the source terminal.
+	 * @param target
+	 *            Optional cell that represents the target terminal.
+	 * @param index
+	 *            Optional index to insert the cells at. Default is to append.
 	 * @return Returns the edge that was added.
 	 */
 	public Object addEdge(Object edge, Object parent, Object source,
@@ -2611,7 +2535,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Adds the cell to the default parent. This is a shortcut method.
 	 * 
-	 * @param cell Cell to be inserted.
+	 * @param cell
+	 *            Cell to be inserted.
 	 * @return Returns the cell that was added.
 	 */
 	public Object addCell(Object cell)
@@ -2622,9 +2547,10 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Adds the cell to the parent. This is a shortcut method.
 	 * 
-	 * @param cell Cell tobe inserted.
-	 * @param parent Object that represents the new parent. If no parent is
-	 * given then the default parent is used.
+	 * @param cell
+	 *            Cell tobe inserted.
+	 * @param parent
+	 *            Object that represents the new parent. If no parent is given then the default parent is used.
 	 * @return Returns the cell that was added.
 	 */
 	public Object addCell(Object cell, Object parent)
@@ -2633,15 +2559,18 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Adds the cell to the parent and connects it to the given source and
-	 * target terminals. This is a shortcut method.
+	 * Adds the cell to the parent and connects it to the given source and target terminals. This is a shortcut method.
 	 * 
-	 * @param cell Cell to be inserted into the given parent.
-	 * @param parent Object that represents the new parent. If no parent is
-	 * given then the default parent is used.
-	 * @param index Optional index to insert the cells at. Default is to append.
-	 * @param source Optional cell that represents the source terminal.
-	 * @param target Optional cell that represents the target terminal.
+	 * @param cell
+	 *            Cell to be inserted into the given parent.
+	 * @param parent
+	 *            Object that represents the new parent. If no parent is given then the default parent is used.
+	 * @param index
+	 *            Optional index to insert the cells at. Default is to append.
+	 * @param source
+	 *            Optional cell that represents the source terminal.
+	 * @param target
+	 *            Optional cell that represents the target terminal.
 	 * @return Returns the cell that was added.
 	 */
 	public Object addCell(Object cell, Object parent, Integer index,
@@ -2653,7 +2582,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Adds the cells to the default parent. This is a shortcut method.
 	 * 
-	 * @param cells Array of cells to be inserted.
+	 * @param cells
+	 *            Array of cells to be inserted.
 	 * @return Returns the cells that were added.
 	 */
 	public Object[] addCells(Object[] cells)
@@ -2664,9 +2594,10 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Adds the cells to the parent. This is a shortcut method.
 	 * 
-	 * @param cells Array of cells to be inserted.
-	 * @param parent Optional cell that represents the new parent. If no parent
-	 * is specified then the default parent is used.
+	 * @param cells
+	 *            Array of cells to be inserted.
+	 * @param parent
+	 *            Optional cell that represents the new parent. If no parent is specified then the default parent is used.
 	 * @return Returns the cells that were added.
 	 */
 	public Object[] addCells(Object[] cells, Object parent)
@@ -2677,10 +2608,12 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Adds the cells to the parent at the given index. This is a shortcut method.
 	 * 
-	 * @param cells Array of cells to be inserted.
-	 * @param parent Optional cell that represents the new parent. If no parent
-	 * is specified then the default parent is used.
-	 * @param index Optional index to insert the cells at. Default is to append.
+	 * @param cells
+	 *            Array of cells to be inserted.
+	 * @param parent
+	 *            Optional cell that represents the new parent. If no parent is specified then the default parent is used.
+	 * @param index
+	 *            Optional index to insert the cells at. Default is to append.
 	 * @return Returns the cells that were added.
 	 */
 	public Object[] addCells(Object[] cells, Object parent, Integer index)
@@ -2689,17 +2622,18 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Adds the cells to the parent at the given index, connecting each cell to
-	 * the optional source and target terminal. The change is carried out using
-	 * cellsAdded. This method fires mxEvent.ADD_CELLS while the transaction
-	 * is in progress.
+	 * Adds the cells to the parent at the given index, connecting each cell to the optional source and target terminal. The change is carried out using cellsAdded. This method fires mxEvent.ADD_CELLS while the transaction is in progress.
 	 * 
-	 * @param cells Array of cells to be added.
-	 * @param parent Optional cell that represents the new parent. If no parent
-	 * is specified then the default parent is used.
-	 * @param index Optional index to insert the cells at. Default is to append.
-	 * @param source Optional source terminal for all inserted cells.
-	 * @param target Optional target terminal for all inserted cells.
+	 * @param cells
+	 *            Array of cells to be added.
+	 * @param parent
+	 *            Optional cell that represents the new parent. If no parent is specified then the default parent is used.
+	 * @param index
+	 *            Optional index to insert the cells at. Default is to append.
+	 * @param source
+	 *            Optional source terminal for all inserted cells.
+	 * @param target
+	 *            Optional target terminal for all inserted cells.
 	 * @return Returns the cells that were added.
 	 */
 	public Object[] addCells(Object[] cells, Object parent, Integer index,
@@ -2722,8 +2656,7 @@ public class mxGraph extends mxEventSource
 			fireEvent(new mxEventObject(mxEvent.ADD_CELLS, "cells", cells,
 					"parent", parent, "index", index, "source", source,
 					"target", target));
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -2732,8 +2665,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Adds the specified cells to the given parent. This method fires
-	 * mxEvent.CELLS_ADDED while the transaction is in progress.
+	 * Adds the specified cells to the given parent. This method fires mxEvent.CELLS_ADDED while the transaction is in progress.
 	 */
 	public void cellsAdded(Object[] cells, Object parent, Integer index,
 			Object source, Object target, boolean absolute)
@@ -2742,8 +2674,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Adds the specified cells to the given parent. This method fires
-	 * mxEvent.CELLS_ADDED while the transaction is in progress.
+	 * Adds the specified cells to the given parent. This method fires mxEvent.CELLS_ADDED while the transaction is in progress.
 	 */
 	public void cellsAdded(Object[] cells, Object parent, Integer index,
 			Object source, Object target, boolean absolute, boolean constrain)
@@ -2837,8 +2768,7 @@ public class mxGraph extends mxEventSource
 						cells, "parent", parent, "index", index, "source",
 						source, "target", target, "absolute", absolute));
 
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -2858,7 +2788,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Removes the given cells from the graph.
 	 * 
-	 * @param cells Array of cells to remove.
+	 * @param cells
+	 *            Array of cells to remove.
 	 * @return Returns the cells that have been removed.
 	 */
 	public Object[] removeCells(Object[] cells)
@@ -2867,14 +2798,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Removes the given cells from the graph including all connected edges if
-	 * includeEdges is true. The change is carried out using cellsRemoved. This
-	 * method fires mxEvent.REMOVE_CELLS while the transaction is in progress.
+	 * Removes the given cells from the graph including all connected edges if includeEdges is true. The change is carried out using cellsRemoved. This method fires mxEvent.REMOVE_CELLS while the transaction is in progress.
 	 * 
-	 * @param cells Array of cells to remove. If null is specified then the
-	 * selection cells which are deletable are used.
-	 * @param includeEdges Specifies if all connected edges should be removed as
-	 * well.
+	 * @param cells
+	 *            Array of cells to remove. If null is specified then the selection cells which are deletable are used.
+	 * @param includeEdges
+	 *            Specifies if all connected edges should be removed as well.
 	 */
 	public Object[] removeCells(Object[] cells, boolean includeEdges)
 	{
@@ -2895,8 +2824,7 @@ public class mxGraph extends mxEventSource
 			cellsRemoved(cells);
 			fireEvent(new mxEventObject(mxEvent.REMOVE_CELLS, "cells", cells,
 					"includeEdges", includeEdges));
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -2905,10 +2833,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Removes the given cells from the model. This method fires
-	 * mxEvent.CELLS_REMOVED while the transaction is in progress.
+	 * Removes the given cells from the model. This method fires mxEvent.CELLS_REMOVED while the transaction is in progress.
 	 * 
-	 * @param cells Array of cells to remove.
+	 * @param cells
+	 *            Array of cells to remove.
 	 */
 	public void cellsRemoved(Object[] cells)
 	{
@@ -2942,7 +2870,7 @@ public class mxGraph extends mxEventSource
 									// Checks which side of the edge is being disconnected
 									Object tmp = state.getVisibleTerminal(true);
 									boolean source = false;
-									
+
 									while (tmp != null)
 									{
 										if (cells[i] == tmp)
@@ -2950,10 +2878,10 @@ public class mxGraph extends mxEventSource
 											source = true;
 											break;
 										}
-										
+
 										tmp = model.getParent(tmp);
 									}
-									
+
 									geo = (mxGeometry) geo.clone();
 									int n = (source) ? 0 : state
 											.getAbsolutePointCount() - 1;
@@ -2974,8 +2902,7 @@ public class mxGraph extends mxEventSource
 
 				fireEvent(new mxEventObject(mxEvent.CELLS_REMOVED, "cells",
 						cells));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -2999,14 +2926,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Splits the given edge by adding a newEdge between the previous source
-	 * and the given cell and reconnecting the source of the given edge to the
-	 * given cell. Fires mxEvent.SPLIT_EDGE while the transaction is in
-	 * progress.
+	 * Splits the given edge by adding a newEdge between the previous source and the given cell and reconnecting the source of the given edge to the given cell. Fires mxEvent.SPLIT_EDGE while the transaction is in progress.
 	 * 
-	 * @param edge Object that represents the edge to be splitted.
-	 * @param cells Array that contains the cells to insert into the edge.
-	 * @param newEdge Object that represents the edge to be inserted.
+	 * @param edge
+	 *            Object that represents the edge to be splitted.
+	 * @param cells
+	 *            Array that contains the cells to insert into the edge.
+	 * @param newEdge
+	 *            Object that represents the edge to be inserted.
 	 * @return Returns the new edge that has been inserted.
 	 */
 	public Object splitEdge(Object edge, Object[] cells, Object newEdge,
@@ -3031,8 +2958,7 @@ public class mxGraph extends mxEventSource
 			cellConnected(edge, cells[0], true, null);
 			fireEvent(new mxEventObject(mxEvent.SPLIT_EDGE, "edge", edge,
 					"cells", cells, "newEdge", newEdge, "dx", dx, "dy", dy));
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -3045,10 +2971,10 @@ public class mxGraph extends mxEventSource
 	//
 
 	/**
-	 * Sets the visible state of the selection cells. This is a shortcut
-	 * method.
+	 * Sets the visible state of the selection cells. This is a shortcut method.
 	 * 
-	 * @param show Boolean that specifies the visible state to be assigned.
+	 * @param show
+	 *            Boolean that specifies the visible state to be assigned.
 	 * @return Returns the cells whose visible state was changed.
 	 */
 	public Object[] toggleCells(boolean show)
@@ -3057,11 +2983,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the visible state of the specified cells. This is a shortcut
-	 * method.
+	 * Sets the visible state of the specified cells. This is a shortcut method.
 	 *
-	 * @param show Boolean that specifies the visible state to be assigned.
-	 * @param cells Array of cells whose visible state should be changed.
+	 * @param show
+	 *            Boolean that specifies the visible state to be assigned.
+	 * @param cells
+	 *            Array of cells whose visible state should be changed.
 	 * @return Returns the cells whose visible state was changed.
 	 */
 	public Object[] toggleCells(boolean show, Object[] cells)
@@ -3070,14 +2997,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the visible state of the specified cells and all connected edges
-	 * if includeEdges is true. The change is carried out using cellsToggled.
-	 * This method fires mxEvent.TOGGLE_CELLS while the transaction is in
-	 * progress.
+	 * Sets the visible state of the specified cells and all connected edges if includeEdges is true. The change is carried out using cellsToggled. This method fires mxEvent.TOGGLE_CELLS while the transaction is in progress.
 	 *
-	 * @param show Boolean that specifies the visible state to be assigned.
-	 * @param cells Array of cells whose visible state should be changed. If
-	 * null is specified then the selection cells are used.
+	 * @param show
+	 *            Boolean that specifies the visible state to be assigned.
+	 * @param cells
+	 *            Array of cells whose visible state should be changed. If null is specified then the selection cells are used.
 	 * @return Returns the cells whose visible state was changed.
 	 */
 	public Object[] toggleCells(boolean show, Object[] cells,
@@ -3100,8 +3025,7 @@ public class mxGraph extends mxEventSource
 			cellsToggled(cells, show);
 			fireEvent(new mxEventObject(mxEvent.TOGGLE_CELLS, "show", show,
 					"cells", cells, "includeEdges", includeEdges));
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -3112,8 +3036,10 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets the visible state of the specified cells.
 	 * 
-	 * @param cells Array of cells whose visible state should be changed.
-	 * @param show Boolean that specifies the visible state to be assigned.
+	 * @param cells
+	 *            Array of cells whose visible state should be changed.
+	 * @param show
+	 *            Boolean that specifies the visible state to be assigned.
 	 */
 	public void cellsToggled(Object[] cells, boolean show)
 	{
@@ -3126,8 +3052,7 @@ public class mxGraph extends mxEventSource
 				{
 					model.setVisible(cells[i], show);
 				}
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -3139,11 +3064,10 @@ public class mxGraph extends mxEventSource
 	//
 
 	/**
-	 * Sets the collapsed state of the selection cells without recursion.
-	 * This is a shortcut method.
+	 * Sets the collapsed state of the selection cells without recursion. This is a shortcut method.
 	 * 
-	 * @param collapse Boolean that specifies the collapsed state to be
-	 * assigned.
+	 * @param collapse
+	 *            Boolean that specifies the collapsed state to be assigned.
 	 * @return Returns the cells whose collapsed state was changed.
 	 */
 	public Object[] foldCells(boolean collapse)
@@ -3152,13 +3076,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the collapsed state of the selection cells. This is a shortcut
-	 * method.
+	 * Sets the collapsed state of the selection cells. This is a shortcut method.
 	 * 
-	 * @param collapse Boolean that specifies the collapsed state to be
-	 * assigned.
-	 * @param recurse Boolean that specifies if the collapsed state should
-	 * be assigned to all descendants.
+	 * @param collapse
+	 *            Boolean that specifies the collapsed state to be assigned.
+	 * @param recurse
+	 *            Boolean that specifies if the collapsed state should be assigned to all descendants.
 	 * @return Returns the cells whose collapsed state was changed.
 	 */
 	public Object[] foldCells(boolean collapse, boolean recurse)
@@ -3175,18 +3098,17 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the collapsed state of the specified cells and all descendants
-	 * if recurse is true. The change is carried out using cellsFolded.
-	 * This method fires mxEvent.FOLD_CELLS while the transaction is in
-	 * progress. Returns the cells whose collapsed state was changed.
+	 * Sets the collapsed state of the specified cells and all descendants if recurse is true. The change is carried out using cellsFolded. This method fires mxEvent.FOLD_CELLS while the transaction is in progress. Returns the cells whose collapsed
+	 * state was changed.
 	 * 
-	 * @param collapse Boolean indicating the collapsed state to be assigned.
-	 * @param recurse Boolean indicating if the collapsed state of all
-	 * descendants should be set.
-	 * @param cells Array of cells whose collapsed state should be set. If
-	 * null is specified then the foldable selection cells are used.
-	 * @param checkFoldable Boolean indicating of isCellFoldable should be
-	 * checked. Default is false.
+	 * @param collapse
+	 *            Boolean indicating the collapsed state to be assigned.
+	 * @param recurse
+	 *            Boolean indicating if the collapsed state of all descendants should be set.
+	 * @param cells
+	 *            Array of cells whose collapsed state should be set. If null is specified then the foldable selection cells are used.
+	 * @param checkFoldable
+	 *            Boolean indicating of isCellFoldable should be checked. Default is false.
 	 */
 	public Object[] foldCells(boolean collapse, boolean recurse,
 			Object[] cells, boolean checkFoldable)
@@ -3202,8 +3124,7 @@ public class mxGraph extends mxEventSource
 			cellsFolded(cells, collapse, recurse, checkFoldable);
 			fireEvent(new mxEventObject(mxEvent.FOLD_CELLS, "cells", cells,
 					"collapse", collapse, "recurse", recurse));
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -3220,16 +3141,16 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the collapsed state of the specified cells. This method fires
-	 * mxEvent.CELLS_FOLDED while the transaction is in progress. Returns the
-	 * cells whose collapsed state was changed.
+	 * Sets the collapsed state of the specified cells. This method fires mxEvent.CELLS_FOLDED while the transaction is in progress. Returns the cells whose collapsed state was changed.
 	 * 
-	 * @param cells Array of cells whose collapsed state should be set.
-	 * @param collapse Boolean indicating the collapsed state to be assigned.
-	 * @param recurse Boolean indicating if the collapsed state of all
-	 * descendants should be set.
-	 * @param checkFoldable Boolean indicating of isCellFoldable should be
-	 * checked. Default is false.
+	 * @param cells
+	 *            Array of cells whose collapsed state should be set.
+	 * @param collapse
+	 *            Boolean indicating the collapsed state to be assigned.
+	 * @param recurse
+	 *            Boolean indicating if the collapsed state of all descendants should be set.
+	 * @param checkFoldable
+	 *            Boolean indicating of isCellFoldable should be checked. Default is false.
 	 */
 	public void cellsFolded(Object[] cells, boolean collapse, boolean recurse,
 			boolean checkFoldable)
@@ -3263,8 +3184,7 @@ public class mxGraph extends mxEventSource
 
 				fireEvent(new mxEventObject(mxEvent.CELLS_FOLDED, "cells",
 						cells, "collapse", collapse, "recurse", recurse));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -3272,11 +3192,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Swaps the alternate and the actual bounds in the geometry of the given
-	 * cell invoking updateAlternateBounds before carrying out the swap.
+	 * Swaps the alternate and the actual bounds in the geometry of the given cell invoking updateAlternateBounds before carrying out the swap.
 	 * 
-	 * @param cell Cell for which the bounds should be swapped.
-	 * @param willCollapse Boolean indicating if the cell is going to be collapsed.
+	 * @param cell
+	 *            Cell for which the bounds should be swapped.
+	 * @param willCollapse
+	 *            Boolean indicating if the cell is going to be collapsed.
 	 */
 	public void swapBounds(Object cell, boolean willCollapse)
 	{
@@ -3297,16 +3218,15 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Updates or sets the alternate bounds in the given geometry for the given
-	 * cell depending on whether the cell is going to be collapsed. If no
-	 * alternate bounds are defined in the geometry and
-	 * collapseToPreferredSize is true, then the preferred size is used for
-	 * the alternate bounds. The top, left corner is always kept at the same
-	 * location.
+	 * Updates or sets the alternate bounds in the given geometry for the given cell depending on whether the cell is going to be collapsed. If no alternate bounds are defined in the geometry and collapseToPreferredSize is true, then the preferred
+	 * size is used for the alternate bounds. The top, left corner is always kept at the same location.
 	 * 
-	 * @param cell Cell for which the geometry is being udpated.
-	 * @param geo Geometry for which the alternate bounds should be updated.
-	 * @param willCollapse Boolean indicating if the cell is going to be collapsed.
+	 * @param cell
+	 *            Cell for which the geometry is being udpated.
+	 * @param geo
+	 *            Geometry for which the alternate bounds should be updated.
+	 * @param willCollapse
+	 *            Boolean indicating if the cell is going to be collapsed.
 	 */
 	public void updateAlternateBounds(Object cell, mxGeometry geo,
 			boolean willCollapse)
@@ -3349,8 +3269,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns an array with the given cells and all edges that are connected
-	 * to a cell or one of its descendants.
+	 * Returns an array with the given cells and all edges that are connected to a cell or one of its descendants.
 	 */
 	public Object[] addAllEdges(Object[] cells)
 	{
@@ -3393,11 +3312,10 @@ public class mxGraph extends mxEventSource
 	//
 
 	/**
-	 * Updates the size of the given cell in the model using
-	 * getPreferredSizeForCell to get the new size. This function
-	 * fires beforeUpdateSize and afterUpdateSize events.
+	 * Updates the size of the given cell in the model using getPreferredSizeForCell to get the new size. This function fires beforeUpdateSize and afterUpdateSize events.
 	 * 
-	 * @param cell <mxCell> for which the size should be changed.
+	 * @param cell
+	 *            <mxCell> for which the size should be changed.
 	 */
 	public Object updateCellSize(Object cell)
 	{
@@ -3405,11 +3323,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Updates the size of the given cell in the model using
-	 * getPreferredSizeForCell to get the new size. This function
-	 * fires mxEvent.UPDATE_CELL_SIZE.
+	 * Updates the size of the given cell in the model using getPreferredSizeForCell to get the new size. This function fires mxEvent.UPDATE_CELL_SIZE.
 	 * 
-	 * @param cell Cell for which the size should be changed.
+	 * @param cell
+	 *            Cell for which the size should be changed.
 	 */
 	public Object updateCellSize(Object cell, boolean ignoreChildren)
 	{
@@ -3419,8 +3336,7 @@ public class mxGraph extends mxEventSource
 			cellSizeUpdated(cell, ignoreChildren);
 			fireEvent(new mxEventObject(mxEvent.UPDATE_CELL_SIZE, "cell", cell,
 					"ignoreChildren", ignoreChildren));
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -3429,10 +3345,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Updates the size of the given cell in the model using
-	 * getPreferredSizeForCell to get the new size.
+	 * Updates the size of the given cell in the model using getPreferredSizeForCell to get the new size.
 	 * 
-	 * @param cell Cell for which the size should be changed.
+	 * @param cell
+	 *            Cell for which the size should be changed.
 	 */
 	public void cellSizeUpdated(Object cell, boolean ignoreChildren)
 	{
@@ -3520,8 +3436,7 @@ public class mxGraph extends mxEventSource
 					cellsResized(new Object[] { cell },
 							new mxRectangle[] { geo });
 				}
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -3529,10 +3444,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the preferred width and height of the given <mxCell> as an
-	 * <mxRectangle>.
+	 * Returns the preferred width and height of the given <mxCell> as an <mxRectangle>.
 	 * 
-	 * @param cell <mxCell> for which the preferred size should be returned.
+	 * @param cell
+	 *            <mxCell> for which the preferred size should be returned.
 	 */
 	public mxRectangle getPreferredSizeForCell(Object cell)
 	{
@@ -3628,11 +3543,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the bounds of the given cell using resizeCells. Returns the
-	 * cell which was passed to the function.
+	 * Sets the bounds of the given cell using resizeCells. Returns the cell which was passed to the function.
 	 * 
-	 * @param cell <mxCell> whose bounds should be changed.
-	 * @param bounds <mxRectangle> that represents the new bounds.
+	 * @param cell
+	 *            <mxCell> whose bounds should be changed.
+	 * @param bounds
+	 *            <mxRectangle> that represents the new bounds.
 	 */
 	public Object resizeCell(Object cell, mxRectangle bounds)
 	{
@@ -3640,12 +3556,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the bounds of the given cells and fires a mxEvent.RESIZE_CELLS
-	 * event. while the transaction is in progress. Returns the cells which
-	 * have been passed to the function.
+	 * Sets the bounds of the given cells and fires a mxEvent.RESIZE_CELLS event. while the transaction is in progress. Returns the cells which have been passed to the function.
 	 * 
-	 * @param cells Array of cells whose bounds should be changed.
-	 * @param bounds Array of rectangles that represents the new bounds.
+	 * @param cells
+	 *            Array of cells whose bounds should be changed.
+	 * @param bounds
+	 *            Array of rectangles that represents the new bounds.
 	 */
 	public Object[] resizeCells(Object[] cells, mxRectangle[] bounds)
 	{
@@ -3655,8 +3571,7 @@ public class mxGraph extends mxEventSource
 			cellsResized(cells, bounds);
 			fireEvent(new mxEventObject(mxEvent.RESIZE_CELLS, "cells", cells,
 					"bounds", bounds));
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -3665,12 +3580,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the bounds of the given cells and fires a <mxEvent.CELLS_RESIZED>
-	 * event. If extendParents is true, then the parent is extended if a child
-	 * size is changed so that it overlaps with the parent.
+	 * Sets the bounds of the given cells and fires a <mxEvent.CELLS_RESIZED> event. If extendParents is true, then the parent is extended if a child size is changed so that it overlaps with the parent.
 	 * 
-	 * @param cells Array of <mxCells> whose bounds should be changed.
-	 * @param bounds Array of <mxRectangles> that represents the new bounds.
+	 * @param cells
+	 *            Array of <mxCells> whose bounds should be changed.
+	 * @param bounds
+	 *            Array of <mxRectangles> that represents the new bounds.
 	 */
 	public void cellsResized(Object[] cells, mxRectangle[] bounds)
 	{
@@ -3735,8 +3650,7 @@ public class mxGraph extends mxEventSource
 				// RENAME BOUNDSARRAY TO BOUNDS
 				fireEvent(new mxEventObject(mxEvent.CELLS_RESIZED, "cells",
 						cells, "bounds", bounds));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -3744,10 +3658,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Resizes the parents recursively so that they contain the complete area
-	 * of the resized child cell.
+	 * Resizes the parents recursively so that they contain the complete area of the resized child cell.
 	 * 
-	 * @param cell <mxCell> that has been resized.
+	 * @param cell
+	 *            <mxCell> that has been resized.
 	 */
 	public void extendParent(Object cell)
 	{
@@ -3791,8 +3705,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Moves or clones the cells and moves the cells or clones by the given
-	 * amount. This is a shortcut method.
+	 * Moves or clones the cells and moves the cells or clones by the given amount. This is a shortcut method.
 	 */
 	public Object[] moveCells(Object[] cells, double dx, double dy,
 			boolean clone)
@@ -3801,18 +3714,21 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Moves or clones the specified cells and moves the cells or clones by the
-	 * given amount, adding them to the optional target cell. The location is
-	 * the position of the mouse pointer as the mouse was released. The change
-	 * is carried out using cellsMoved. This method fires mxEvent.MOVE_CELLS
-	 * while the transaction is in progress.
+	 * Moves or clones the specified cells and moves the cells or clones by the given amount, adding them to the optional target cell. The location is the position of the mouse pointer as the mouse was released. The change is carried out using
+	 * cellsMoved. This method fires mxEvent.MOVE_CELLS while the transaction is in progress.
 	 * 
-	 * @param cells Array of cells to be moved, cloned or added to the target.
-	 * @param dx Integer that specifies the x-coordinate of the vector.
-	 * @param dy Integer that specifies the y-coordinate of the vector.
-	 * @param clone Boolean indicating if the cells should be cloned.
-	 * @param target Cell that represents the new parent of the cells.
-	 * @param location Location where the mouse was released.
+	 * @param cells
+	 *            Array of cells to be moved, cloned or added to the target.
+	 * @param dx
+	 *            Integer that specifies the x-coordinate of the vector.
+	 * @param dy
+	 *            Integer that specifies the y-coordinate of the vector.
+	 * @param clone
+	 *            Boolean indicating if the cells should be cloned.
+	 * @param target
+	 *            Cell that represents the new parent of the cells.
+	 * @param location
+	 *            Location where the mouse was released.
 	 * @return Returns the cells that were moved.
 	 */
 	public Object[] moveCells(Object[] cells, double dx, double dy,
@@ -3856,8 +3772,7 @@ public class mxGraph extends mxEventSource
 				fireEvent(new mxEventObject(mxEvent.MOVE_CELLS, "cells", cells,
 						"dx", dx, "dy", dy, "clone", clone, "target", target,
 						"location", location));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -3867,9 +3782,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Moves the specified cells by the given vector, disconnecting the cells
-	 * using disconnectGraph if disconnect is true. This method fires
-	 * mxEvent.CELLS_MOVED while the transaction is in progress.
+	 * Moves the specified cells by the given vector, disconnecting the cells using disconnectGraph if disconnect is true. This method fires mxEvent.CELLS_MOVED while the transaction is in progress.
 	 */
 	public void cellsMoved(Object[] cells, double dx, double dy,
 			boolean disconnect, boolean constrain)
@@ -3901,8 +3814,7 @@ public class mxGraph extends mxEventSource
 
 				fireEvent(new mxEventObject(mxEvent.CELLS_MOVED, "cells",
 						cells, "dx", dx, "dy", dy, "disconnect", disconnect));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -3910,8 +3822,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Translates the geometry of the given cell and stores the new,
-	 * translated geometry in the model as an atomic change.
+	 * Translates the geometry of the given cell and stores the new, translated geometry in the model as an atomic change.
 	 */
 	public void translateCell(Object cell, double dx, double dy)
 	{
@@ -3999,7 +3910,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the maximumGraphBounds to set
+	 * @param value
+	 *            the maximumGraphBounds to set
 	 */
 	public void setMaximumGraphBounds(mxRectangle value)
 	{
@@ -4011,12 +3923,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Keeps the given cell inside the bounds returned by
-	 * getCellContainmentArea for its parent, according to the rules defined by
-	 * getOverlap and isConstrainChild. This modifies the cell's geometry
-	 * in-place and does not clone it.
+	 * Keeps the given cell inside the bounds returned by getCellContainmentArea for its parent, according to the rules defined by getOverlap and isConstrainChild. This modifies the cell's geometry in-place and does not clone it.
 	 * 
-	 * @param cell Cell which should be constrained.
+	 * @param cell
+	 *            Cell which should be constrained.
 	 */
 	public void constrainChild(Object cell)
 	{
@@ -4062,11 +3972,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Resets the control points of the edges that are connected to the given
-	 * cells if not both ends of the edge are in the given cells array.
+	 * Resets the control points of the edges that are connected to the given cells if not both ends of the edge are in the given cells array.
 	 * 
-	 * @param cells Array of mxCells for which the connected edges should be
-	 * reset.
+	 * @param cells
+	 *            Array of mxCells for which the connected edges should be reset.
 	 */
 	public void removeEdgesControlPoints(Object[] cells)
 	{
@@ -4104,8 +4013,7 @@ public class mxGraph extends mxEventSource
 
 					removeEdgesControlPoints(mxGraphModel.getChildren(model, cells[i]));
 				}
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -4142,8 +4050,10 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns an array of all constraints for the given terminal.
 	 * 
-	 * @param terminal Cell state that represents the terminal.
-	 * @param source Specifies if the terminal is the source or target.
+	 * @param terminal
+	 *            Cell state that represents the terminal.
+	 * @param source
+	 *            Specifies if the terminal is the source or target.
 	 */
 	public mxConnectionConstraint[] getAllConnectionConstraints(
 			mxCellState terminal, boolean source)
@@ -4152,12 +4062,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns an connection constraint that describes the given connection
-	 * point. This result can then be passed to getConnectionPoint.
+	 * Returns an connection constraint that describes the given connection point. This result can then be passed to getConnectionPoint.
 	 * 
-	 * @param edge Cell state that represents the edge.
-	 * @param terminal Cell state that represents the terminal.
-	 * @param source Boolean indicating if the terminal is the source or target.
+	 * @param edge
+	 *            Cell state that represents the edge.
+	 * @param terminal
+	 *            Cell state that represents the terminal.
+	 * @param source
+	 *            Boolean indicating if the terminal is the source or target.
 	 */
 	public mxConnectionConstraint getConnectionConstraint(mxCellState edge,
 			mxCellState terminal, boolean source)
@@ -4193,14 +4105,16 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the connection constraint that describes the given connection point.
-	 * If no constraint is given then nothing is changed. To remove an existing
-	 * constraint from the given edge, use an empty constraint instead.
+	 * Sets the connection constraint that describes the given connection point. If no constraint is given then nothing is changed. To remove an existing constraint from the given edge, use an empty constraint instead.
 	 * 
-	 * @param edge Cell that represents the edge.
-	 * @param terminal Cell that represents the terminal.
-	 * @param source Boolean indicating if the terminal is the source or target.
-	 * @param constraint Optional connection constraint to be used for this connection.
+	 * @param edge
+	 *            Cell that represents the edge.
+	 * @param terminal
+	 *            Cell that represents the terminal.
+	 * @param source
+	 *            Boolean indicating if the terminal is the source or target.
+	 * @param constraint
+	 *            Optional connection constraint to be used for this connection.
 	 */
 	public void setConnectionConstraint(Object edge, Object terminal,
 			boolean source, mxConnectionConstraint constraint)
@@ -4247,8 +4161,7 @@ public class mxGraph extends mxEventSource
 								null, cells);
 					}
 				}
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -4256,13 +4169,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the connection constraint that describes the given connection point.
-	 * If no constraint is given then nothing is changed. To remove an existing
-	 * constraint from the given edge, use an empty constraint instead.
+	 * Sets the connection constraint that describes the given connection point. If no constraint is given then nothing is changed. To remove an existing constraint from the given edge, use an empty constraint instead.
 	 * 
-	 * @param vertex Cell state that represents the vertex.
-	 * @param constraint Connection constraint that represents the connection point
-	 * constraint as returned by getConnectionConstraint.
+	 * @param vertex
+	 *            Cell state that represents the vertex.
+	 * @param constraint
+	 *            Connection constraint that represents the connection point constraint as returned by getConnectionConstraint.
 	 */
 	public mxPoint getConnectionPoint(mxCellState vertex,
 			mxConnectionConstraint constraint)
@@ -4285,9 +4197,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Connects the specified end of the given edge to the given terminal
-	 * using cellConnected and fires mxEvent.CONNECT_CELL while the transaction
-	 * is in progress.
+	 * Connects the specified end of the given edge to the given terminal using cellConnected and fires mxEvent.CONNECT_CELL while the transaction is in progress.
 	 */
 	public Object connectCell(Object edge, Object terminal, boolean source)
 	{
@@ -4295,14 +4205,16 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Connects the specified end of the given edge to the given terminal
-	 * using cellConnected and fires mxEvent.CONNECT_CELL while the transaction
-	 * is in progress.
+	 * Connects the specified end of the given edge to the given terminal using cellConnected and fires mxEvent.CONNECT_CELL while the transaction is in progress.
 	 * 
-	 * @param edge Edge whose terminal should be updated.
-	 * @param terminal New terminal to be used.
-	 * @param source Specifies if the new terminal is the source or target.
-	 * @param constraint Optional constraint to be used for this connection.
+	 * @param edge
+	 *            Edge whose terminal should be updated.
+	 * @param terminal
+	 *            New terminal to be used.
+	 * @param source
+	 *            Specifies if the new terminal is the source or target.
+	 * @param constraint
+	 *            Optional constraint to be used for this connection.
 	 * @return Returns the update edge.
 	 */
 	public Object connectCell(Object edge, Object terminal, boolean source,
@@ -4316,8 +4228,7 @@ public class mxGraph extends mxEventSource
 			fireEvent(new mxEventObject(mxEvent.CONNECT_CELL, "edge", edge,
 					"terminal", terminal, "source", source, "previous",
 					previous));
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
@@ -4326,14 +4237,16 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the new terminal for the given edge and resets the edge points if
-	 * isResetEdgesOnConnect returns true. This method fires
-	 * <mxEvent.CELL_CONNECTED> while the transaction is in progress.
+	 * Sets the new terminal for the given edge and resets the edge points if isResetEdgesOnConnect returns true. This method fires <mxEvent.CELL_CONNECTED> while the transaction is in progress.
 	 * 
-	 * @param edge Edge whose terminal should be updated.
-	 * @param terminal New terminal to be used.
-	 * @param source Specifies if the new terminal is the source or target.
-	 * @param constraint Constraint to be used for this connection.
+	 * @param edge
+	 *            Edge whose terminal should be updated.
+	 * @param terminal
+	 *            New terminal to be used.
+	 * @param source
+	 *            Specifies if the new terminal is the source or target.
+	 * @param constraint
+	 *            Constraint to be used for this connection.
 	 */
 	public void cellConnected(Object edge, Object terminal, boolean source,
 			mxConnectionConstraint constraint)
@@ -4377,8 +4290,7 @@ public class mxGraph extends mxEventSource
 				fireEvent(new mxEventObject(mxEvent.CELL_CONNECTED, "edge",
 						edge, "terminal", terminal, "source", source,
 						"previous", previous));
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -4386,10 +4298,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Disconnects the given edges from the terminals which are not in the
-	 * given array.
+	 * Disconnects the given edges from the terminals which are not in the given array.
 	 * 
-	 * @param cells Array of <mxCells> to be disconnected.
+	 * @param cells
+	 *            Array of <mxCells> to be disconnected.
 	 */
 	public void disconnectGraph(Object[] cells)
 	{
@@ -4483,8 +4395,7 @@ public class mxGraph extends mxEventSource
 						}
 					}
 				}
-			}
-			finally
+			} finally
 			{
 				model.endUpdate();
 			}
@@ -4496,8 +4407,7 @@ public class mxGraph extends mxEventSource
 	//
 
 	/**
-	 * Returns the current root of the displayed cell hierarchy. This is a
-	 * shortcut to <mxGraphView.currentRoot> in <view>.
+	 * Returns the current root of the displayed cell hierarchy. This is a shortcut to <mxGraphView.currentRoot> in <view>.
 	 * 
 	 * @return Returns the current root in the view.
 	 */
@@ -4507,10 +4417,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the translation to be used if the given cell is the root cell as
-	 * an <mxPoint>. This implementation returns null.
+	 * Returns the translation to be used if the given cell is the root cell as an <mxPoint>. This implementation returns null.
 	 * 
-	 * @param cell Cell that represents the root of the view.
+	 * @param cell
+	 *            Cell that represents the root of the view.
 	 * @return Returns the translation of the graph for the given root cell.
 	 */
 	public mxPoint getTranslateForRoot(Object cell)
@@ -4519,12 +4429,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is a "port", that is, when connecting to
-	 * it, the cell returned by getTerminalForPort should be used as the
-	 * terminal and the port should be referenced by the ID in either the
-	 * mxConstants.STYLE_SOURCE_PORT or the or the
-	 * mxConstants.STYLE_TARGET_PORT. Note that a port should not be movable.
-	 * This implementation always returns false.
+	 * Returns true if the given cell is a "port", that is, when connecting to it, the cell returned by getTerminalForPort should be used as the terminal and the port should be referenced by the ID in either the mxConstants.STYLE_SOURCE_PORT or the
+	 * or the mxConstants.STYLE_TARGET_PORT. Note that a port should not be movable. This implementation always returns false.
 	 * 
 	 * A typical implementation of this method looks as follows:
 	 * 
@@ -4537,7 +4443,8 @@ public class mxGraph extends mxEventSource
 	 * }
 	 * </code>
 	 * 
-	 * @param cell Cell that represents the port.
+	 * @param cell
+	 *            Cell that represents the port.
 	 * @return Returns true if the cell is a port.
 	 */
 	public boolean isPort(Object cell)
@@ -4546,11 +4453,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the terminal to be used for a given port. This implementation
-	 * always returns the parent cell.
+	 * Returns the terminal to be used for a given port. This implementation always returns the parent cell.
 	 * 
-	 * @param cell Cell that represents the port.
-	 * @param source If the cell is the source or target port.
+	 * @param cell
+	 *            Cell that represents the port.
+	 * @param source
+	 *            If the cell is the source or target port.
 	 * @return Returns the terminal to be used for the given port.
 	 */
 	public Object getTerminalForPort(Object cell, boolean source)
@@ -4559,11 +4467,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the offset to be used for the cells inside the given cell. The
-	 * root and layer cells may be identified using mxGraphModel.isRoot and
-	 * mxGraphModel.isLayer. This implementation returns null.
+	 * Returns the offset to be used for the cells inside the given cell. The root and layer cells may be identified using mxGraphModel.isRoot and mxGraphModel.isLayer. This implementation returns null.
 	 *
-	 * @param cell Cell whose offset should be returned.
+	 * @param cell
+	 *            Cell whose offset should be returned.
 	 * @return Returns the child offset for the given cell.
 	 */
 	public mxPoint getChildOffsetForCell(Object cell)
@@ -4580,9 +4487,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Uses the given cell as the root of the displayed cell hierarchy. If no
-	 * cell is specified then the selection cell is used. The cell is only used
-	 * if <isValidRoot> returns true.
+	 * Uses the given cell as the root of the displayed cell hierarchy. If no cell is specified then the selection cell is used. The cell is only used if <isValidRoot> returns true.
 	 * 
 	 * @param cell
 	 */
@@ -4601,8 +4506,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Changes the current root to the next valid root in the displayed cell
-	 * hierarchy.
+	 * Changes the current root to the next valid root in the displayed cell hierarchy.
 	 */
 	public void exitGroup()
 	{
@@ -4642,8 +4546,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Uses the root of the model as the root of the displayed cell hierarchy
-	 * and selects the previous root.
+	 * Uses the root of the model as the root of the displayed cell hierarchy and selects the previous root.
 	 */
 	public void home()
 	{
@@ -4662,10 +4565,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is a valid root for the cell display
-	 * hierarchy. This implementation returns true for all non-null values.
+	 * Returns true if the given cell is a valid root for the cell display hierarchy. This implementation returns true for all non-null values.
 	 * 
-	 * @param cell <mxCell> which should be checked as a possible root.
+	 * @param cell
+	 *            <mxCell> which should be checked as a possible root.
 	 * @return Returns true if the given cell is a valid root.
 	 */
 	public boolean isValidRoot(Object cell)
@@ -4694,8 +4597,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the bounds of the given cell including all connected edges
-	 * if includeEdge is true.
+	 * Returns the bounds of the given cell including all connected edges if includeEdge is true.
 	 */
 	public mxRectangle getCellBounds(Object cell, boolean includeEdges)
 	{
@@ -4703,8 +4605,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the bounds of the given cell including all connected edges
-	 * if includeEdge is true.
+	 * Returns the bounds of the given cell including all connected edges if includeEdge is true.
 	 */
 	public mxRectangle getCellBounds(Object cell, boolean includeEdges,
 			boolean includeDescendants)
@@ -4713,8 +4614,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the bounding box for the geometries of the vertices in the
-	 * given array of cells.
+	 * Returns the bounding box for the geometries of the vertices in the given array of cells.
 	 */
 	public mxRectangle getBoundingBoxFromGeometry(Object[] cells)
 	{
@@ -4752,8 +4652,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the bounding box of the given cell including all connected edges
-	 * if includeEdge is true.
+	 * Returns the bounding box of the given cell including all connected edges if includeEdge is true.
 	 */
 	public mxRectangle getBoundingBox(Object cell, boolean includeEdges)
 	{
@@ -4761,8 +4660,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the bounding box of the given cell including all connected edges
-	 * if includeEdge is true.
+	 * Returns the bounding box of the given cell including all connected edges if includeEdge is true.
 	 */
 	public mxRectangle getBoundingBox(Object cell, boolean includeEdges,
 			boolean includeDescendants)
@@ -4811,8 +4709,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the bounds of the given cell including all connected edges
-	 * if includeEdge is true.
+	 * Returns the bounds of the given cell including all connected edges if includeEdge is true.
 	 */
 	public mxRectangle getCellBounds(Object cell, boolean includeEdges,
 			boolean includeDescendants, boolean boundingBox)
@@ -4882,8 +4779,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Clears all cell states or the states for the hierarchy starting at the
-	 * given cell and validates the graph.
+	 * Clears all cell states or the states for the hierarchy starting at the given cell and validates the graph.
 	 */
 	public void refresh()
 	{
@@ -4900,8 +4796,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Fires a repaint event. The optional region is the rectangle that needs
-	 * to be repainted.
+	 * Fires a repaint event. The optional region is the rectangle that needs to be repainted.
 	 */
 	public void repaint(mxRectangle region)
 	{
@@ -4911,7 +4806,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Snaps the given numeric value to the grid if <gridEnabled> is true.
 	 *
-	 * @param value Numeric value to be snapped to the grid.
+	 * @param value
+	 *            Numeric value to be snapped to the grid.
 	 * @return Returns the value aligned to the grid.
 	 */
 	public double snap(double value)
@@ -4927,7 +4823,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns the geometry for the given cell.
 	 * 
-	 * @param cell Cell whose geometry should be returned.
+	 * @param cell
+	 *            Cell whose geometry should be returned.
 	 * @return Returns the geometry of the cell.
 	 */
 	public mxGeometry getCellGeometry(Object cell)
@@ -4936,15 +4833,13 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is visible in this graph. This
-	 * implementation uses <mxGraphModel.isVisible>. Subclassers can override
-	 * this to implement specific visibility for cells in only one graph, that
-	 * is, without affecting the visible state of the cell.
+	 * Returns true if the given cell is visible in this graph. This implementation uses <mxGraphModel.isVisible>. Subclassers can override this to implement specific visibility for cells in only one graph, that is, without affecting the visible
+	 * state of the cell.
 	 * 
-	 * When using dynamic filter expressions for cell visibility, then the
-	 * graph should be revalidated after the filter expression has changed.
+	 * When using dynamic filter expressions for cell visibility, then the graph should be revalidated after the filter expression has changed.
 	 * 
-	 * @param cell Cell whose visible state should be returned.
+	 * @param cell
+	 *            Cell whose visible state should be returned.
 	 * @return Returns the visible state of the cell.
 	 */
 	public boolean isCellVisible(Object cell)
@@ -4953,15 +4848,13 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is collapsed in this graph. This
-	 * implementation uses <mxGraphModel.isCollapsed>. Subclassers can override
-	 * this to implement specific collapsed states for cells in only one graph,
-	 * that is, without affecting the collapsed state of the cell.
+	 * Returns true if the given cell is collapsed in this graph. This implementation uses <mxGraphModel.isCollapsed>. Subclassers can override this to implement specific collapsed states for cells in only one graph, that is, without affecting the
+	 * collapsed state of the cell.
 	 * 
-	 * When using dynamic filter expressions for the collapsed state, then the
-	 * graph should be revalidated after the filter expression has changed.
+	 * When using dynamic filter expressions for the collapsed state, then the graph should be revalidated after the filter expression has changed.
 	 * 
-	 * @param cell Cell whose collapsed state should be returned.
+	 * @param cell
+	 *            Cell whose collapsed state should be returned.
 	 * @return Returns the collapsed state of the cell.
 	 */
 	public boolean isCellCollapsed(Object cell)
@@ -4970,12 +4863,11 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is connectable in this graph. This
-	 * implementation uses <mxGraphModel.isConnectable>. Subclassers can override
-	 * this to implement specific connectable states for cells in only one graph,
-	 * that is, without affecting the connectable state of the cell in the model.
+	 * Returns true if the given cell is connectable in this graph. This implementation uses <mxGraphModel.isConnectable>. Subclassers can override this to implement specific connectable states for cells in only one graph, that is, without affecting
+	 * the connectable state of the cell in the model.
 	 * 
-	 * @param cell Cell whose connectable state should be returned.
+	 * @param cell
+	 *            Cell whose connectable state should be returned.
 	 * @return Returns the connectable state of the cell.
 	 */
 	public boolean isCellConnectable(Object cell)
@@ -4984,10 +4876,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if perimeter points should be computed such that the
-	 * resulting edge has only horizontal or vertical segments.
+	 * Returns true if perimeter points should be computed such that the resulting edge has only horizontal or vertical segments.
 	 * 
-	 * @param edge Cell state that represents the edge.
+	 * @param edge
+	 *            Cell state that represents the edge.
 	 */
 	public boolean isOrthogonal(mxCellState edge)
 	{
@@ -5011,7 +4903,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns true if the given cell state is a loop.
 	 * 
-	 * @param state <mxCellState> that represents a potential loop.
+	 * @param state
+	 *            <mxCellState> that represents a potential loop.
 	 * @return Returns true if the given cell is a loop.
 	 */
 	public boolean isLoop(mxCellState state)
@@ -5047,12 +4940,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Checks if the return value of getEdgeValidationError for the given
-	 * arguments is null.
+	 * Checks if the return value of getEdgeValidationError for the given arguments is null.
 	 * 
-	 * @param edge Cell that represents the edge to validate.
-	 * @param source Cell that represents the source terminal.
-	 * @param target Cell that represents the target terminal.
+	 * @param edge
+	 *            Cell that represents the edge to validate.
+	 * @param source
+	 *            Cell that represents the source terminal.
+	 * @param target
+	 *            Cell that represents the target terminal.
 	 */
 	public boolean isEdgeValid(Object edge, Object source, Object target)
 	{
@@ -5060,18 +4955,16 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the validation error message to be displayed when inserting or
-	 * changing an edges' connectivity. A return value of null means the edge
-	 * is valid, a return value of '' means it's not valid, but do not display
-	 * an error message. Any other (non-empty) string returned from this method
-	 * is displayed as an error message when trying to connect an edge to a
-	 * source and target. This implementation uses the multiplicities, as
-	 * well as multigraph and allowDanglingEdges to generate validation
-	 * errors.
+	 * Returns the validation error message to be displayed when inserting or changing an edges' connectivity. A return value of null means the edge is valid, a return value of '' means it's not valid, but do not display an error message. Any other
+	 * (non-empty) string returned from this method is displayed as an error message when trying to connect an edge to a source and target. This implementation uses the multiplicities, as well as multigraph and allowDanglingEdges to generate
+	 * validation errors.
 	 * 
-	 * @param edge Cell that represents the edge to validate.
-	 * @param source Cell that represents the source terminal.
-	 * @param target Cell that represents the target terminal.
+	 * @param edge
+	 *            Cell that represents the edge to validate.
+	 * @param source
+	 *            Cell that represents the source terminal.
+	 * @param target
+	 *            Cell that represents the target terminal.
 	 */
 	public String getEdgeValidationError(Object edge, Object source,
 			Object target)
@@ -5105,7 +4998,7 @@ public class mxGraph extends mxEventSource
 			StringBuffer error = new StringBuffer();
 
 			// Checks if the cells are already connected
-			// and adds an error message if required			
+			// and adds an error message if required
 			if (!multigraph)
 			{
 				Object[] tmp = mxGraphModel.getEdgesBetween(model, source,
@@ -5157,12 +5050,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Hook method for subclassers to return an error message for the given
-	 * edge and terminals. This implementation returns null.
+	 * Hook method for subclassers to return an error message for the given edge and terminals. This implementation returns null.
 	 * 
-	 * @param edge Cell that represents the edge to validate.
-	 * @param source Cell that represents the source terminal.
-	 * @param target Cell that represents the target terminal.
+	 * @param edge
+	 *            Cell that represents the edge to validate.
+	 * @param source
+	 *            Cell that represents the source terminal.
+	 * @param target
+	 *            Cell that represents the target terminal.
 	 */
 	public String validateEdge(Object edge, Object source, Object target)
 	{
@@ -5170,11 +5065,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Checks all multiplicities that cannot be enforced while the graph is
-	 * being modified, namely, all multiplicities that require a minimum of
-	 * 1 edge.
+	 * Checks all multiplicities that cannot be enforced while the graph is being modified, namely, all multiplicities that require a minimum of 1 edge.
 	 * 
-	 * @param cell Cell for which the multiplicities should be checked.
+	 * @param cell
+	 *            Cell for which the multiplicities should be checked.
 	 */
 	public String getCellValidationError(Object cell)
 	{
@@ -5213,11 +5107,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Hook method for subclassers to return an error message for the given
-	 * cell and validation context. This implementation returns null.
+	 * Hook method for subclassers to return an error message for the given cell and validation context. This implementation returns null.
 	 * 
-	 * @param cell Cell that represents the cell to validate.
-	 * @param context Hashtable that represents the global validation state.
+	 * @param cell
+	 *            Cell that represents the cell to validate.
+	 * @param context
+	 *            Hashtable that represents the global validation state.
 	 */
 	public String validateCell(Object cell, Hashtable<Object, Object> context)
 	{
@@ -5237,7 +5132,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the labelsVisible to set
+	 * @param value
+	 *            the labelsVisible to set
 	 */
 	public void setLabelsVisible(boolean value)
 	{
@@ -5249,7 +5145,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the htmlLabels to set
+	 * @param value
+	 *            the htmlLabels to set
 	 */
 	public void setHtmlLabels(boolean value)
 	{
@@ -5270,7 +5167,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns the textual representation for the given cell.
 	 * 
-	 * @param cell Cell to be converted to a string.
+	 * @param cell
+	 *            Cell to be converted to a string.
 	 * @return Returns the textual representation of the cell.
 	 */
 	public String convertValueToString(Object cell)
@@ -5281,11 +5179,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns a string or DOM node that represents the label for the given
-	 * cell. This implementation uses <convertValueToString> if <labelsVisible>
-	 * is true. Otherwise it returns an empty string.
+	 * Returns a string or DOM node that represents the label for the given cell. This implementation uses <convertValueToString> if <labelsVisible> is true. Otherwise it returns an empty string.
 	 * 
-	 * @param cell <mxCell> whose label should be returned.
+	 * @param cell
+	 *            <mxCell> whose label should be returned.
 	 * @return Returns the label for the given cell.
 	 */
 	public String getLabel(Object cell)
@@ -5309,12 +5206,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the new label for a cell. If autoSize is true then
-	 * <cellSizeUpdated> will be called.
+	 * Sets the new label for a cell. If autoSize is true then <cellSizeUpdated> will be called.
 	 * 
-	 * @param cell Cell whose label should be changed.
-	 * @param value New label to be assigned.
-	 * @param autoSize Specifies if cellSizeUpdated should be called.
+	 * @param cell
+	 *            Cell whose label should be changed.
+	 * @param value
+	 *            New label to be assigned.
+	 * @param autoSize
+	 *            Specifies if cellSizeUpdated should be called.
 	 */
 	public void cellLabelChanged(Object cell, Object value, boolean autoSize)
 	{
@@ -5327,18 +5226,17 @@ public class mxGraph extends mxEventSource
 			{
 				cellSizeUpdated(cell, false);
 			}
-		}
-		finally
+		} finally
 		{
 			model.endUpdate();
 		}
 	}
 
 	/**
-	 * Returns true if the label must be rendered as HTML markup. The default
-	 * implementation returns <htmlLabels>.
+	 * Returns true if the label must be rendered as HTML markup. The default implementation returns <htmlLabels>.
 	 * 
-	 * @param cell <mxCell> whose label should be displayed as HTML markup.
+	 * @param cell
+	 *            <mxCell> whose label should be displayed as HTML markup.
 	 * @return Returns true if the given cell label is HTML markup.
 	 */
 	public boolean isHtmlLabel(Object cell)
@@ -5355,12 +5253,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the start size of the given swimlane, that is, the width or
-	 * height of the part that contains the title, depending on the
-	 * horizontal style. The return value is an <mxRectangle> with either
-	 * width or height set as appropriate.
+	 * Returns the start size of the given swimlane, that is, the width or height of the part that contains the title, depending on the horizontal style. The return value is an <mxRectangle> with either width or height set as appropriate.
 	 * 
-	 * @param swimlane <mxCell> whose start size should be returned.
+	 * @param swimlane
+	 *            <mxCell> whose start size should be returned.
 	 * @return Returns the startsize for the given swimlane.
 	 */
 	public mxRectangle getStartSize(Object swimlane)
@@ -5389,9 +5285,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the image URL for the given cell state. This implementation
-	 * returns the value stored under <mxConstants.STYLE_IMAGE> in the cell
-	 * style.
+	 * Returns the image URL for the given cell state. This implementation returns the value stored under <mxConstants.STYLE_IMAGE> in the cell style.
 	 * 
 	 * @param state
 	 * @return Returns the image associated with the given cell state.
@@ -5415,7 +5309,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets the value of <border>.
 	 * 
-	 * @param value Positive integer that represents the border to be used.
+	 * @param value
+	 *            Positive integer that represents the border to be used.
 	 */
 	public void setBorder(int value)
 	{
@@ -5435,7 +5330,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets the default style used for loops.
 	 * 
-	 * @param value Default style to be used for loops.
+	 * @param value
+	 *            Default style to be used for loops.
 	 */
 	public void setDefaultLoopStyle(mxEdgeStyle.mxEdgeStyleFunction value)
 	{
@@ -5447,10 +5343,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is a swimlane. This implementation always
-	 * returns false.
+	 * Returns true if the given cell is a swimlane. This implementation always returns false.
 	 * 
-	 * @param cell Cell that should be checked. 
+	 * @param cell
+	 *            Cell that should be checked.
 	 * @return Returns true if the cell is a swimlane.
 	 */
 	public boolean isSwimlane(Object cell)
@@ -5480,11 +5376,10 @@ public class mxGraph extends mxEventSource
 	//
 
 	/**
-	 * Returns true if the given cell may not be moved, sized, bended,
-	 * disconnected, edited or selected. This implementation returns true for
-	 * all vertices with a relative geometry if cellsLocked is false.
+	 * Returns true if the given cell may not be moved, sized, bended, disconnected, edited or selected. This implementation returns true for all vertices with a relative geometry if cellsLocked is false.
 	 * 
-	 * @param cell Cell whose locked state should be returned.
+	 * @param cell
+	 *            Cell whose locked state should be returned.
 	 * @return Returns true if the given cell is locked.
 	 */
 	public boolean isCellLocked(Object cell)
@@ -5505,8 +5400,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets cellsLocked, the default return value for isCellLocked and fires a
-	 * property change event for cellsLocked.
+	 * Sets cellsLocked, the default return value for isCellLocked and fires a property change event for cellsLocked.
 	 */
 	public void setCellsLocked(boolean value)
 	{
@@ -5519,7 +5413,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns true if the given cell is movable. This implementation returns editable.
 	 * 
-	 * @param cell Cell whose editable state should be returned.
+	 * @param cell
+	 *            Cell whose editable state should be returned.
 	 * @return Returns true if the cell is editable.
 	 */
 	public boolean isCellEditable(Object cell)
@@ -5555,10 +5450,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is resizable. This implementation returns
-	 * cellsSizable for all cells.
+	 * Returns true if the given cell is resizable. This implementation returns cellsSizable for all cells.
 	 * 
-	 * @param cell Cell whose resizable state should be returned.
+	 * @param cell
+	 *            Cell whose resizable state should be returned.
 	 * @return Returns true if the cell is sizable.
 	 */
 	public boolean isCellResizable(Object cell)
@@ -5606,10 +5501,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is movable. This implementation
-	 * returns movable.
+	 * Returns true if the given cell is movable. This implementation returns movable.
 	 * 
-	 * @param cell Cell whose movable state should be returned.
+	 * @param cell
+	 *            Cell whose movable state should be returned.
 	 * @return Returns true if the cell is movable.
 	 */
 	public boolean isCellMovable(Object cell)
@@ -5645,14 +5540,13 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Function: isTerminalPointMovable
 	 *
-	 * Returns true if the given terminal point is movable. This is independent
-	 * from isCellConnectable and isCellDisconnectable and controls if terminal
-	 * points can be moved in the graph if the edge is not connected. Note that
-	 * it is required for this to return true to connect unconnected edges.
-	 * This implementation returns true.
+	 * Returns true if the given terminal point is movable. This is independent from isCellConnectable and isCellDisconnectable and controls if terminal points can be moved in the graph if the edge is not connected. Note that it is required for this
+	 * to return true to connect unconnected edges. This implementation returns true.
 	 * 
-	 * @param cell Cell whose terminal point should be moved.
-	 * @param source Boolean indicating if the source or target terminal should be moved.
+	 * @param cell
+	 *            Cell whose terminal point should be moved.
+	 * @param source
+	 *            Boolean indicating if the source or target terminal should be moved.
 	 */
 	public boolean isTerminalPointMovable(Object cell, boolean source)
 	{
@@ -5660,11 +5554,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is bendable. This implementation returns
-	 * bendable. This is used in mxElbowEdgeHandler to determine if the middle
-	 * handle should be shown.
+	 * Returns true if the given cell is bendable. This implementation returns bendable. This is used in mxElbowEdgeHandler to determine if the middle handle should be shown.
 	 * 
-	 * @param cell Cell whose bendable state should be returned.
+	 * @param cell
+	 *            Cell whose bendable state should be returned.
 	 * @return Returns true if the cell is bendable.
 	 */
 	public boolean isCellBendable(Object cell)
@@ -5698,10 +5591,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is selectable. This implementation returns
-	 * <selectable>.
+	 * Returns true if the given cell is selectable. This implementation returns <selectable>.
 	 * 
-	 * @param cell <mxCell> whose selectable state should be returned.
+	 * @param cell
+	 *            <mxCell> whose selectable state should be returned.
 	 * @return Returns true if the given cell is selectable.
 	 */
 	public boolean isCellSelectable(Object cell)
@@ -5744,10 +5637,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is movable. This implementation always
-	 * returns true.
+	 * Returns true if the given cell is movable. This implementation always returns true.
 	 * 
-	 * @param cell Cell whose movable state should be returned.
+	 * @param cell
+	 *            Cell whose movable state should be returned.
 	 * @return Returns true if the cell is movable.
 	 */
 	public boolean isCellDeletable(Object cell)
@@ -5795,9 +5688,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the constant true. This does not use the cloneable field to
-	 * return a value for a given cell, it is simply a hook for subclassers
-	 * to disallow cloning of individual cells.
+	 * Returns the constant true. This does not use the cloneable field to return a value for a given cell, it is simply a hook for subclassers to disallow cloning of individual cells.
 	 */
 	public boolean isCellCloneable(Object cell)
 	{
@@ -5818,11 +5709,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Specifies if the graph should allow cloning of cells by holding down the
-	 * control key while cells are being moved. This implementation updates
-	 * cellsCloneable.
+	 * Specifies if the graph should allow cloning of cells by holding down the control key while cells are being moved. This implementation updates cellsCloneable.
 	 *
-	 * @param value Boolean indicating if the graph should be cloneable.
+	 * @param value
+	 *            Boolean indicating if the graph should be cloneable.
 	 */
 	public void setCellsCloneable(boolean value)
 	{
@@ -5834,16 +5724,15 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is disconnectable from the source or
-	 * target terminal. This returns <disconnectable> for all given cells if
-	 * <isLocked> does not return true for the given cell.
+	 * Returns true if the given cell is disconnectable from the source or target terminal. This returns <disconnectable> for all given cells if <isLocked> does not return true for the given cell.
 	 * 
-	 * @param cell <mxCell> whose disconnectable state should be returned.
-	 * @param terminal <mxCell> that represents the source or target terminal.
-	 * @param source Boolean indicating if the source or target terminal is to be
-	 * disconnected.
-	 * @return Returns true if the given edge can be disconnected from the given
-	 * terminal.
+	 * @param cell
+	 *            <mxCell> whose disconnectable state should be returned.
+	 * @param terminal
+	 *            <mxCell> that represents the source or target terminal.
+	 * @param source
+	 *            Boolean indicating if the source or target terminal is to be disconnected.
+	 * @return Returns true if the given edge can be disconnected from the given terminal.
 	 */
 	public boolean isCellDisconnectable(Object cell, Object terminal,
 			boolean source)
@@ -5862,8 +5751,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets cellsDisconnectable.
 	 * 
-	 * @param value Boolean indicating if the graph should allow disconnecting of
-	 * edges.
+	 * @param value
+	 *            Boolean indicating if the graph should allow disconnecting of edges.
 	 */
 	public void setCellsDisconnectable(boolean value)
 	{
@@ -5875,12 +5764,11 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the overflow portion of labels should be hidden. If this
-	 * returns true then vertex labels will be clipped to the size of the vertices.
-	 * This implementation returns true if <mxConstants.STYLE_OVERFLOW> in the
-	 * style of the given cell is "hidden".
+	 * Returns true if the overflow portion of labels should be hidden. If this returns true then vertex labels will be clipped to the size of the vertices. This implementation returns true if <mxConstants.STYLE_OVERFLOW> in the style of the given
+	 * cell is "hidden".
 	 * 
-	 * @param cell Cell whose label should be clipped.
+	 * @param cell
+	 *            Cell whose label should be clipped.
 	 * @return Returns true if the cell label should be clipped.
 	 */
 	public boolean isLabelClipped(Object cell)
@@ -5919,11 +5807,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given edges's label is moveable. This returns
-	 * <movable> for all given cells if <isLocked> does not return true
-	 * for the given cell.
+	 * Returns true if the given edges's label is moveable. This returns <movable> for all given cells if <isLocked> does not return true for the given cell.
 	 * 
-	 * @param cell <mxCell> whose label should be moved.
+	 * @param cell
+	 *            <mxCell> whose label should be moved.
 	 * @return Returns true if the label of the given cell is movable.
 	 */
 	public boolean isLabelMovable(Object cell)
@@ -5988,10 +5875,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Specifies if the graph should allow any interactions. This
-	 * implementation updates <enabled>.
+	 * Specifies if the graph should allow any interactions. This implementation updates <enabled>.
 	 * 
-	 * @param value Boolean indicating if the graph should be enabled.
+	 * @param value
+	 *            Boolean indicating if the graph should be enabled.
 	 */
 	public void setEnabled(boolean value)
 	{
@@ -6021,9 +5908,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Affects the return values of isValidDropTarget to allow for edges as
-	 * drop targets. The splitEdge method is called in mxGraphHandler if
-	 * mxGraphComponent.isSplitEvent returns true for a given configuration.
+	 * Affects the return values of isValidDropTarget to allow for edges as drop targets. The splitEdge method is called in mxGraphHandler if mxGraphComponent.isSplitEvent returns true for a given configuration.
 	 */
 	public boolean isSplitEnabled()
 	{
@@ -6259,12 +6144,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the size of the given cell should automatically be
-	 * updated after a change of the label. This implementation returns
-	 * autoSize for all given cells or checks if the cell style does specify
-	 * mxConstants.STYLE_AUTOSIZE to be 1.
+	 * Returns true if the size of the given cell should automatically be updated after a change of the label. This implementation returns autoSize for all given cells or checks if the cell style does specify mxConstants.STYLE_AUTOSIZE to be 1.
 	 * 
-	 * @param cell Cell that should be resized.
+	 * @param cell
+	 *            Cell that should be resized.
 	 * @return Returns true if the size of the given cell should be updated.
 	 */
 	public boolean isAutoSizeCell(Object cell)
@@ -6278,9 +6161,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the size of the given cell should automatically be
-	 * updated after a change of the label. This implementation returns
-	 * autoSize for all given cells.
+	 * Returns true if the size of the given cell should automatically be updated after a change of the label. This implementation returns autoSize for all given cells.
 	 */
 	public boolean isAutoSizeCells()
 	{
@@ -6288,11 +6169,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Specifies if cell sizes should be automatically updated after a label
-	 * change. This implementation sets autoSize to the given parameter.
+	 * Specifies if cell sizes should be automatically updated after a label change. This implementation sets autoSize to the given parameter.
 	 * 
-	 * @param value Boolean indicating if cells should be resized
-	 * automatically.
+	 * @param value
+	 *            Boolean indicating if cells should be resized automatically.
 	 */
 	public void setAutoSizeCells(boolean value)
 	{
@@ -6304,11 +6184,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the parent of the given cell should be extended if the
-	 * child has been resized so that it overlaps the parent. This
-		 * implementation returns ExtendParents if cell is not an edge.
+	 * Returns true if the parent of the given cell should be extended if the child has been resized so that it overlaps the parent. This implementation returns ExtendParents if cell is not an edge.
 	 * 
-	 * @param cell Cell that has been resized.
+	 * @param cell
+	 *            Cell that has been resized.
 	 */
 	public boolean isExtendParent(Object cell)
 	{
@@ -6356,10 +6235,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell should be kept inside the bounds of its
-	 * parent according to the rules defined by getOverlap and
-	 * isAllowOverlapParent. This implementation returns false for all children
-	 * of edges and isConstrainChildren() otherwise.
+	 * Returns true if the given cell should be kept inside the bounds of its parent according to the rules defined by getOverlap and isAllowOverlapParent. This implementation returns false for all children of edges and isConstrainChildren()
+	 * otherwise.
 	 */
 	public boolean isConstrainChild(Object cell)
 	{
@@ -6378,7 +6255,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the constrainChildren to set
+	 * @param value
+	 *            the constrainChildren to set
 	 */
 	public void setConstrainChildren(boolean value)
 	{
@@ -6398,7 +6276,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the autoOrigin to set
+	 * @param value
+	 *            the autoOrigin to set
 	 */
 	public void setAutoOrigin(boolean value)
 	{
@@ -6417,7 +6296,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the origin to set
+	 * @param value
+	 *            the origin to set
 	 */
 	public void setOrigin(mxPoint value)
 	{
@@ -6436,7 +6316,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the changesRepaintThreshold to set
+	 * @param value
+	 *            the changesRepaintThreshold to set
 	 */
 	public void setChangesRepaintThreshold(int value)
 	{
@@ -6458,7 +6339,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the allowNegativeCoordinates to set
+	 * @param value
+	 *            the allowNegativeCoordinates to set
 	 */
 	public void setAllowNegativeCoordinates(boolean value)
 	{
@@ -6480,7 +6362,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the collapseToPreferredSize to set
+	 * @param value
+	 *            the collapseToPreferredSize to set
 	 */
 	public void setCollapseToPreferredSize(boolean value)
 	{
@@ -6500,7 +6383,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the keepEdgesInForeground to set
+	 * @param value
+	 *            the keepEdgesInForeground to set
 	 */
 	public void setKeepEdgesInForeground(boolean value)
 	{
@@ -6520,7 +6404,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the keepEdgesInBackground to set
+	 * @param value
+	 *            the keepEdgesInBackground to set
 	 */
 	public void setKeepEdgesInBackground(boolean value)
 	{
@@ -6532,11 +6417,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is a valid source for new connections.
-	 * This implementation returns true for all non-null values and is
-	 * called by is called by <isValidConnection>.
+	 * Returns true if the given cell is a valid source for new connections. This implementation returns true for all non-null values and is called by is called by <isValidConnection>.
 	 * 
-	 * @param cell Object that represents a possible source or null.
+	 * @param cell
+	 *            Object that represents a possible source or null.
 	 * @return Returns true if the given cell is a valid source terminal.
 	 */
 	public boolean isValidSource(Object cell)
@@ -6547,10 +6431,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns isValidSource for the given cell. This is called by
-	 * isValidConnection.
+	 * Returns isValidSource for the given cell. This is called by isValidConnection.
 	 *
-	 * @param cell Object that represents a possible target or null.
+	 * @param cell
+	 *            Object that represents a possible target or null.
 	 * @return Returns true if the given cell is a valid target.
 	 */
 	public boolean isValidTarget(Object cell)
@@ -6559,16 +6443,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given target cell is a valid target for source.
-	 * This is a boolean implementation for not allowing connections between
-	 * certain pairs of vertices and is called by <getEdgeValidationError>.
-	 * This implementation returns true if <isValidSource> returns true for
-	 * the source and <isValidTarget> returns true for the target.
+	 * Returns true if the given target cell is a valid target for source. This is a boolean implementation for not allowing connections between certain pairs of vertices and is called by <getEdgeValidationError>. This implementation returns true if
+	 * <isValidSource> returns true for the source and <isValidTarget> returns true for the target.
 	 * 
-	 * @param source Object that represents the source cell.
-	 * @param target Object that represents the target cell.
-	 * @return Returns true if the the connection between the given terminals
-	 * is valid.
+	 * @param source
+	 *            Object that represents the source cell.
+	 * @param target
+	 *            Object that represents the target cell.
+	 * @return Returns true if the the connection between the given terminals is valid.
 	 */
 	public boolean isValidConnection(Object source, Object target)
 	{
@@ -6587,7 +6469,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * @param value the minimumGraphSize to set
+	 * @param value
+	 *            the minimumGraphSize to set
 	 */
 	public void setMinimumGraphSize(mxRectangle value)
 	{
@@ -6598,16 +6481,11 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns a decimal number representing the amount of the width and height
-	 * of the given cell that is allowed to overlap its parent. A value of 0
-	 * means all children must stay inside the parent, 1 means the child is
-	 * allowed to be placed outside of the parent such that it touches one of
-	 * the parents sides. If <isAllowOverlapParent> returns false for the given
-	 * cell, then this method returns 0.
+	 * Returns a decimal number representing the amount of the width and height of the given cell that is allowed to overlap its parent. A value of 0 means all children must stay inside the parent, 1 means the child is allowed to be placed outside of
+	 * the parent such that it touches one of the parents sides. If <isAllowOverlapParent> returns false for the given cell, then this method returns 0.
 	 * 
 	 * @param cell
-	 * @return Returns the overlapping value for the given cell inside its
-	 * parent.
+	 * @return Returns the overlapping value for the given cell inside its parent.
 	 */
 	public double getOverlap(Object cell)
 	{
@@ -6634,8 +6512,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is allowed to be placed outside of the
-	 * parents area.
+	 * Returns true if the given cell is allowed to be placed outside of the parents area.
 	 * 
 	 * @param cell
 	 * @return Returns true if the given cell may overlap its parent.
@@ -6660,11 +6537,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is expandable. This implementation
-	 * returns true if the cell has at least one child and its style
-	 * does not specify mxConstants.STYLE_FOLDABLE to be 0.
+	 * Returns true if the given cell is expandable. This implementation returns true if the cell has at least one child and its style does not specify mxConstants.STYLE_FOLDABLE to be 0.
 	 *
-	 * @param cell <mxCell> whose expandable state should be returned.
+	 * @param cell
+	 *            <mxCell> whose expandable state should be returned.
 	 * @return Returns true if the given cell is expandable.
 	 */
 	public boolean isCellFoldable(Object cell, boolean collapse)
@@ -6690,7 +6566,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets if the grid is enabled.
 	 * 
-	 * @param value Specifies if the grid should be enabled.
+	 * @param value
+	 *            Specifies if the grid should be enabled.
 	 */
 	public void setGridEnabled(boolean value)
 	{
@@ -6713,7 +6590,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets if ports are enabled.
 	 * 
-	 * @param value Specifies if the ports should be enabled.
+	 * @param value
+	 *            Specifies if the ports should be enabled.
 	 */
 	public void setPortsEnabled(boolean value)
 	{
@@ -6737,7 +6615,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Sets the grid size and fires a property change event for gridSize.
 	 * 
-	 * @param value New grid size to be used.
+	 * @param value
+	 *            New grid size to be used.
 	 */
 	public void setGridSize(int value)
 	{
@@ -6768,15 +6647,13 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if the given cell is a valid drop target for the specified
-	 * cells. This returns true if the cell is a swimlane, has children and is
-	 * not collapsed, or if splitEnabled is true and isSplitTarget returns
-	 * true for the given arguments
+	 * Returns true if the given cell is a valid drop target for the specified cells. This returns true if the cell is a swimlane, has children and is not collapsed, or if splitEnabled is true and isSplitTarget returns true for the given arguments
 	 * 
-	 * @param cell Object that represents the possible drop target.
-	 * @param cells Objects that are going to be dropped.
-	 * @return Returns true if the cell is a valid drop target for the given
-	 * cells.
+	 * @param cell
+	 *            Object that represents the possible drop target.
+	 * @param cells
+	 *            Objects that are going to be dropped.
+	 * @return Returns true if the cell is a valid drop target for the given cells.
 	 */
 	public boolean isValidDropTarget(Object cell, Object[] cells)
 	{
@@ -6787,13 +6664,13 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns true if split is enabled and the given edge may be splitted into
-	 * two edges with the given cell as a new terminal between the two.
+	 * Returns true if split is enabled and the given edge may be splitted into two edges with the given cell as a new terminal between the two.
 	 * 
-	 * @param target Object that represents the edge to be splitted.
-	 * @param cells Array of cells to add into the given edge.
-	 * @return Returns true if the given edge may be splitted by the given
-	 * cell.
+	 * @param target
+	 *            Object that represents the edge to be splitted.
+	 * @param cells
+	 *            Array of cells to add into the given edge.
+	 * @return Returns true if the given edge may be splitted by the given cell.
 	 */
 	public boolean isSplitTarget(Object target, Object[] cells)
 	{
@@ -6814,11 +6691,8 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the given cell if it is a drop target for the given cells or the
-	 * nearest ancestor that may be used as a drop target for the given cells.
-	 * If the given array contains a swimlane and swimlaneNesting is false
-	 * then this always returns null. If no cell is given, then the bottommost
-	 * swimlane at the location of the given event is returned.
+	 * Returns the given cell if it is a drop target for the given cells or the nearest ancestor that may be used as a drop target for the given cells. If the given array contains a swimlane and swimlaneNesting is false then this always returns null.
+	 * If no cell is given, then the bottommost swimlane at the location of the given event is returned.
 	 * 
 	 * This function should only be used if isDropEnabled returns true.
 	 */
@@ -6836,28 +6710,19 @@ public class mxGraph extends mxEventSource
 		}
 
 		// FIXME the else below does nothing if swimlane is null
-		Object swimlane = null; //getSwimlaneAt(pt.x, pt.y);
+		Object swimlane = null; // getSwimlaneAt(pt.x, pt.y);
 
 		if (cell == null)
 		{
 			cell = swimlane;
 		}
-		/*else if (swimlane != null)
-		{
-			// Checks if the cell is an ancestor of the swimlane
-			// under the mouse and uses the swimlane in that case
-			Object tmp = model.getParent(swimlane);
-
-			while (tmp != null && isSwimlane(tmp) && tmp != cell)
-			{
-				tmp = model.getParent(tmp);
-			}
-
-			if (tmp == cell)
-			{
-				cell = swimlane;
-			}
-		}*/
+		/*
+		 * else if (swimlane != null) { // Checks if the cell is an ancestor of the swimlane // under the mouse and uses the swimlane in that case Object tmp = model.getParent(swimlane);
+		 * 
+		 * while (tmp != null && isSwimlane(tmp) && tmp != cell) { tmp = model.getParent(tmp); }
+		 * 
+		 * if (tmp == cell) { cell = swimlane; } }
+		 */
 
 		while (cell != null && !isValidDropTarget(cell, cells)
 				&& model.getParent(cell) != model.getRoot())
@@ -6874,8 +6739,7 @@ public class mxGraph extends mxEventSource
 	//
 
 	/**
-	 * Returns the first child of the root in the model, that is, the first or
-	 * default layer of the diagram. 
+	 * Returns the first child of the root in the model, that is, the first or default layer of the diagram.
 	 * 
 	 * @return Returns the default parent for new cells.
 	 */
@@ -6898,9 +6762,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Sets the default parent to be returned by getDefaultParent.
-	 * Set this to null to return the first child of the root in
-	 * getDefaultParent.
+	 * Sets the default parent to be returned by getDefaultParent. Set this to null to return the first child of the root in getDefaultParent.
 	 */
 	public void setDefaultParent(Object value)
 	{
@@ -6910,7 +6772,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns the visible child vertices of the given parent.
 	 * 
-	 * @param parent Cell whose children should be returned.
+	 * @param parent
+	 *            Cell whose children should be returned.
 	 */
 	public Object[] getChildVertices(Object parent)
 	{
@@ -6920,7 +6783,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns the visible child edges of the given parent.
 	 * 
-	 * @param parent Cell whose children should be returned.
+	 * @param parent
+	 *            Cell whose children should be returned.
 	 */
 	public Object[] getChildEdges(Object parent)
 	{
@@ -6930,7 +6794,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns the visible children of the given parent.
 	 * 
-	 * @param parent Cell whose children should be returned.
+	 * @param parent
+	 *            Cell whose children should be returned.
 	 */
 	public Object[] getChildCells(Object parent)
 	{
@@ -6938,12 +6803,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the visible child vertices or edges in the given parent. If
-	 * vertices and edges is false, then all children are returned.
+	 * Returns the visible child vertices or edges in the given parent. If vertices and edges is false, then all children are returned.
 	 * 
-	 * @param parent Cell whose children should be returned.
-	 * @param vertices Specifies if child vertices should be returned.
-	 * @param edges Specifies if child edges should be returned.
+	 * @param parent
+	 *            Cell whose children should be returned.
+	 * @param vertices
+	 *            Specifies if child vertices should be returned.
+	 * @param edges
+	 *            Specifies if child edges should be returned.
 	 * @return Returns the child vertices and edges.
 	 */
 	public Object[] getChildCells(Object parent, boolean vertices, boolean edges)
@@ -6967,7 +6834,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns all visible edges connected to the given cell without loops.
 	 * 
-	 * @param cell Cell whose connections should be returned.
+	 * @param cell
+	 *            Cell whose connections should be returned.
 	 * @return Returns the connected edges for the given cell.
 	 */
 	public Object[] getConnections(Object cell)
@@ -6976,13 +6844,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns all visible edges connected to the given cell without loops.
-	 * If the optional parent argument is specified, then only child
-	 * edges of the given parent are returned.
+	 * Returns all visible edges connected to the given cell without loops. If the optional parent argument is specified, then only child edges of the given parent are returned.
 	 * 
-	 * @param cell Cell whose connections should be returned.
-	 * @param parent Optional parent of the opposite end for a connection
-	 * to be returned.
+	 * @param cell
+	 *            Cell whose connections should be returned.
+	 * @param parent
+	 *            Optional parent of the opposite end for a connection to be returned.
 	 * @return Returns the connected edges for the given cell.
 	 */
 	public Object[] getConnections(Object cell, Object parent)
@@ -6991,13 +6858,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns all visible edges connected to the given cell without loops.
-	 * If the optional parent argument is specified, then only child
-	 * edges of the given parent are returned.
+	 * Returns all visible edges connected to the given cell without loops. If the optional parent argument is specified, then only child edges of the given parent are returned.
 	 * 
-	 * @param cell Cell whose connections should be returned.
-	 * @param parent Optional parent of the opposite end for a connection
-	 * to be returned.
+	 * @param cell
+	 *            Cell whose connections should be returned.
+	 * @param parent
+	 *            Optional parent of the opposite end for a connection to be returned.
 	 * @return Returns the connected edges for the given cell.
 	 */
 	public Object[] getConnections(Object cell, Object parent, boolean recurse)
@@ -7006,10 +6872,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns all incoming visible edges connected to the given cell without
-	 * loops.
+	 * Returns all incoming visible edges connected to the given cell without loops.
 	 * 
-	 * @param cell Cell whose incoming edges should be returned.
+	 * @param cell
+	 *            Cell whose incoming edges should be returned.
 	 * @return Returns the incoming edges of the given cell.
 	 */
 	public Object[] getIncomingEdges(Object cell)
@@ -7018,13 +6884,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the visible incoming edges for the given cell. If the optional
-	 * parent argument is specified, then only child edges of the given parent
-	 * are returned.
+	 * Returns the visible incoming edges for the given cell. If the optional parent argument is specified, then only child edges of the given parent are returned.
 	 * 
-	 * @param cell Cell whose incoming edges should be returned.
-	 * @param parent Optional parent of the opposite end for an edge
-	 * to be returned.
+	 * @param cell
+	 *            Cell whose incoming edges should be returned.
+	 * @param parent
+	 *            Optional parent of the opposite end for an edge to be returned.
 	 * @return Returns the incoming edges of the given cell.
 	 */
 	public Object[] getIncomingEdges(Object cell, Object parent)
@@ -7033,10 +6898,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns all outgoing visible edges connected to the given cell without
-	 * loops.
+	 * Returns all outgoing visible edges connected to the given cell without loops.
 	 * 
-	 * @param cell Cell whose outgoing edges should be returned.
+	 * @param cell
+	 *            Cell whose outgoing edges should be returned.
 	 * @return Returns the outgoing edges of the given cell.
 	 */
 	public Object[] getOutgoingEdges(Object cell)
@@ -7045,13 +6910,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the visible outgoing edges for the given cell. If the optional
-	 * parent argument is specified, then only child edges of the given parent
-	 * are returned.
+	 * Returns the visible outgoing edges for the given cell. If the optional parent argument is specified, then only child edges of the given parent are returned.
 	 * 
-	 * @param cell Cell whose outgoing edges should be returned.
-	 * @param parent Optional parent of the opposite end for an edge
-	 * to be returned.
+	 * @param cell
+	 *            Cell whose outgoing edges should be returned.
+	 * @param parent
+	 *            Optional parent of the opposite end for an edge to be returned.
 	 * @return Returns the outgoing edges of the given cell.
 	 */
 	public Object[] getOutgoingEdges(Object cell, Object parent)
@@ -7062,7 +6926,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns all visible edges connected to the given cell including loops.
 	 *
-	 * @param cell Cell whose edges should be returned.
+	 * @param cell
+	 *            Cell whose edges should be returned.
 	 * @return Returns the edges of the given cell.
 	 */
 	public Object[] getEdges(Object cell)
@@ -7073,9 +6938,10 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Returns all visible edges connected to the given cell including loops.
 	 * 
-	 * @param cell Cell whose edges should be returned.
-	 * @param parent Optional parent of the opposite end for an edge
-	 * to be returned.
+	 * @param cell
+	 *            Cell whose edges should be returned.
+	 * @param parent
+	 *            Optional parent of the opposite end for an edge to be returned.
 	 * @return Returns the edges of the given cell.
 	 */
 	public Object[] getEdges(Object cell, Object parent)
@@ -7084,18 +6950,18 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the incoming and/or outgoing edges for the given cell.
-	 * If the optional parent argument is specified, then only edges are returned
-	 * where the opposite is in the given parent cell.
+	 * Returns the incoming and/or outgoing edges for the given cell. If the optional parent argument is specified, then only edges are returned where the opposite is in the given parent cell.
 	 * 
-	 * @param cell Cell whose edges should be returned.
-	 * @param parent Optional parent. If specified the opposite end of any edge
-	 * must be a direct child of that parent in order for the edge to be returned.
-	 * @param incoming Specifies if incoming edges should be included in the
-	 * result.
-	 * @param outgoing Specifies if outgoing edges should be included in the
-	 * result.
-	 * @param includeLoops Specifies if loops should be included in the result.
+	 * @param cell
+	 *            Cell whose edges should be returned.
+	 * @param parent
+	 *            Optional parent. If specified the opposite end of any edge must be a direct child of that parent in order for the edge to be returned.
+	 * @param incoming
+	 *            Specifies if incoming edges should be included in the result.
+	 * @param outgoing
+	 *            Specifies if outgoing edges should be included in the result.
+	 * @param includeLoops
+	 *            Specifies if loops should be included in the result.
 	 * @return Returns the edges connected to the given cell.
 	 */
 	public Object[] getEdges(Object cell, Object parent, boolean incoming,
@@ -7105,22 +6971,21 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the incoming and/or outgoing edges for the given cell.
-	 * If the optional parent argument is specified, then only edges are returned
-	 * where the opposite is in the given parent cell.
+	 * Returns the incoming and/or outgoing edges for the given cell. If the optional parent argument is specified, then only edges are returned where the opposite is in the given parent cell.
 	 * 
-	 * @param cell Cell whose edges should be returned.
-	 * @param parent Optional parent. If specified the opposite end of any edge
-	 * must be a child of that parent in order for the edge to be returned. The
-	 * recurse parameter specifies whether or not it must be the direct child
-	 * or the parent just be an ancestral parent.
-	 * @param incoming Specifies if incoming edges should be included in the
-	 * result.
-	 * @param outgoing Specifies if outgoing edges should be included in the
-	 * result.
-	 * @param includeLoops Specifies if loops should be included in the result.
-	 * @param recurse Specifies if the parent specified only need be an ancestral
-	 * parent, <code>true</code>, or the direct parent, <code>false</code>
+	 * @param cell
+	 *            Cell whose edges should be returned.
+	 * @param parent
+	 *            Optional parent. If specified the opposite end of any edge must be a child of that parent in order for the edge to be returned. The recurse parameter specifies whether or not it must be the direct child or the parent just be an
+	 *            ancestral parent.
+	 * @param incoming
+	 *            Specifies if incoming edges should be included in the result.
+	 * @param outgoing
+	 *            Specifies if outgoing edges should be included in the result.
+	 * @param includeLoops
+	 *            Specifies if loops should be included in the result.
+	 * @param recurse
+	 *            Specifies if the parent specified only need be an ancestral parent, <code>true</code>, or the direct parent, <code>false</code>
 	 * @return Returns the edges connected to the given cell.
 	 */
 	public Object[] getEdges(Object cell, Object parent, boolean incoming,
@@ -7169,15 +7034,15 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns whether or not the specified parent is a valid
-	 * ancestor of the specified cell, either direct or indirectly
-	 * based on whether ancestor recursion is enabled.
-	 * @param cell the possible child cell
-	 * @param parent the possible parent cell
-	 * @param recurse whether or not to recurse the child ancestors
-	 * @return whether or not the specified parent is a valid
-	 * ancestor of the specified cell, either direct or indirectly
-	 * based on whether ancestor recursion is enabled.
+	 * Returns whether or not the specified parent is a valid ancestor of the specified cell, either direct or indirectly based on whether ancestor recursion is enabled.
+	 * 
+	 * @param cell
+	 *            the possible child cell
+	 * @param parent
+	 *            the possible parent cell
+	 * @param recurse
+	 *            whether or not to recurse the child ancestors
+	 * @return whether or not the specified parent is a valid ancestor of the specified cell, either direct or indirectly based on whether ancestor recursion is enabled.
 	 */
 	public boolean isValidAncestor(Object cell, Object parent, boolean recurse)
 	{
@@ -7186,8 +7051,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns all distinct visible opposite cells of the terminal on the given
-	 * edges.
+	 * Returns all distinct visible opposite cells of the terminal on the given edges.
 	 * 
 	 * @param edges
 	 * @param terminal
@@ -7199,16 +7063,16 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns all distincts visible opposite cells for the specified terminal
-	 * on the given edges.
+	 * Returns all distincts visible opposite cells for the specified terminal on the given edges.
 	 * 
-	 * @param edges Edges whose opposite terminals should be returned.
-	 * @param terminal Terminal that specifies the end whose opposite should be
-	 * returned.
-	 * @param sources Specifies if source terminals should be included in the
-	 * result.
-	 * @param targets Specifies if target terminals should be included in the
-	 * result.
+	 * @param edges
+	 *            Edges whose opposite terminals should be returned.
+	 * @param terminal
+	 *            Terminal that specifies the end whose opposite should be returned.
+	 * @param sources
+	 *            Specifies if source terminals should be included in the result.
+	 * @param targets
+	 *            Specifies if target terminals should be included in the result.
 	 * @return Returns the cells at the opposite ends of the given edges.
 	 */
 	public Object[] getOpposites(Object[] edges, Object terminal,
@@ -7252,9 +7116,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the edges between the given source and target. This takes into
-	 * account collapsed and invisible cells and returns the connected edges
-	 * as displayed on the screen.
+	 * Returns the edges between the given source and target. This takes into account collapsed and invisible cells and returns the connected edges as displayed on the screen.
 	 * 
 	 * @param source
 	 * @param target
@@ -7266,9 +7128,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the edges between the given source and target. This takes into
-	 * account collapsed and invisible cells and returns the connected edges
-	 * as displayed on the screen.
+	 * Returns the edges between the given source and target. This takes into account collapsed and invisible cells and returns the connected edges as displayed on the screen.
 	 * 
 	 * @param source
 	 * @param target
@@ -7302,17 +7162,18 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns the children of the given parent that are contained in the
-	 * halfpane from the given point (x0, y0) rightwards and downwards
-	 * depending on rightHalfpane and bottomHalfpane.
+	 * Returns the children of the given parent that are contained in the halfpane from the given point (x0, y0) rightwards and downwards depending on rightHalfpane and bottomHalfpane.
 	 * 
-	 * @param x0 X-coordinate of the origin.
-	 * @param y0 Y-coordinate of the origin.
-	 * @param parent <mxCell> whose children should be checked.
-	 * @param rightHalfpane Boolean indicating if the cells in the right halfpane
-	 * from the origin should be returned.
-	 * @param bottomHalfpane Boolean indicating if the cells in the bottom halfpane
-	 * from the origin should be returned.
+	 * @param x0
+	 *            X-coordinate of the origin.
+	 * @param y0
+	 *            Y-coordinate of the origin.
+	 * @param parent
+	 *            <mxCell> whose children should be checked.
+	 * @param rightHalfpane
+	 *            Boolean indicating if the cells in the right halfpane from the origin should be returned.
+	 * @param bottomHalfpane
+	 *            Boolean indicating if the cells in the bottom halfpane from the origin should be returned.
 	 * @return Returns the cells beyond the given halfpane.
 	 */
 	public Object[] getCellsBeyond(double x0, double y0, Object parent,
@@ -7352,13 +7213,11 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns all visible children in the given parent which do not have
-	 * incoming edges. If the result is empty then the with the greatest
-	 * difference between incoming and outgoing edges is returned. This
-	 * takes into account edges that are being promoted to the given
-	 * root due to invisible children or collapsed cells.
+	 * Returns all visible children in the given parent which do not have incoming edges. If the result is empty then the with the greatest difference between incoming and outgoing edges is returned. This takes into account edges that are being
+	 * promoted to the given root due to invisible children or collapsed cells.
 	 * 
-	 * @param parent Cell whose children should be checked.
+	 * @param parent
+	 *            Cell whose children should be checked.
 	 * @return List of tree roots in parent.
 	 */
 	public List<Object> findTreeRoots(Object parent)
@@ -7367,15 +7226,13 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns all visible children in the given parent which do not have
-	 * incoming edges. If the result is empty then the children with the
-	 * maximum difference between incoming and outgoing edges are returned.
-	 * This takes into account edges that are being promoted to the given
-	 * root due to invisible children or collapsed cells.
+	 * Returns all visible children in the given parent which do not have incoming edges. If the result is empty then the children with the maximum difference between incoming and outgoing edges are returned. This takes into account edges that are
+	 * being promoted to the given root due to invisible children or collapsed cells.
 	 * 
-	 * @param parent Cell whose children should be checked.
-	 * @param isolate Specifies if edges should be ignored if the opposite
-	 * end is not a child of the given parent cell.
+	 * @param parent
+	 *            Cell whose children should be checked.
+	 * @param isolate
+	 *            Specifies if edges should be ignored if the opposite end is not a child of the given parent cell.
 	 * @return List of tree roots in parent.
 	 */
 	public List<Object> findTreeRoots(Object parent, boolean isolate)
@@ -7384,17 +7241,15 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Returns all visible children in the given parent which do not have
-	 * incoming edges. If the result is empty then the children with the
-	 * maximum difference between incoming and outgoing edges are returned.
-	 * This takes into account edges that are being promoted to the given
-	 * root due to invisible children or collapsed cells.
+	 * Returns all visible children in the given parent which do not have incoming edges. If the result is empty then the children with the maximum difference between incoming and outgoing edges are returned. This takes into account edges that are
+	 * being promoted to the given root due to invisible children or collapsed cells.
 	 * 
-	 * @param parent Cell whose children should be checked.
-	 * @param isolate Specifies if edges should be ignored if the opposite
-	 * end is not a child of the given parent cell.
-	 * @param invert Specifies if outgoing or incoming edges should be counted
-	 * for a tree root. If false then outgoing edges will be counted.
+	 * @param parent
+	 *            Cell whose children should be checked.
+	 * @param isolate
+	 *            Specifies if edges should be ignored if the opposite end is not a child of the given parent cell.
+	 * @param invert
+	 *            Specifies if outgoing or incoming edges should be counted for a tree root. If false then outgoing edges will be counted.
 	 * @return List of tree roots in parent.
 	 */
 	public List<Object> findTreeRoots(Object parent, boolean isolate,
@@ -7459,9 +7314,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Traverses the tree starting at the given vertex. Here is how to use this
-	 * method for a given vertex (root) which is typically the root of a tree:
-	 * <code>
+	 * Traverses the tree starting at the given vertex. Here is how to use this method for a given vertex (root) which is typically the root of a tree: <code>
 	 * graph.traverse(root, true, new mxICellVisitor()
 	 * {
 	 *   public boolean visit(Object vertex, Object edge)
@@ -7484,20 +7337,19 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Traverses the (directed) graph invoking the given function for each
-	 * visited vertex and edge. The function is invoked with the current vertex
-	 * and the incoming edge as a parameter. This implementation makes sure
-	 * each vertex is only visited once. The function may return false if the
-	 * traversal should stop at the given vertex.
+	 * Traverses the (directed) graph invoking the given function for each visited vertex and edge. The function is invoked with the current vertex and the incoming edge as a parameter. This implementation makes sure each vertex is only visited once.
+	 * The function may return false if the traversal should stop at the given vertex.
 	 * 
-	 * @param vertex <mxCell> that represents the vertex where the traversal starts.
-	 * @param directed Optional boolean indicating if edges should only be traversed
-	 * from source to target. Default is true.
-	 * @param visitor Visitor that takes the current vertex and the incoming edge.
-	 * The traversal stops if the function returns false.
-	 * @param edge Optional <mxCell> that represents the incoming edge. This is
-	 * null for the first step of the traversal.
-	 * @param visited Optional array of cell paths for the visited cells.
+	 * @param vertex
+	 *            <mxCell> that represents the vertex where the traversal starts.
+	 * @param directed
+	 *            Optional boolean indicating if edges should only be traversed from source to target. Default is true.
+	 * @param visitor
+	 *            Visitor that takes the current vertex and the incoming edge. The traversal stops if the function returns false.
+	 * @param edge
+	 *            Optional <mxCell> that represents the incoming edge. This is null for the first step of the traversal.
+	 * @param visited
+	 *            Optional array of cell paths for the visited cells.
 	 */
 	public void traverse(Object vertex, boolean directed,
 			mxICellVisitor visitor, Object edge, Set<Object> visited)
@@ -7695,8 +7547,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Selects the next, parent, first child or previous cell, if all arguments
-	 * are false.
+	 * Selects the next, parent, first child or previous cell, if all arguments are false.
 	 * 
 	 * @param isNext
 	 * @param isParent
@@ -7765,8 +7616,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Selects all vertices inside the given parent or the default parent
-	 * if no parent is given.
+	 * Selects all vertices inside the given parent or the default parent if no parent is given.
 	 */
 	public void selectVertices(Object parent)
 	{
@@ -7782,8 +7632,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Selects all vertices inside the given parent or the default parent
-	 * if no parent is given.
+	 * Selects all vertices inside the given parent or the default parent if no parent is given.
 	 */
 	public void selectEdges(Object parent)
 	{
@@ -7791,12 +7640,12 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Selects all vertices and/or edges depending on the given boolean
-	 * arguments recursively, starting at the default parent. Use
-	 * <code>selectAll</code> to select all cells.
-	 *  
-	 * @param vertices Boolean indicating if vertices should be selected.
-	 * @param edges Boolean indicating if edges should be selected.
+	 * Selects all vertices and/or edges depending on the given boolean arguments recursively, starting at the default parent. Use <code>selectAll</code> to select all cells.
+	 * 
+	 * @param vertices
+	 *            Boolean indicating if vertices should be selected.
+	 * @param edges
+	 *            Boolean indicating if edges should be selected.
 	 */
 	public void selectCells(boolean vertices, boolean edges)
 	{
@@ -7804,15 +7653,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Selects all vertices and/or edges depending on the given boolean
-	 * arguments recursively, starting at the given parent or the default
-	 * parent if no parent is specified. Use <code>selectAll</code> to select
-	 * all cells.
+	 * Selects all vertices and/or edges depending on the given boolean arguments recursively, starting at the given parent or the default parent if no parent is specified. Use <code>selectAll</code> to select all cells.
 	 * 
-	 * @param vertices Boolean indicating if vertices should be selected.
-	 * @param edges Boolean indicating if edges should be selected.
-	 * @param parent Optional cell that acts as the root of the recursion.
-	 * Default is <code>defaultParent</code>.
+	 * @param vertices
+	 *            Boolean indicating if vertices should be selected.
+	 * @param edges
+	 *            Boolean indicating if edges should be selected.
+	 * @param parent
+	 *            Optional cell that acts as the root of the recursion. Default is <code>defaultParent</code>.
 	 */
 	public void selectCells(final boolean vertices, final boolean edges,
 			Object parent)
@@ -7850,12 +7698,10 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Selects all children of the given parent cell or the children of the
-	 * default parent if no parent is specified. To select leaf vertices and/or
-	 * edges use <selectCells>.
+	 * Selects all children of the given parent cell or the children of the default parent if no parent is specified. To select leaf vertices and/or edges use <selectCells>.
 	 * 
-	 * @param parent  Optional <mxCell> whose children should be selected.
-	 * Default is <defaultParent>.
+	 * @param parent
+	 *            Optional <mxCell> whose children should be selected. Default is <defaultParent>.
 	 */
 	public void selectAll(Object parent)
 	{
@@ -7879,7 +7725,8 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Draws the graph onto the given canvas.
 	 * 
-	 * @param canvas Canvas onto which the graph should be drawn.
+	 * @param canvas
+	 *            Canvas onto which the graph should be drawn.
 	 */
 	public void drawGraph(mxICanvas canvas)
 	{
@@ -7889,8 +7736,10 @@ public class mxGraph extends mxEventSource
 	/**
 	 * Draws the given cell and its descendants onto the specified canvas.
 	 * 
-	 * @param canvas Canvas onto which the cell should be drawn.
-	 * @param cell Cell that should be drawn onto the canvas.
+	 * @param canvas
+	 *            Canvas onto which the cell should be drawn.
+	 * @param cell
+	 *            Cell that should be drawn onto the canvas.
 	 */
 	public void drawCell(mxICanvas canvas, Object cell)
 	{
@@ -7907,14 +7756,14 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Draws the cell state with the given label onto the canvas. No
-	 * children or descendants are painted here. This method invokes
-	 * cellDrawn after the cell, but not its descendants have been
-	 * painted.
+	 * Draws the cell state with the given label onto the canvas. No children or descendants are painted here. This method invokes cellDrawn after the cell, but not its descendants have been painted.
 	 * 
-	 * @param canvas Canvas onto which the cell should be drawn.
-	 * @param state State of the cell to be drawn.
-	 * @param drawLabel Indicates if the label should be drawn.
+	 * @param canvas
+	 *            Canvas onto which the cell should be drawn.
+	 * @param state
+	 *            State of the cell to be drawn.
+	 * @param drawLabel
+	 *            Indicates if the label should be drawn.
 	 */
 	public void drawState(mxICanvas canvas, mxCellState state, boolean drawLabel)
 	{
@@ -7941,8 +7790,8 @@ public class mxGraph extends mxEventSource
 				clippedCanvas = ((mxImageCanvas) clippedCanvas)
 						.getGraphicsCanvas();
 				// TODO: Shift newClip to match the image offset
-				//Point pt = ((mxImageCanvas) canvas).getTranslate();
-				//newClip.translate(-pt.x, -pt.y);
+				// Point pt = ((mxImageCanvas) canvas).getTranslate();
+				// newClip.translate(-pt.x, -pt.y);
 			}
 
 			if (clippedCanvas instanceof mxGraphics2DCanvas)
@@ -7989,8 +7838,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Called when a cell has been painted as the specified object, typically a
-	 * DOM node that represents the given cell graphically in a document.
+	 * Called when a cell has been painted as the specified object, typically a DOM node that represents the given cell graphically in a document.
 	 */
 	protected void cellDrawn(mxICanvas canvas, mxCellState state,
 			Object element, Object labelElement)
@@ -8117,7 +7965,7 @@ public class mxGraph extends mxEventSource
 	}
 
 	/**
-	 * Prints the version number on the console. 
+	 * Prints the version number on the console.
 	 */
 	public static void main(String[] args)
 	{
@@ -8125,18 +7973,18 @@ public class mxGraph extends mxEventSource
 	}
 
 	public Object[] getRootCells() {
-		this.selectAll(); 
+		this.selectAll();
 		Object[] cells = this.getSelectionCells();
 		this.clearSelection();
 		return cells;
 	}
 
 	public void orderCell(boolean back, mxCell cell) {
-		orderCells(back, new Object[] {cell});
+		orderCells(back, new Object[] { cell });
 	}
 
 	public void removeCell(mxICell resetEdge) {
-		removeCells(new Object[] {resetEdge});
+		removeCells(new Object[] { resetEdge });
 	}
 
 	public void clear() {
@@ -8153,26 +8001,30 @@ public class mxGraph extends mxEventSource
 			mxCell source = (mxCell) edge.getTerminal(true);
 			mxCell target = (mxCell) edge.getTerminal(false);
 
-			mxCell resetEdge = (mxCell) insertEdge(parent, null, null,
-					source, target, null); // i);
+			mxCell resetEdge = (mxCell) insertEdge(parent, null, null, source,
+					target, null); // i);
 			removeCell(edge);
 
-			String style = edge.getStyle(); // strokeWidth (and edgeStyle) and
-											// more?
+			String style = edge.getStyle(); // strokeWidth, edgeStyle...
 			String toolTip = edge.getToolTip();
-			if (!style.contains(mxConstants.STYLE_ENTRY_X)) { 
-				double exitX = 1;
-				double entryX = 1;
-				if (source != target) {
-					exitX = source.computePort(resetEdge, true);
-					entryX = target.computePort(resetEdge, false);
+			if (!style.contains(mxConstants.STYLE_ENTRY_X)) { // first reset
+				double exitX = source.computePort(resetEdge, true);
+				double entryX = target.computePort(resetEdge, false);
+				if (source == target) {
+					style += mxConstants.STYLE_LOOP + "=" + mxEdgeStyle.Loop
+							+ ";";
+					mxPoint sourcePoint = resetEdge.getTerminalPoint(true);
+					mxPoint targetPoint = resetEdge.getTerminalPoint(false);
+					List<mxPoint> list = getLoopPoints(sourcePoint, targetPoint);
+					resetEdge.getGeometry().setPoints(list);
 				}
 				style += mxConstants.STYLE_ENTRY_X + "=" + entryX + ";"
-					+ mxConstants.STYLE_EXIT_X + "=" + exitX + ";"
-					+ mxConstants.STYLE_ENTRY_Y + "=" + "0;"
-					+ mxConstants.STYLE_EXIT_Y + "=" + "1;"
-					+ mxConstants.STYLE_ENTRY_PERIMETER + "=0;"
-					+ mxConstants.STYLE_EXIT_PERIMETER + "=0;"; 
+						+ mxConstants.STYLE_EXIT_X + "=" + exitX + ";"
+						+ mxConstants.STYLE_ENTRY_Y + "=" + "0;"
+						+ mxConstants.STYLE_EXIT_Y + "=" + "1;"
+						+ mxConstants.STYLE_ENTRY_PERIMETER + "=0;"
+						+ mxConstants.STYLE_EXIT_PERIMETER + "=0;";
+
 			}
 			resetEdge.setStyle(style); // topToBottom is orthogonal
 			resetEdge.setToolTip(toolTip);
@@ -8182,6 +8034,24 @@ public class mxGraph extends mxEventSource
 			// TODO: set edge points next to the vertices they would cross
 			// how to find out which vertices they cross?
 		}
+
 	}
 
+	/**
+	 * @param sourcePoint
+	 * @param targetPoint
+	 * @return
+	 */
+	private static List<mxPoint> getLoopPoints(mxPoint sourcePoint, mxPoint targetPoint) {
+		List<mxPoint> list = new ArrayList<mxPoint>();
+		// unten rechts
+		list.add(new mxPoint(sourcePoint.getX() + 20, sourcePoint.getY()));
+		// oben rechts
+		list.add(new mxPoint(targetPoint.getX() + 20, targetPoint.getY()));
+		// drüber rechts
+		list.add(new mxPoint(targetPoint.getX() + 20, targetPoint.getY() - 20));
+		// drüber
+		list.add(new mxPoint(targetPoint.getX(), targetPoint.getY() - 20));
+		return list;
+	}
 }
