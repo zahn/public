@@ -2501,6 +2501,9 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 
 	@Override
 	public void save() {
+		if (fileName == null) {
+			return;
+		}
 		try {
 			FileOutputStream fout = new FileOutputStream(fileName);
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
@@ -2572,7 +2575,7 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 		String filenamesString = filenames.toString();
 		filenamesString = filenamesString.substring(1, filenamesString.length() - 1); // [...]
 		filenamesString = filenamesString.replace(", ", "-");
-		fileName = filenamesString.hashCode() + ".ser";
+		fileName = focusFilePath + filenamesString.hashCode() + ".ser";
 		//System.out.println(fileName);
 	}
 }
