@@ -757,6 +757,9 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	 * @return 0 < x < 1 describes a point of the cell's border
 	 */
 	public double computePort(mxICell edge, boolean isSource) {
+		if (edge.getTerminal(true) == edge.getTerminal(false)) {
+			return 1; //recursive call
+		}
 		sortEdges();
 
 		// compute x coordinates by connected vertices' x
