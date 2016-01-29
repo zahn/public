@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.swing.JTextField;
+
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource;
@@ -139,6 +141,8 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 	 * 
 	 */
 	protected transient boolean endingUpdate = false;
+
+	private JTextField textField;
 
 	/**
 	 * Constructs a new empty graph model.
@@ -2590,7 +2594,13 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 				hiddenVerticesCounter ++;
 			}
 		}
-		System.out.println("Hidden Vertices: " + hiddenVerticesCounter); //TODO: show in status bar
+		textField.setText("Hidden Vertices: " + hiddenVerticesCounter); 
+		textField.setVisible(true);
+	}
+
+	@Override
+	public void addTextField(JTextField textField) {
+		this.textField = textField;
 	}
 
 }

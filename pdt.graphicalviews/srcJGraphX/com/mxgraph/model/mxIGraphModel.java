@@ -5,6 +5,8 @@ package com.mxgraph.model;
 
 import java.util.Map;
 
+import javax.swing.JTextField;
+
 import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxUndoableEdit.mxUndoableChange;
 
@@ -340,5 +342,7 @@ public interface mxIGraphModel
 	void load(String focusFilePath);
 
 	void incHiddenVerticesCounter(mxCell cell);
+
+	void addTextField(JTextField textField);
 
 }

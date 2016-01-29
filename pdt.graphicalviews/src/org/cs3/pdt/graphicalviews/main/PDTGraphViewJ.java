@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
+import javax.swing.JTextField;
+
 import org.cs3.pdt.graphicalviews.focusview.CallGraphViewBase;
 import org.cs3.pdt.graphicalviews.focusview.ViewBase;
 import org.cs3.pdt.graphicalviews.model.GraphModel;
@@ -46,9 +48,17 @@ public class PDTGraphViewJ extends PDTGraphView  {
 
 	private double xOverhead;
 	private double yOverhead;
+
+	private JTextField textField;
 	
 	public PDTGraphViewJ(ViewBase focusView, String path) {
 		super(focusView, path);
+		
+		textField = new JTextField();
+        textField.setBounds(5, 5, 150, 20);
+        textField.setEditable(false);
+        textField.setVisible(false);
+        add(textField);
 	}
 
 	public boolean isEmpty() {
@@ -548,7 +558,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 			
 			setRootVerticesXDistance(graph);
 			setChildVerticesXDistance(graph);
-			graph.updateGroupBounds(graph.getRootCells(), 10);
+			graph.updateGroupBounds(graph.getRootCells(), 10); 
 			moveChildrenDownAndAdaptRootNodesHeight(graph);
 			setRootVerticesYDistance(graph);
 
@@ -560,6 +570,8 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		} finally {
 			graph.getModel().endUpdate();
 		}
+		
+		graph.getModel().addTextField(textField);
 	}
 
 }
