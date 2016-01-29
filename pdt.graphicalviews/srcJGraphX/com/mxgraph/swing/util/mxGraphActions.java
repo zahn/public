@@ -445,7 +445,7 @@ public class mxGraphActions
 						if (cell.isEdge()) {
 							graph.resetEdge(cell);
 						} else {
-							break;
+							model.incHiddenVerticesCounter(cell);
 						}
 					}
 				} finally {

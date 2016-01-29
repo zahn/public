@@ -339,4 +339,6 @@ public interface mxIGraphModel
 
 	void load(String focusFilePath);
 
+	void incHiddenVerticesCounter(mxCell cell);
+
 }

@@ -78,6 +78,8 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 //mxGraphModel is the underlying object that stores the data structure of your graph
 
 	private String fileName;
+	
+	private int hiddenVerticesCounter;
 
 	/**
 	 * Holds the root cell, which in turn contains the cells that represent the
@@ -2578,4 +2580,17 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 		fileName = focusFilePath + filenamesString.hashCode() + ".ser";
 		//System.out.println(fileName);
 	}
+
+
+	@Override
+	public void incHiddenVerticesCounter(mxCell cell) {
+		hiddenVerticesCounter ++;
+		for (int i=0; i<cell.getChildCount(); i++) {
+			if (cell.getChildAt(i).isVertex() ) {
+				hiddenVerticesCounter ++;
+			}
+		}
+		System.out.println("Hidden Vertices: " + hiddenVerticesCounter); //TODO: show in status bar
+	}
+
 }
