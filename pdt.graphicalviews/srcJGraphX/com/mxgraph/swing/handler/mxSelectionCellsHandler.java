@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -63,8 +64,7 @@ public class mxSelectionCellsHandler implements MouseListener,
 	protected Rectangle bounds = null;
 
 	/**
-	 * Defines the maximum number of handlers to paint individually.
-	 * Default is DEFAULT_MAX_HANDLES.
+	 * Defines the maximum number of handlers to paint individually. Default is DEFAULT_MAX_HANDLES.
 	 */
 	protected int maxHandlers = DEFAULT_MAX_HANDLERS;
 
@@ -95,6 +95,7 @@ public class mxSelectionCellsHandler implements MouseListener,
 
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 		 */
 		public void propertyChange(PropertyChangeEvent evt)
@@ -256,9 +257,7 @@ public class mxSelectionCellsHandler implements MouseListener,
 	}
 
 	/**
-	 * Dispatches the mousepressed event to the subhandles. This is
-	 * called from the connection handler as subhandles have precedence
-	 * over the connection handler.
+	 * Dispatches the mousepressed event to the subhandles. This is called from the connection handler as subhandles have precedence over the connection handler.
 	 */
 	public void mousePressed(MouseEvent e)
 	{
@@ -325,9 +324,7 @@ public class mxSelectionCellsHandler implements MouseListener,
 	}
 
 	/**
-	 * Redirects the tooltip handling of the JComponent to the graph
-	 * component, which in turn may use getHandleToolTipText in this class to
-	 * find a tooltip associated with a handle.
+	 * Redirects the tooltip handling of the JComponent to the graph component, which in turn may use getHandleToolTipText in this class to find a tooltip associated with a handle.
 	 */
 	public String getToolTipText(MouseEvent e)
 	{
@@ -414,8 +411,8 @@ public class mxSelectionCellsHandler implements MouseListener,
 				}
 			}
 		}
-		
-		for (mxCellHandler handler: oldHandlers.values())
+
+		for (mxCellHandler handler : oldHandlers.values())
 		{
 			handler.destroy();
 		}
@@ -452,12 +449,17 @@ public class mxSelectionCellsHandler implements MouseListener,
 
 		while (it.hasNext())
 		{
-			it.next().paint(g);
+			try {
+				it.next().paint(g);
+			} catch (ConcurrentModificationException e) {
+				// this might happen when loading another graph. still it is loaded correctly. so we dont need to do anything here.
+			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	public void mouseClicked(MouseEvent arg0)
@@ -467,6 +469,7 @@ public class mxSelectionCellsHandler implements MouseListener,
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
 	 */
 	public void mouseEntered(MouseEvent arg0)
@@ -476,6 +479,7 @@ public class mxSelectionCellsHandler implements MouseListener,
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
 	 */
 	public void mouseExited(MouseEvent arg0)
