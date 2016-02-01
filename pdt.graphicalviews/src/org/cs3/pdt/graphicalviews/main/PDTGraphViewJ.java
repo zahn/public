@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.cs3.pdt.graphicalviews.focusview.CallGraphViewBase;
@@ -49,16 +50,18 @@ public class PDTGraphViewJ extends PDTGraphView  {
 	private double xOverhead;
 	private double yOverhead;
 
-	private JTextField textField;
+	private JLabel label;
 	
 	public PDTGraphViewJ(ViewBase focusView, String path) {
 		super(focusView, path);
 		
-		textField = new JTextField();
-        textField.setBounds(5, 5, 150, 20);
-        textField.setEditable(false);
-        textField.setVisible(false);
-        add(textField);
+		label = new JLabel();
+        label.setBounds(5, 5, 150, 20);
+        //textField.setEditable(false);
+        label.setVisible(false);
+      
+        add(label);
+        setComponentZOrder(label, 0);
 	}
 
 	public boolean isEmpty() {
@@ -119,7 +122,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 			}
 		}
 		xOverhead = minX - 10;
-		yOverhead = minY - 10;
+		yOverhead = minY - 20;
 	}
 	
 	private mxGraphComponent createGraphComponent(mxGraph graph) {
@@ -571,7 +574,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 			graph.getModel().endUpdate();
 		}
 		
-		graph.getModel().addTextField(textField);
+		graph.getModel().addLabel(label);
 	}
 
 }

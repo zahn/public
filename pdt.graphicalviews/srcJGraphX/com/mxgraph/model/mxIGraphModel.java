@@ -5,6 +5,7 @@ package com.mxgraph.model;
 
 import java.util.Map;
 
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import com.mxgraph.util.mxEventSource.mxIEventListener;
@@ -343,6 +344,6 @@ public interface mxIGraphModel
 
 	void incHiddenVerticesCounter(mxCell cell);
 
-	void addTextField(JTextField textField);
+	void addLabel(JLabel textField);
 
 }

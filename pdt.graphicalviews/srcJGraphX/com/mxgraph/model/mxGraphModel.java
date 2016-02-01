@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import com.mxgraph.util.mxEvent;
@@ -142,7 +143,7 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 	 */
 	protected transient boolean endingUpdate = false;
 
-	private JTextField textField;
+	private JLabel label;
 
 	/**
 	 * Constructs a new empty graph model.
@@ -2594,13 +2595,16 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 				hiddenVerticesCounter ++;
 			}
 		}
-		textField.setText("Hidden Vertices: " + hiddenVerticesCounter); 
-		textField.setVisible(true);
+		label.setText("Hidden Vertices: " + hiddenVerticesCounter); 
+		label.setVisible(true);
 	}
 
 	@Override
-	public void addTextField(JTextField textField) {
-		this.textField = textField;
+	public void addLabel(JLabel textField) {
+		this.label = textField;
+		/*if (textField.isVisible()) {
+			textField.setVisible(true);
+		}*/
 	}
 
 }
