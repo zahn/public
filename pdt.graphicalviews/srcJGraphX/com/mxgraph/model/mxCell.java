@@ -398,7 +398,12 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	 * @see com.mxgraph.model.mxICell#getChildAt(int)
 	 */
 	public mxICell getChildAt(int index) {
-		return (children != null) ? (mxICell) children.get(index) : null;
+		if (children != null) {
+			if (children.size() > index) {
+				return (mxICell) children.get(index);
+			}
+		} 
+		return null;
 	}
 
 	/*
