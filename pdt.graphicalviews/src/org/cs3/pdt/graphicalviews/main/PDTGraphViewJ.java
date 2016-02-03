@@ -38,39 +38,41 @@ import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxRectangle;
+import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxEdgeStyle;
 import com.mxgraph.view.mxGraph;
+import com.mxgraph.view.mxGraphView;
 
-public class PDTGraphViewJ extends PDTGraphView  {
+public class PDTGraphViewJ extends PDTGraphView {
 
 	private static final long serialVersionUID = -611433500513523511L;
-	
+
 	private String focusFilePath;
 
 	private double xOverhead;
 	private double yOverhead;
 
 	private JLabel label;
-	
+
 	public PDTGraphViewJ(ViewBase focusView, String path) {
 		super(focusView, path);
-		
+
 		label = new JLabel();
-        label.setBounds(5, 5, 150, 20);
-        //textField.setEditable(false);
-        label.setVisible(false);
-      
-        add(label);
-        setComponentZOrder(label, 0);
+		label.setBounds(5, 5, 150, 20);
+		// textField.setEditable(false);
+		label.setVisible(false);
+
+		add(label);
+		setComponentZOrder(label, 0);
 	}
 
 	public boolean isEmpty() {
 		return this.graphModel// .getGraphJ() //NullPointerException
 				== null;
-		//return graphY == null
-				//|| graphY.getNodeArray().length == 0;
+		// return graphY == null
+		// || graphY.getNodeArray().length == 0;
 	}
-	
+
 	public void loadGraph(File helpFile) {
 		loadGraph(reader.readFile(helpFile));
 	}
@@ -88,7 +90,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 
 		updateView();
 	}
-	
+
 	private void adaptRootNodeHeight(mxGraph graph, mxCell cell) {
 		if (cell.isVertex()) {
 			// Resize cells' height
@@ -97,7 +99,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 			g.setHeight(newHeight);
 		}
 	}
-	
+
 	private void computeCoordinatesOverhead(mxGraph graph) {
 		// The coordinate system in Java is x is positive to the right and y is
 		// positive downwards
@@ -106,7 +108,8 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		Object[] cells = graph.getRootCells();
 		for (Object c : cells) {
 			mxCell cell = (mxCell) c; // cast
-			if (cell.isEdge()) continue;
+			if (cell.isEdge())
+				continue;
 			mxGeometry g = cell.getGeometry();
 			double x = g.getX();
 			// System.out.println(cell.getValue() + " has x: " + x);
@@ -124,7 +127,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		xOverhead = minX - 10;
 		yOverhead = minY - 20;
 	}
-	
+
 	private mxGraphComponent createGraphComponent(mxGraph graph) {
 		mxGraphComponent graphComponent = new mxGraphComponent(graph);
 		graphComponent.setConnectable(false); // disable drag and drop edge
@@ -134,7 +137,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		// graphComponent.setSize(50, 50); //does not prevent white space to the
 		// left and top
 		graphComponent.setToolTips(true);
-		new mxKeyboardHandler(graphComponent); //to enable resetting edges by (Fn) DEL
+		new mxKeyboardHandler(graphComponent); // to enable resetting edges by (Fn) DEL
 		return graphComponent;
 	}
 
@@ -152,13 +155,11 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		layout.setDisableEdgeStyle(false);
 		layout.execute(graph.getDefaultParent());
 	}
-	
-	private ArrayList<mxCell> sortByX(Object[] cells) {		/*
-		 * PriorityQueue<mxCell> cellQueue = new PriorityQueue<mxCell>(10, new
-		 * Comparator<mxCell>() { public int compare(mxCell cell1, mxCell cell2)
-		 * { Double x1 = cell1.getAbsX(); return x1.compareTo(cell2.getAbsX());
-		 * } }); for (Object o : cells) { cellQueue.add((mxCell) o); }
-		 */
+
+	private ArrayList<mxCell> sortByX(Object[] cells) { /*
+														 * PriorityQueue<mxCell> cellQueue = new PriorityQueue<mxCell>(10, new Comparator<mxCell>() { public int compare(mxCell cell1, mxCell cell2) { Double x1 = cell1.getAbsX(); return
+														 * x1.compareTo(cell2.getAbsX()); } }); for (Object o : cells) { cellQueue.add((mxCell) o); }
+														 */
 		ArrayList<mxCell> list = new ArrayList<mxCell>();
 		for (Object o : cells) {
 			mxCell cell = (mxCell) o;
@@ -341,7 +342,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 			}
 		}
 	}
-	
+
 	private boolean setNeighboursXDistance(mxCell left, mxCell right) {
 		double leftEnd = left.getAbsX() + left.getGeometry().getWidth();
 		double rightStart = leftEnd + 10;
@@ -367,28 +368,23 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		return false; // has not been set because it is already correct
 	}
 
-	
-
 	/**
 	 * sets the distance between neighbouring root cells
 	 * 
 	 * --> to prevent them from overlapping:
 	 * 
-	 * if neighbours share x- and y-coordinates, move next downwards (increase
-	 * y)
+	 * if neighbours share x- and y-coordinates, move next downwards (increase y)
 	 * 
 	 * 
 	 * --> to prevent too much empty space between them:
 	 * 
-	 * if x-neighbours dont share x-coordinates, set the empty space between
-	 * them by moving next (leftwards: reduce x)
+	 * if x-neighbours dont share x-coordinates, set the empty space between them by moving next (leftwards: reduce x)
 	 * 
-	 * if y-neighbours dont share y-coordinates, set the empty space between
-	 * them by moving next (upwards: reduce y)
+	 * if y-neighbours dont share y-coordinates, set the empty space between them by moving next (upwards: reduce y)
 	 * 
 	 * @param graph
 	 */
-	private void setRootVerticesDistance(mxGraph graph) { 
+	private void setRootVerticesDistance(mxGraph graph) {
 		setRootVerticesYDistance(graph);
 		setRootVerticesXDistance(graph);
 	}
@@ -398,28 +394,16 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		ArrayList<mxCell> list = sortByX(cells);
 		setVerticesXDistance(list);
 		/*
-		 * for (int i = 0; i < cellQueue.size() - 1; i++) { mxCell cell =
-		 * cellQueue.poll(); Object value = cell.getValue(); if (value != null
-		 * && value.equals("preparser.pl")) { System.out.println(
-		 * "setting breakpoint"); } mxCell nextCell = cellQueue.peek(); if
-		 * (!sameY(cell, nextCell)) { setNeighboursXDistance(cell, nextCell);
-		 * //cellQueue.add(nextCell); } else if (sameX(cell, nextCell)) {
-		 * setNeighboursYDistance(cell, nextCell); //cellQueue.add(nextCell); }
-		 * }
+		 * for (int i = 0; i < cellQueue.size() - 1; i++) { mxCell cell = cellQueue.poll(); Object value = cell.getValue(); if (value != null && value.equals("preparser.pl")) { System.out.println( "setting breakpoint"); } mxCell nextCell =
+		 * cellQueue.peek(); if (!sameY(cell, nextCell)) { setNeighboursXDistance(cell, nextCell); //cellQueue.add(nextCell); } else if (sameX(cell, nextCell)) { setNeighboursYDistance(cell, nextCell); //cellQueue.add(nextCell); } }
 		 */
 	}
 
 	private void setChildVerticesXDistance(mxGraph graph) {
 		Object[] cells = graph.getRootCells();
 		/*
-		 * for (int i = 0; i < cellQueue.size() - 1; i++) { mxCell cell =
-		 * cellQueue.poll(); Object value = cell.getValue(); if (value != null
-		 * && value.equals("preparser.pl")) { System.out.println(
-		 * "setting breakpoint"); } mxCell nextCell = cellQueue.peek(); if
-		 * (!sameY(cell, nextCell)) { setNeighboursXDistance(cell, nextCell);
-		 * //cellQueue.add(nextCell); } else if (sameX(cell, nextCell)) {
-		 * setNeighboursYDistance(cell, nextCell); //cellQueue.add(nextCell); }
-		 * }
+		 * for (int i = 0; i < cellQueue.size() - 1; i++) { mxCell cell = cellQueue.poll(); Object value = cell.getValue(); if (value != null && value.equals("preparser.pl")) { System.out.println( "setting breakpoint"); } mxCell nextCell =
+		 * cellQueue.peek(); if (!sameY(cell, nextCell)) { setNeighboursXDistance(cell, nextCell); //cellQueue.add(nextCell); } else if (sameX(cell, nextCell)) { setNeighboursYDistance(cell, nextCell); //cellQueue.add(nextCell); } }
 		 */
 		for (int i = 0; i < cells.length; i++) {
 			setChildVerticesXDistance((mxCell) cells[i]);
@@ -431,8 +415,7 @@ public class PDTGraphViewJ extends PDTGraphView  {
 	 * 
 	 * --> to prevent too much empty space between them:
 	 * 
-	 * if x-neighbours dont share x-coordinates, set the empty space between
-	 * them by moving next (leftwards: reduce x)
+	 * if x-neighbours dont share x-coordinates, set the empty space between them by moving next (leftwards: reduce x)
 	 * 
 	 * @param graph
 	 */
@@ -446,14 +429,8 @@ public class PDTGraphViewJ extends PDTGraphView  {
 
 		setVerticesXDistance(list);
 		/*
-		 * for (int i = 0; i < cellQueue.size() - 1; i++) { mxCell cell =
-		 * cellQueue.poll(); Object value = cell.getValue(); if (value != null
-		 * && value.equals("preparser.pl")) { System.out.println(
-		 * "setting breakpoint"); } mxCell nextCell = cellQueue.peek(); if
-		 * (!sameY(cell, nextCell)) { setNeighboursXDistance(cell, nextCell);
-		 * //cellQueue.add(nextCell); } else if (sameX(cell, nextCell)) {
-		 * setNeighboursYDistance(cell, nextCell); //cellQueue.add(nextCell); }
-		 * }
+		 * for (int i = 0; i < cellQueue.size() - 1; i++) { mxCell cell = cellQueue.poll(); Object value = cell.getValue(); if (value != null && value.equals("preparser.pl")) { System.out.println( "setting breakpoint"); } mxCell nextCell =
+		 * cellQueue.peek(); if (!sameY(cell, nextCell)) { setNeighboursXDistance(cell, nextCell); //cellQueue.add(nextCell); } else if (sameX(cell, nextCell)) { setNeighboursYDistance(cell, nextCell); //cellQueue.add(nextCell); } }
 		 */
 	}
 
@@ -465,17 +442,17 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		cells = list.toArray();
 		list = sortByX(cells);
 		for (int i = 0; i < list.size() - 1; i++) {
-			//System.out.println(i);
+			// System.out.println(i);
 			mxCell cell = list.get(i);
 			mxCell nextCell = list.get(i + 1);
 			if (overlap(cell, nextCell)) {
-				//System.out.println(cell.getValue() + " x-overlapping "	+ nextCell.getValue());
+				// System.out.println(cell.getValue() + " x-overlapping " + nextCell.getValue());
 				if (setNeighboursXDistance(cell, nextCell)) {
 					list = sortByX(cells);
 					i--;
 				}
 			} else if (!sameX(cell, nextCell)) {
-				//System.out.println(cell.getValue() + " x-neighboring "	+ nextCell.getValue());
+				// System.out.println(cell.getValue() + " x-neighboring " + nextCell.getValue());
 				if (setNeighboursXDistance(cell, nextCell)) {
 					list = sortByX(cells);
 					i--;
@@ -489,14 +466,12 @@ public class PDTGraphViewJ extends PDTGraphView  {
 	 * 
 	 * --> to prevent them from overlapping:
 	 * 
-	 * if neighbours share x- and y-coordinates, move next downwards (increase
-	 * y)
+	 * if neighbours share x- and y-coordinates, move next downwards (increase y)
 	 * 
 	 * 
 	 * --> to prevent too much empty space between them:
 	 * 
-	 * if y-neighbours dont share y-coordinates, set the empty space between
-	 * them by moving next (upwards: reduce y)
+	 * if y-neighbours dont share y-coordinates, set the empty space between them by moving next (upwards: reduce y)
 	 * 
 	 * @param graph
 	 */
@@ -533,35 +508,41 @@ public class PDTGraphViewJ extends PDTGraphView  {
 		}
 	}
 
-	private void updateCellSize(mxGraph graph, mxCell cell) {
-		//System.out.println("cell" + cell.getValue());
+	private boolean updateCellSize(mxGraph graph, mxCell cell) {
+		// System.out.println("cell" + cell.getValue());
 		if (cell.isVertex()) {
 			graph.updateCellSize(cell);
 			// Resize cells' height
 			mxGeometry g = (mxGeometry) cell.getGeometry(); // .clone();
-			mxRectangle bounds = graph.getView().getState(cell)
-					.getLabelBounds();
+			mxGraphView graphView = graph.getView();
+			mxCellState state = graphView.getState(cell);
+			if (state == null) {
+				return false;
+			}
+			mxRectangle bounds = state.getLabelBounds();
 			double newHeight = bounds.getHeight() + 10;
 			g.setHeight(newHeight); // 10 is for padding
 		}
+		return true;
+
 	}
 
 	protected void updateView() {
-		//removeAll(); //only adding new graphComponents works better
-		
+		// removeAll(); //only adding new graphComponents works better
+
 		final mxGraph graph = graphModel.getGraphJ();
-		
+
 		mxGraphComponent graphComponent = createGraphComponent(graph);
 		add(graphComponent);
-		
+
 		graph.getModel().beginUpdate();
 		try {
 			resizeCells(graph);
 			executeHierarchicalLayout(graph);
-			
+
 			setRootVerticesXDistance(graph);
 			setChildVerticesXDistance(graph);
-			graph.updateGroupBounds(graph.getRootCells(), 10); 
+			graph.updateGroupBounds(graph.getRootCells(), 10);
 			moveChildrenDownAndAdaptRootNodesHeight(graph);
 			setRootVerticesYDistance(graph);
 
@@ -569,11 +550,11 @@ public class PDTGraphViewJ extends PDTGraphView  {
 			resetEdges(graph); // to relayout edges by deleting and adding them
 			// and computing ports
 
-			//graph.getModel().load(focusFilePath);
+			// graph.getModel().load(focusFilePath);
 		} finally {
 			graph.getModel().endUpdate();
 		}
-		
+
 		graph.getModel().addLabel(label);
 	}
 
