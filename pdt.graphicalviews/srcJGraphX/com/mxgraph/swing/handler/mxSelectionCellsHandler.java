@@ -449,8 +449,9 @@ public class mxSelectionCellsHandler implements MouseListener,
 
 		while (it.hasNext())
 		{
+			mxCellHandler itNext = it.next();
 			try {
-				it.next().paint(g);
+				itNext.paint(g);
 			} catch (ConcurrentModificationException e) {
 				// this might happen when loading another graph. still it is loaded correctly. so we dont need to do anything here.
 			}
