@@ -16,9 +16,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.SwingUtilities;
 
@@ -71,7 +76,8 @@ public class mxSelectionCellsHandler implements MouseListener,
 	/**
 	 * Maps from cells to handlers in the order of the selection cells.
 	 */
-	protected transient LinkedHashMap<Object, mxCellHandler> handlers = new LinkedHashMap<Object, mxCellHandler>();
+	//protected transient LinkedHashMap<Object, mxCellHandler> handlers = new LinkedHashMap<Object, mxCellHandler>();
+	protected transient ConcurrentHashMap<Object, mxCellHandler> handlers = new ConcurrentHashMap<Object, mxCellHandler>();
 
 	/**
 	 * 
@@ -363,8 +369,8 @@ public class mxSelectionCellsHandler implements MouseListener,
 
 		// Creates a new map for the handlers and tries to
 		// to reuse existing handlers from the old map
-		LinkedHashMap<Object, mxCellHandler> oldHandlers = handlers;
-		handlers = new LinkedHashMap<Object, mxCellHandler>();
+		ConcurrentHashMap<Object, mxCellHandler> oldHandlers = handlers;
+		handlers = new ConcurrentHashMap<Object, mxCellHandler>();
 
 		// Creates handles for all selection cells
 		Object[] tmp = graph.getSelectionCells();
@@ -445,16 +451,8 @@ public class mxSelectionCellsHandler implements MouseListener,
 	 */
 	public void paintHandles(Graphics g)
 	{
-		Iterator<mxCellHandler> it = handlers.values().iterator();
-
-		while (it.hasNext())
-		{
-			mxCellHandler itNext = it.next();
-			try {
-				itNext.paint(g);
-			} catch (ConcurrentModificationException e) {
-				// this might happen when loading another graph. still it is loaded correctly. so we dont need to do anything here.
-			}
+		for (mxCellHandler i : handlers.values()) {
+		    i.paint(g);
 		}
 	}
 
