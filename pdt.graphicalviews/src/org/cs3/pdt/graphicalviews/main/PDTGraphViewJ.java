@@ -151,43 +151,6 @@ public class PDTGraphViewJ extends PDTGraphView {
 		layout.execute(graph.getDefaultParent());
 	}
 
-	private ArrayList<mxCell> sortByX(Object[] cells) { /*
-														 * PriorityQueue<mxCell> cellQueue = new PriorityQueue<mxCell>(10, new Comparator<mxCell>() { public int compare(mxCell cell1, mxCell cell2) { Double x1 = cell1.getAbsX(); return
-														 * x1.compareTo(cell2.getAbsX()); } }); for (Object o : cells) { cellQueue.add((mxCell) o); }
-														 */
-		ArrayList<mxCell> list = new ArrayList<mxCell>();
-		for (Object o : cells) {
-			mxCell cell = (mxCell) o;
-			if (cell.isVertex()) {
-				list.add(cell);
-			}
-		}
-		Collections.sort(list, new Comparator<mxCell>() {
-			public int compare(mxCell cell1, mxCell cell2) {
-				Double x1 = cell1.getAbsX();
-				return x1.compareTo(cell2.getAbsX());
-			}
-		});
-		return list;
-	}
-
-	private ArrayList<mxCell> sortByY(Object[] cells) {
-		ArrayList<mxCell> list = new ArrayList<mxCell>();
-		for (Object o : cells) {
-			mxCell cell = (mxCell) o;
-			if (cell.isVertex()) {
-				list.add((mxCell) o);
-			}
-		}
-		Collections.sort(list, new Comparator<mxCell>() {
-			public int compare(mxCell cell1, mxCell cell2) {
-				Double y1 = cell1.getAbsY();
-				return y1.compareTo(cell2.getAbsY());
-			}
-		});
-		return list;
-	}
-
 	private void moveCell(mxGraph graph, mxCell cell) {
 		// The x,y position of a vertex is its position relative to its parent
 		// container (graph.getDefaultParent()), so in the case of default
@@ -249,10 +212,6 @@ public class PDTGraphViewJ extends PDTGraphView {
 		}
 	}
 
-	private boolean overlap(mxCell cell, mxCell nextCell) {
-		return sameX(cell, nextCell) && sameY(cell, nextCell);
-	}
-
 	private void resetEdges(mxGraph graph) {
 		Map<String, Object> style = graph.getStylesheet().getDefaultEdgeStyle();
 		style.put(mxConstants.STYLE_EDGE,
@@ -292,64 +251,6 @@ public class PDTGraphViewJ extends PDTGraphView {
 		} finally {
 			graph.getModel().endUpdate();
 		}
-	}
-
-	private boolean sameX(mxCell cell1, mxCell cell2) {
-		double cell1x = cell1.getAbsX();
-		double cell2x = cell2.getAbsX();
-		if (cell1x < cell2x) {
-			// cell1 starts left from cell2
-			if (cell1x + cell1.getGeometry().getWidth() < cell2x) {
-				// cell1 ends left from cell2
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			// cell2 starts left from cell2
-			if (cell2x + cell2.getGeometry().getWidth() < cell1x) {
-				// cell2 ends left from cell1
-				return false;
-			} else {
-				return true;
-			}
-		}
-	}
-
-	private boolean sameY(mxCell cell1, mxCell cell2) {
-		double cell1y = cell1.getAbsY();
-		double cell2y = cell2.getAbsY();
-		if (cell1y < cell2y) {
-			// cell1 starts above cell2
-			if (cell1y + cell1.getGeometry().getHeight() < cell2y) {
-				// cell1 ends above cell2
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			// cell2 starts above cell2
-			if (cell2y + cell2.getGeometry().getHeight() < cell1y) {
-				// cell2 ends above cell1
-				return false;
-			} else {
-				return true;
-			}
-		}
-	}
-
-	private boolean setNeighboursXDistance(mxCell left, mxCell right) {
-		double leftEnd = left.getAbsX() + left.getGeometry().getWidth();
-		double rightStart = leftEnd + 10;
-		mxGeometry g = right.getGeometry();
-		double start = g.getX();
-		if (start <= rightStart) {
-			// System.out.println("had already been set.");
-			return false; // has not been set because it is already correct
-		}
-		g.setX(rightStart);
-		// System.out.println("are set from " + start + " to " + rightStart);
-		return true;
 	}
 
 	private boolean setNeighboursYDistance(mxCell top, mxCell bottom) {
@@ -412,27 +313,186 @@ public class PDTGraphViewJ extends PDTGraphView {
 	 * @param list
 	 */
 	private void setVerticesXDistance(ArrayList<mxCell> list) {
+		boolean test = false;
+		/*
+		 * if (list.size() > 0) { String value = (String)
+		 * list.get(0).getParent().getValue(); if (value != null &&
+		 * value.equals("timetable.pl")) { test = true; } }
+		 */
 		Object[] cells;
 		cells = list.toArray();
 		list = sortByX(cells);
 		for (int i = 0; i < list.size() - 1; i++) {
-			// System.out.println(i);
+			if (test)
+				System.out.println(i);
 			mxCell cell = list.get(i);
 			mxCell nextCell = list.get(i + 1);
 			if (overlap(cell, nextCell)) {
-				// System.out.println(cell.getValue() + " x-overlapping " + nextCell.getValue());
+				if (test)
+					System.out.println(cell.getValue() + " x-overlapping "
+							+ nextCell.getValue());
 				if (setNeighboursXDistance(cell, nextCell)) {
 					list = sortByX(cells);
 					i--;
+					if (i >= 0)
+						i--;
 				}
 			} else if (!sameX(cell, nextCell)) {
-				// System.out.println(cell.getValue() + " x-neighboring " + nextCell.getValue());
+				if (test)
+					System.out.println(cell.getValue() + " x-neighboring "
+							+ nextCell.getValue());
 				if (setNeighboursXDistance(cell, nextCell)) {
 					list = sortByX(cells);
 					i--;
+					if (i >= 0)
+						i--;
 				}
 			}
+			if (test)
+				System.out.println(cell.getGeometry().getX() + " :x: "
+						+ nextCell.getGeometry().getX());
 		}
+	}
+
+	private boolean overlap(mxCell cell, mxCell nextCell) {
+		return sameX(cell, nextCell) && sameY(cell, nextCell);
+	}
+
+	private ArrayList<mxCell> sortByX(Object[] cells) {
+		/*
+		 * PriorityQueue < mxCell > cellQueue = new PriorityQueue < mxCell >(10,
+		 * new Comparator < mxCell >() { public int compare ( mxCell cell1 ,
+		 * mxCell cell2 ) { Double x1 = cell1 . getAbsX (); return x1. compareTo
+		 * ( cell2 . getAbsX ()); } }); for (Object o : cells ) { cellQueue .
+		 * add(( mxCell ) o); }
+		 */
+		ArrayList<mxCell> list = new ArrayList<mxCell>();
+		for (Object o : cells) {
+			mxCell cell = (mxCell) o;
+			if (cell.isVertex()) {
+				list.add(cell);
+			}
+		}
+		Collections.sort(list, new Comparator<mxCell>() {
+			public int compare(mxCell cell1, mxCell cell2) {
+				Double x1 = cell1.getAbsX();
+				return x1.compareTo(cell2.getAbsX());
+			}
+		});
+		return list;
+	}
+
+	private ArrayList<mxCell> sortByY(Object[] cells) {
+		ArrayList<mxCell> list = new ArrayList<mxCell>();
+		for (Object o : cells) {
+			mxCell cell = (mxCell) o;
+			if (cell.isVertex()) {
+				list.add((mxCell) o);
+			}
+		}
+		Collections.sort(list, new Comparator<mxCell>() {
+			public int compare(mxCell cell1, mxCell cell2) {
+				Double y1 = cell1.getAbsY();
+				return y1.compareTo(cell2.getAbsY());
+			}
+		});
+		return list;
+	}
+
+	private boolean sameX(mxCell cell1, mxCell cell2) {
+		double cell1x = cell1.getAbsX();
+		double cell2x = cell2.getAbsX();
+		if (cell1x < cell2x) {
+			// cell1 starts left from cell2
+			if (cell1x + cell1.getGeometry().getWidth() < cell2x) {
+				// cell1 ends left from cell2
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			// cell2 starts left from cell2
+			if (cell2x + cell2.getGeometry().getWidth() < cell1x) {
+				// cell2 ends left from cell1
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
+
+	private boolean sameY(mxCell cell1, mxCell cell2) {
+		double cell1y = cell1.getAbsY();
+		double cell2y = cell2.getAbsY();
+		if (cell1y < cell2y) {
+			// cell1 starts above cell2
+			if (cell1y + cell1.getGeometry().getHeight() < cell2y) {
+				// cell1 ends above cell2
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			// cell2 starts above cell2
+			if (cell2y + cell2.getGeometry().getHeight() < cell1y) {
+				// cell2 ends above cell1
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
+
+	/**
+	 * if right's x is too right, then move it to the left. if it is
+	 * connected to other edges then only move it the half way and move left to
+	 * the right the other half such that they meet in the middle.
+	 * 
+	 * @param left
+	 *            cell
+	 * @param right
+	 *            cell = cell with the smallest x which is bigger than left
+	 *            cell's x
+	 * @return true if right has been moved to the left. false if nothing has
+	 *         been changed.
+	 */
+	private boolean setNeighboursXDistance(mxCell left, mxCell right) {
+		boolean test = false;
+		String value = (String) left.getParent().getValue();
+		if (value != null && value.equals("available.pl")) {
+			// test = true;
+		}
+		double toleratedDistance = 100; // tolerated distance between 2 nodes
+		mxGeometry gLeft = left.getGeometry();
+		mxGeometry gRight = right.getGeometry();
+		double startLeft = gLeft.getX();
+		double startRight = gRight.getX();
+		double width = gLeft.getWidth();
+		double endLeft = startLeft + width;
+		if (startRight <= endLeft + toleratedDistance) {
+			if (test)
+				System.out.println(" are ok.");
+			return false;
+		}
+		//move:
+		double optDistance = 10; // optimal distance between 2 nodes
+		if (right.getEdgeCount() > 0) {
+			double halfDistance = ((endLeft + optDistance - startRight) / 2);
+			double middle = endLeft - halfDistance;
+			gRight.setX(middle + optDistance);
+			gLeft.setX(middle - width);
+		} else {
+			gRight.setX(endLeft + optDistance);
+		}
+		if (test) {
+			System.out.println("are setting right from " + startRight + " to "
+					+ right.getGeometry().getX());
+			System.out.println("and left from " + startLeft + " to "
+					+ left.getGeometry().getX());
+			System.out.println("width: " + left.getGeometry().getWidth());
+			System.out.println("startRight: " + startRight);
+		}
+		return true;
 	}
 
 	/**
