@@ -260,7 +260,8 @@ public class mxGraphMlGraph {
 					+ mxConstants.STYLE_STROKECOLOR + "="
 					+ getBorderColor(dataMap) + ";" + mxConstants.STYLE_DASHED
 					+ "=" + isDashed(dataMap) + ";"
-					+ mxConstants.STYLE_FILLCOLOR + "=" + getFillColor(dataMap);
+					+ mxConstants.STYLE_FILLCOLOR + "=" + getFillColor(dataMap)
+					+ ";" + mxConstants.STYLE_SHAPE + "=" + getShape(dataMap);
 			v1 = (mxCell) graph.insertVertex(parent, id, label, 0, 0, 100, 100,
 					style, pdtId);
 			// v1.setPdtId(pdtId); //too late
@@ -283,13 +284,11 @@ public class mxGraphMlGraph {
 
 	private String getToolTip(HashMap<String, mxGraphMlData> dataMap) {
 		StringBuilder sb = new StringBuilder();
-		/*if (isModule(dataMap)) {
-			sb.append("Module: ");
-		} else if (isFile(dataMap)) {
-			sb.append("File: ");
-		} else if (isPredicate(dataMap)) {
-			sb.append("Predicate: ");
-		}*/ //not shown
+		/*
+		 * if (isModule(dataMap)) { sb.append("Module: "); } else if
+		 * (isFile(dataMap)) { sb.append("File: "); } else if
+		 * (isPredicate(dataMap)) { sb.append("Predicate: "); }
+		 */// not shown
 
 		sb.append(getLabel(dataMap));
 
@@ -304,15 +303,21 @@ public class mxGraphMlGraph {
 		if (isUnusedLocal(dataMap)) {
 			sb.append(" [Unused]");
 		}
-		
+
+		if (isMetaPredicate(dataMap)) {
+			if (isInferred(dataMap)) {
+				sb.append(" [Inferred]");
+			}
+		}
+
 		if (isMetaCall(dataMap)) {
-			sb.append(getLabel(dataMap)); //aspect_action(...,...,grossvater(...,...))
+			sb.append(getLabel(dataMap)); // aspect_action(...,...,grossvater(...,...))
 		}
 
 		/*
 		 * if ("inferred".equals(getMetaPredType(dataMap))) {
 		 * setLabelText(model.getLabelTextForNode() + " [Inferred]"); }
-		 */ 
+		 */
 		return sb.toString();
 	}
 
@@ -365,6 +370,33 @@ public class mxGraphMlGraph {
 		}
 		return false;
 	}
+	
+
+	private boolean isInferred(HashMap<String, mxGraphMlData> dataMap) {
+		if (isPredicate(dataMap)) {
+			mxGraphMlData isUnusedLocalEntry = dataMap.get("metaPredicateType");
+			if (isUnusedLocalEntry != null) {
+				String isUnusedLocalValue = isUnusedLocalEntry.getDataValue();
+				if (isUnusedLocalValue.equals("inferred")) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean isMetaPredicate(HashMap<String, mxGraphMlData> dataMap) {
+		if (isPredicate(dataMap)) {
+			mxGraphMlData isUnusedLocalEntry = dataMap.get("isMetaPredicate");
+			if (isUnusedLocalEntry != null) {
+				String isUnusedLocalValue = isUnusedLocalEntry.getDataValue();
+				if (isUnusedLocalValue.equals("true")) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	private boolean isUnusedLocal(HashMap<String, mxGraphMlData> dataMap) {
 		if (isPredicate(dataMap)) {
@@ -378,10 +410,21 @@ public class mxGraphMlGraph {
 		}
 		return false;
 	}
+	
+
+	private String getShape(HashMap<String, mxGraphMlData> dataMap) {
+		if (isMetaPredicate(dataMap)) {
+			return mxConstants.SHAPE_HEXAGON;
+		}
+		return mxConstants.SHAPE_RECTANGLE;
+	}
 
 	private String getBorderColor(HashMap<String, mxGraphMlData> dataMap) {
 		if (isUnusedLocal(dataMap)) {
 			return "red";
+		}
+		if (isInferred(dataMap)) {
+			return "grey";
 		}
 		return "black";
 	}
@@ -423,7 +466,7 @@ public class mxGraphMlGraph {
 			return "white";
 		}
 		if (isExported(dataMap)) {
-			return "green";
+			return "#90EE90"; //light green
 		}
 		return "yellow";
 	}
