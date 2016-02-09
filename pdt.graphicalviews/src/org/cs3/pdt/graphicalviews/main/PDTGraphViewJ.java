@@ -20,7 +20,6 @@ import java.util.Comparator;
 import java.util.Map;
 
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 import org.cs3.pdt.graphicalviews.focusview.CallGraphViewBase;
 import org.cs3.pdt.graphicalviews.focusview.ViewBase;
@@ -32,11 +31,7 @@ import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.handler.mxKeyboardHandler;
-import com.mxgraph.swing.util.mxMorphing;
 import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxEvent;
-import com.mxgraph.util.mxEventObject;
-import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxRectangle;
 import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxEdgeStyle;
@@ -47,7 +42,7 @@ public class PDTGraphViewJ extends PDTGraphView {
 
 	private static final long serialVersionUID = -611433500513523511L;
 
-	private String focusFilePath;
+	//private String focusFilePath;
 
 	private double xOverhead;
 	private double yOverhead;
@@ -369,26 +364,14 @@ public class PDTGraphViewJ extends PDTGraphView {
 	}
 
 	/**
-	 * sets the distance between neighbouring root cells
-	 * 
-	 * --> to prevent them from overlapping:
-	 * 
-	 * if neighbours share x- and y-coordinates, move next downwards (increase y)
-	 * 
-	 * 
+	 * sets the x-distance between x-neighbouring root cells
+	 * y
 	 * --> to prevent too much empty space between them:
 	 * 
 	 * if x-neighbours dont share x-coordinates, set the empty space between them by moving next (leftwards: reduce x)
 	 * 
 	 * if y-neighbours dont share y-coordinates, set the empty space between them by moving next (upwards: reduce y)
-	 * 
-	 * @param graph
 	 */
-	private void setRootVerticesDistance(mxGraph graph) {
-		setRootVerticesYDistance(graph);
-		setRootVerticesXDistance(graph);
-	}
-
 	private void setRootVerticesXDistance(mxGraph graph) {
 		Object[] cells = graph.getRootCells();
 		ArrayList<mxCell> list = sortByX(cells);
@@ -410,15 +393,6 @@ public class PDTGraphViewJ extends PDTGraphView {
 		}
 	}
 
-	/**
-	 * sets the x-distance between x-neighbouring root cells
-	 * 
-	 * --> to prevent too much empty space between them:
-	 * 
-	 * if x-neighbours dont share x-coordinates, set the empty space between them by moving next (leftwards: reduce x)
-	 * 
-	 * @param graph
-	 */
 	private void setChildVerticesXDistance(mxCell parent) {
 		int n = parent.getChildCount();
 		Object[] cells = new Object[n];
@@ -530,7 +504,7 @@ public class PDTGraphViewJ extends PDTGraphView {
 	protected void updateView() {
 		// removeAll(); //only adding new graphComponents works better
 
-		final mxGraph graph = graphModel.getGraphJ();
+		mxGraph graph = graphModel.getGraphJ();
 
 		mxGraphComponent graphComponent = createGraphComponent(graph);
 		add(graphComponent);
@@ -542,7 +516,7 @@ public class PDTGraphViewJ extends PDTGraphView {
 
 			setRootVerticesXDistance(graph);
 			setChildVerticesXDistance(graph);
-			graph.updateGroupBounds(graph.getRootCells(), 10);
+			graph.updateGroupBounds(graph.getRootCells(), 10, true);
 			moveChildrenDownAndAdaptRootNodesHeight(graph);
 			setRootVerticesYDistance(graph);
 
