@@ -14,6 +14,7 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
+import com.mxgraph.view.TerminalNotFoundException;
 import com.mxgraph.view.mxConnectionConstraint;
 import com.mxgraph.view.mxGraph;
 
@@ -565,7 +566,7 @@ public class mxGraphMlGraph {
 	 * @return The inserted edge cell.
 	 */
 	private static mxCell addEdge(mxGraph graph, Object parent,
-			mxGraphMlEdge edge) {
+			mxGraphMlEdge edge) throws TerminalNotFoundException {
 		// Get source and target vertex
 		mxPoint fromConstraint = null;
 		mxPoint toConstraint = null;
@@ -598,19 +599,39 @@ public class mxGraphMlGraph {
 			 * doesn't have.
 			 */
 			mxConstants.STYLE_STROKEWIDTH + "=" + getStrokeWidth(dataMap) + ";"
-			/*+ mxConstants.STYLE_DASH_PATTERN + "=" 
-			+ mxConstants.DEFAULT_DASHED_PATTERN + ";"
-			+ mxConstants.STYLE_DASHED + "=1;" */ //buggy default dashed pattern
-			+ mxConstants.STYLE_STROKECOLOR + "=" + getEdgeColor(dataMap) + ";"
-			;
+					/*
+					 * + mxConstants.STYLE_DASH_PATTERN + "=" +
+					 * mxConstants.DEFAULT_DASHED_PATTERN + ";" +
+					 * mxConstants.STYLE_DASHED + "=1;"
+					 */// buggy default dashed pattern
+					+ mxConstants.STYLE_STROKECOLOR + "="
+					+ getEdgeColor(dataMap) + ";";
 			// System.out.println(style);
-			
+
 			toolTip = getLabel(dataMap);
 		}
 		// Insert new edge.
 		mxCell e = (mxCell) graph.insertEdge(parent, null, label, source,
 				target, style);
 		e.setToolTip(toolTip);
+		insertParentsEdge(graph, parent, source, target);
+		mxConnectionConstraint ccSource = new mxConnectionConstraint(
+				fromConstraint, false);
+		graph.setConnectionConstraint(e, source, true, ccSource);
+		graph.setConnectionConstraint(e, target, false,
+				new mxConnectionConstraint(toConstraint, false));
+
+		return e;
+	}
+
+	/**
+	 * @param graph
+	 * @param parent
+	 * @param source
+	 * @param target
+	 */
+	private static void insertParentsEdge(mxGraph graph, Object parent,
+			Object source, Object target) {
 		mxICell sourceParent = ((mxCell) source).getParent();
 		mxICell targetParent = ((mxCell) target).getParent();
 		if (sourceParent != targetParent) { // for parent node's rank
@@ -627,13 +648,6 @@ public class mxGraphMlGraph {
 			);
 			// graph.getModel().setVisible(edgeParent, false); //does not work
 		}
-		mxConnectionConstraint ccSource = new mxConnectionConstraint(
-				fromConstraint, false);
-		graph.setConnectionConstraint(e, source, true, ccSource);
-		graph.setConnectionConstraint(e, target, false,
-				new mxConnectionConstraint(toConstraint, false));
-
-		return e;
 	}
 
 	private static String getEdgeColor(HashMap<String, mxGraphMlData> dataMap) {
