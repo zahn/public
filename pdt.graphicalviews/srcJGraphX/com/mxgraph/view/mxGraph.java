@@ -8006,13 +8006,22 @@ public class mxGraph extends mxEventSource
 			removeCell(edge);
 
 			String style = edge.getStyle(); // strokeWidth, edgeStyle...
-			String toolTip = edge.getToolTip();
+			String tooltip = edge.getToolTip();
 			if (!style.contains(mxConstants.STYLE_ENTRY_X)) { // first reset
 				double exitX = source.computePort(resetEdge, true);
 				double entryX = target.computePort(resetEdge, false);
 				if (source == target) {
-					style += mxConstants.STYLE_LOOP + "=" + mxEdgeStyle.Loop
-							+ ";";
+					style += mxConstants.STYLE_LOOP + "="
+					// + mxEdgeStyle.ElbowConnector
+					// + mxEdgeStyle.EntityRelation
+					// + mxEdgeStyle.Loop
+					// + mxEdgeStyle.OrthConnector
+					// + mxEdgeStyle.TopToBottom
+					// none of them changes the output
+							+ ";"; // to prevent crossing
+					/*style += mxConstants.STYLE_EDGE + "="
+							+ mxConstants.EDGESTYLE_LOOP + ";"; */ // no effect on
+																// loops
 					mxPoint sourcePoint = resetEdge.getTerminalPoint(true);
 					mxPoint targetPoint = resetEdge.getTerminalPoint(false);
 					List<mxPoint> list = getLoopPoints(sourcePoint, targetPoint);
@@ -8027,14 +8036,13 @@ public class mxGraph extends mxEventSource
 
 			}
 			resetEdge.setStyle(style); // topToBottom is orthogonal
-			resetEdge.setToolTip(toolTip);
+			resetEdge.setToolTip(tooltip);
 
 			// graph.orderCell(false, (mxCell) edge); //this affects edgeStyle
 
 			// TODO: set edge points next to the vertices they would cross
 			// how to find out which vertices they cross?
 		}
-
 	}
 
 	/**
@@ -8042,15 +8050,20 @@ public class mxGraph extends mxEventSource
 	 * @param targetPoint
 	 * @return
 	 */
-	private static List<mxPoint> getLoopPoints(mxPoint sourcePoint, mxPoint targetPoint) {
+	private static List<mxPoint> getLoopPoints(mxPoint sourcePoint,
+			mxPoint targetPoint) {
 		List<mxPoint> list = new ArrayList<mxPoint>();
+		// drunter
+		list.add(new mxPoint(sourcePoint.getX(), sourcePoint.getY() + 20));
+		// drunter rechts (optional)
+		list.add(new mxPoint(sourcePoint.getX() + 20, sourcePoint.getY() + 20));
 		// unten rechts
 		list.add(new mxPoint(sourcePoint.getX() + 20, sourcePoint.getY()));
 		// oben rechts
 		list.add(new mxPoint(targetPoint.getX() + 20, targetPoint.getY()));
-		// drÃ¼ber rechts
+		// drüber rechts (optional)
 		list.add(new mxPoint(targetPoint.getX() + 20, targetPoint.getY() - 20));
-		// drÃ¼ber
+		// drüber
 		list.add(new mxPoint(targetPoint.getX(), targetPoint.getY() - 20));
 		return list;
 	}
