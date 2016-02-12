@@ -24,6 +24,11 @@ import javax.swing.JLabel;
 import org.cs3.pdt.graphicalviews.focusview.CallGraphViewBase;
 import org.cs3.pdt.graphicalviews.focusview.ViewBase;
 import org.cs3.pdt.graphicalviews.model.GraphModel;
+import org.cs3.pdt.graphicalviews.model.realizer.edges.CallEdgeRealizer;
+import org.cs3.pdt.graphicalviews.model.realizer.edges.LoadEdgeRealizer;
+import org.cs3.pdt.graphicalviews.model.realizer.edges.LogtalkEdgeRealizer;
+
+import y.base.Edge;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.model.mxCell;
@@ -42,7 +47,7 @@ public class PDTGraphViewJ extends PDTGraphView {
 
 	private static final long serialVersionUID = -611433500513523511L;
 
-	//private String focusFilePath;
+	private String focusFilePath;
 
 	private double xOverhead;
 	private double yOverhead;
@@ -52,7 +57,8 @@ public class PDTGraphViewJ extends PDTGraphView {
 	private mxGraphComponent graphComponent;
 
 	public PDTGraphViewJ(ViewBase focusView, String path) {
-		super(focusView, path);
+		super(focusView);
+		this.focusFilePath = path; 
 
 		label = new JLabel();
 		label.setBounds(5, 5, 150, 20);
@@ -76,14 +82,51 @@ public class PDTGraphViewJ extends PDTGraphView {
 
 	public void loadGraph(GraphModel model) {
 		graphModel = model;
-		if (focusView instanceof CallGraphViewBase)
+		/*if (focusView instanceof CallGraphViewBase)
 		{
 			CallGraphViewBase callGraphView = (CallGraphViewBase) focusView;
 			graphModel.setMetapredicateCallsVisisble(callGraphView.isMetapredicateCallsVisible());
 			graphModel.setInferredCallsVisible(callGraphView.isInferredCallsVisible());
 		}
 		graphModel.categorizeData();
-		graphModel.assignPortsToEdges();
+		graphModel.assignPortsToEdges();*/ 
+		//private void categorizeEdges() {
+		/*for (Edge edge: graph.getEdgeArray()) {
+			if (dataHolder.isLoadingEdge(edge)) {
+				LoadEdgeRealizer newLoadEdgeRealizer = new LoadEdgeRealizer(loadEdgeRealizer);
+				graph.setRealizer(edge, newLoadEdgeRealizer);
+				
+				String edgeLabel = dataHolder.getEdgeLabel(edge);
+				if (edgeLabel != null && !edgeLabel.isEmpty()) {
+					newLoadEdgeRealizer.setLabelText(edgeLabel);
+				}
+				
+			} else if (dataHolder.isCallEdge(edge)) {
+				boolean isMetaCall = dataHolder.isMetaCall(edge);
+				boolean isDatabaseCall = dataHolder.isDatabaseCall(edge);
+				
+				CallEdgeRealizer newCallEdgeRealizer = new CallEdgeRealizer(callEdgeRealizer, isMetaCall, isDatabaseCall);
+				graph.setRealizer(edge, newCallEdgeRealizer);
+				newCallEdgeRealizer.adjustLineWidth(this);
+				
+//				String label = dataHolder.getEdgeLabel(edge);
+//				newCallEdgeRealizer.setLabelText(label);
+				
+				boolean isMetaPredicateCall = dataHolder.isMetaPred(edge.target());
+				boolean isInferredCall = isMetaCall || isDatabaseCall;
+				
+				newCallEdgeRealizer.setVisible(!isMetaPredicateCall && !isInferredCall
+						|| isMetaPredicateCall && metapredicateCallsVisisble
+						|| isInferredCall && inferredCallsVisible);
+			} else if (dataHolder.isLogtalkGraphEdge(edge)){
+				LogtalkEdgeRealizer logtalkEdgeRealizer = new LogtalkEdgeRealizer();
+				graph.setRealizer(edge, logtalkEdgeRealizer);
+				logtalkEdgeRealizer.init(this);
+			} else {
+				// no realizer to set because it is already bound to default realizer
+			}
+		}
+	}*/
 
 		updateView();
 	}
@@ -589,7 +632,7 @@ public class PDTGraphViewJ extends PDTGraphView {
 			resetEdges(graph); // to relayout edges by deleting and adding them
 			// and computing ports
 
-			// graph.getModel().load(focusFilePath);
+			graph.getModel().load(focusFilePath);
 		} finally {
 			graph.getModel().endUpdate();
 		}

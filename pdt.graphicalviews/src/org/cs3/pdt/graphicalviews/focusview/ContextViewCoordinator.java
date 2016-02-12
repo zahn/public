@@ -29,7 +29,7 @@ public class ContextViewCoordinator extends ViewCoordinatorBase {
 	public void swichFocusView(String path) {
 		currentFocusView = views.get(path);
 		if (currentFocusView == null) {
-			PDTGraphView pdtGraphView = new PDTGraphView(focusView, path);
+			PDTGraphView pdtGraphView = new PDTGraphView(focusView);
 			GraphProcessLoaderBase loader = focusView.createGraphProcessLoader(pdtGraphView);
 			loader.setCurrentPath(path);
 			

@@ -59,7 +59,7 @@ public class LogtalkViewCoordinator extends ViewCoordinatorBase {
 			currentFocusView = views.get(signature);
 			
 			if (currentFocusView == null) {
-				PDTGraphView pdtGraphView = new PDTGraphView(focusView, path);
+				PDTGraphView pdtGraphView = new PDTGraphView(focusView);
 				GraphProcessLoaderBase loader = focusView.createGraphProcessLoader(pdtGraphView);
 				loader.setCurrentPath(path);
 				

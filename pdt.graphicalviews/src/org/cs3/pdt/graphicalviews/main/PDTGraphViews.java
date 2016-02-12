@@ -24,7 +24,7 @@ public class PDTGraphViews {
 
 	public PDTGraphViews(ViewBase focusView, String path) {
 		this.pdtGraphViewJ = new PDTGraphViewJ(focusView, path);
-		this.pdtGraphViewY = new PDTGraphView(focusView, path);
+		this.pdtGraphViewY = new PDTGraphView(focusView);
 	}
 
 	public void updateLayout() {
