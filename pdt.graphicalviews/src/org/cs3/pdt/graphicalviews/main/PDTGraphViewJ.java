@@ -49,6 +49,8 @@ public class PDTGraphViewJ extends PDTGraphView {
 
 	private JLabel label;
 
+	private mxGraphComponent graphComponent;
+
 	public PDTGraphViewJ(ViewBase focusView, String path) {
 		super(focusView, path);
 
@@ -562,12 +564,15 @@ public class PDTGraphViewJ extends PDTGraphView {
 	}
 
 	protected void updateView() {
-		// removeAll(); //only adding new graphComponents works better
-
 		mxGraph graph = graphModel.getGraphJ();
 
-		mxGraphComponent graphComponent = createGraphComponent(graph);
-		add(graphComponent);
+		if (graphComponent == null) {
+			graphComponent = createGraphComponent(graph);
+			add(graphComponent);
+		} else {
+			graphComponent.setGraph(graph);
+			this.validate();
+		}
 
 		graph.getModel().beginUpdate();
 		try {
