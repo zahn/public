@@ -273,7 +273,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 		// mxConstants.ARROW_SIZE + "=100;" + //no effect
 		// mxConstants.ARROW_WIDTH + "=10;" + //no effect
 		mxConstants.STYLE_STROKECOLOR;
-		if (getSource().getParent().isVertex()) { // background
+		if (getSource() != null && getSource().getParent().isVertex()) { // background
 			invisibleStyle += "=FFFFFF;";
 		} else {
 			invisibleStyle += "=EEEEEE;";
