@@ -58,7 +58,7 @@ public class PDTGraphViewJ extends PDTGraphView {
 
 	public PDTGraphViewJ(ViewBase focusView, String path) {
 		super(focusView);
-		this.focusFilePath = path; 
+		this.focusFilePath = path;
 
 		label = new JLabel();
 		label.setBounds(5, 5, 150, 20);
@@ -82,51 +82,27 @@ public class PDTGraphViewJ extends PDTGraphView {
 
 	public void loadGraph(GraphModel model) {
 		graphModel = model;
-		/*if (focusView instanceof CallGraphViewBase)
-		{
-			CallGraphViewBase callGraphView = (CallGraphViewBase) focusView;
-			graphModel.setMetapredicateCallsVisisble(callGraphView.isMetapredicateCallsVisible());
-			graphModel.setInferredCallsVisible(callGraphView.isInferredCallsVisible());
-		}
-		graphModel.categorizeData();
-		graphModel.assignPortsToEdges();*/ 
-		//private void categorizeEdges() {
-		/*for (Edge edge: graph.getEdgeArray()) {
-			if (dataHolder.isLoadingEdge(edge)) {
-				LoadEdgeRealizer newLoadEdgeRealizer = new LoadEdgeRealizer(loadEdgeRealizer);
-				graph.setRealizer(edge, newLoadEdgeRealizer);
-				
-				String edgeLabel = dataHolder.getEdgeLabel(edge);
-				if (edgeLabel != null && !edgeLabel.isEmpty()) {
-					newLoadEdgeRealizer.setLabelText(edgeLabel);
-				}
-				
-			} else if (dataHolder.isCallEdge(edge)) {
-				boolean isMetaCall = dataHolder.isMetaCall(edge);
-				boolean isDatabaseCall = dataHolder.isDatabaseCall(edge);
-				
-				CallEdgeRealizer newCallEdgeRealizer = new CallEdgeRealizer(callEdgeRealizer, isMetaCall, isDatabaseCall);
-				graph.setRealizer(edge, newCallEdgeRealizer);
-				newCallEdgeRealizer.adjustLineWidth(this);
-				
-//				String label = dataHolder.getEdgeLabel(edge);
-//				newCallEdgeRealizer.setLabelText(label);
-				
-				boolean isMetaPredicateCall = dataHolder.isMetaPred(edge.target());
-				boolean isInferredCall = isMetaCall || isDatabaseCall;
-				
-				newCallEdgeRealizer.setVisible(!isMetaPredicateCall && !isInferredCall
-						|| isMetaPredicateCall && metapredicateCallsVisisble
-						|| isInferredCall && inferredCallsVisible);
-			} else if (dataHolder.isLogtalkGraphEdge(edge)){
-				LogtalkEdgeRealizer logtalkEdgeRealizer = new LogtalkEdgeRealizer();
-				graph.setRealizer(edge, logtalkEdgeRealizer);
-				logtalkEdgeRealizer.init(this);
-			} else {
-				// no realizer to set because it is already bound to default realizer
-			}
-		}
-	}*/
+		/*
+		 * if (focusView instanceof CallGraphViewBase) { CallGraphViewBase callGraphView = (CallGraphViewBase) focusView; graphModel.setMetapredicateCallsVisisble(callGraphView.isMetapredicateCallsVisible());
+		 * graphModel.setInferredCallsVisible(callGraphView.isInferredCallsVisible()); } graphModel.categorizeData(); graphModel.assignPortsToEdges();
+		 */
+		// private void categorizeEdges() {
+		/*
+		 * for (Edge edge: graph.getEdgeArray()) { if (dataHolder.isLoadingEdge(edge)) { LoadEdgeRealizer newLoadEdgeRealizer = new LoadEdgeRealizer(loadEdgeRealizer); graph.setRealizer(edge, newLoadEdgeRealizer);
+		 * 
+		 * String edgeLabel = dataHolder.getEdgeLabel(edge); if (edgeLabel != null && !edgeLabel.isEmpty()) { newLoadEdgeRealizer.setLabelText(edgeLabel); }
+		 * 
+		 * } else if (dataHolder.isCallEdge(edge)) { boolean isMetaCall = dataHolder.isMetaCall(edge); boolean isDatabaseCall = dataHolder.isDatabaseCall(edge);
+		 * 
+		 * CallEdgeRealizer newCallEdgeRealizer = new CallEdgeRealizer(callEdgeRealizer, isMetaCall, isDatabaseCall); graph.setRealizer(edge, newCallEdgeRealizer); newCallEdgeRealizer.adjustLineWidth(this);
+		 * 
+		 * // String label = dataHolder.getEdgeLabel(edge); // newCallEdgeRealizer.setLabelText(label);
+		 * 
+		 * boolean isMetaPredicateCall = dataHolder.isMetaPred(edge.target()); boolean isInferredCall = isMetaCall || isDatabaseCall;
+		 * 
+		 * newCallEdgeRealizer.setVisible(!isMetaPredicateCall && !isInferredCall || isMetaPredicateCall && metapredicateCallsVisisble || isInferredCall && inferredCallsVisible); } else if (dataHolder.isLogtalkGraphEdge(edge)){ LogtalkEdgeRealizer
+		 * logtalkEdgeRealizer = new LogtalkEdgeRealizer(); graph.setRealizer(edge, logtalkEdgeRealizer); logtalkEdgeRealizer.init(this); } else { // no realizer to set because it is already bound to default realizer } } }
+		 */
 
 		updateView();
 	}
@@ -310,9 +286,7 @@ public class PDTGraphViewJ extends PDTGraphView {
 	}
 
 	/**
-	 * sets the x-distance between x-neighbouring root cells
-	 * y
-	 * --> to prevent too much empty space between them:
+	 * sets the x-distance between x-neighbouring root cells y --> to prevent too much empty space between them:
 	 * 
 	 * if x-neighbours dont share x-coordinates, set the empty space between them by moving next (leftwards: reduce x)
 	 * 
@@ -360,9 +334,7 @@ public class PDTGraphViewJ extends PDTGraphView {
 	private void setVerticesXDistance(ArrayList<mxCell> list) {
 		boolean test = false;
 		/*
-		 * if (list.size() > 0) { String value = (String)
-		 * list.get(0).getParent().getValue(); if (value != null &&
-		 * value.equals("timetable.pl")) { test = true; } }
+		 * if (list.size() > 0) { String value = (String) list.get(0).getParent().getValue(); if (value != null && value.equals("timetable.pl")) { test = true; } }
 		 */
 		Object[] cells;
 		cells = list.toArray();
@@ -405,11 +377,8 @@ public class PDTGraphViewJ extends PDTGraphView {
 
 	private ArrayList<mxCell> sortByX(Object[] cells) {
 		/*
-		 * PriorityQueue < mxCell > cellQueue = new PriorityQueue < mxCell >(10,
-		 * new Comparator < mxCell >() { public int compare ( mxCell cell1 ,
-		 * mxCell cell2 ) { Double x1 = cell1 . getAbsX (); return x1. compareTo
-		 * ( cell2 . getAbsX ()); } }); for (Object o : cells ) { cellQueue .
-		 * add(( mxCell ) o); }
+		 * PriorityQueue < mxCell > cellQueue = new PriorityQueue < mxCell >(10, new Comparator < mxCell >() { public int compare ( mxCell cell1 , mxCell cell2 ) { Double x1 = cell1 . getAbsX (); return x1. compareTo ( cell2 . getAbsX ()); } }); for
+		 * (Object o : cells ) { cellQueue . add(( mxCell ) o); }
 		 */
 		ArrayList<mxCell> list = new ArrayList<mxCell>();
 		for (Object o : cells) {
@@ -489,17 +458,13 @@ public class PDTGraphViewJ extends PDTGraphView {
 	}
 
 	/**
-	 * if right's x is too right, then move it to the left. if it is
-	 * connected to other edges then only move it the half way and move left to
-	 * the right the other half such that they meet in the middle.
+	 * if right's x is too right, then move it to the left. if it is connected to other edges then only move it the half way and move left to the right the other half such that they meet in the middle.
 	 * 
 	 * @param left
 	 *            cell
 	 * @param right
-	 *            cell = cell with the smallest x which is bigger than left
-	 *            cell's x
-	 * @return true if right has been moved to the left. false if nothing has
-	 *         been changed.
+	 *            cell = cell with the smallest x which is bigger than left cell's x
+	 * @return true if right has been moved to the left. false if nothing has been changed.
 	 */
 	private boolean setNeighboursXDistance(mxCell left, mxCell right) {
 		boolean test = false;
@@ -519,7 +484,7 @@ public class PDTGraphViewJ extends PDTGraphView {
 				System.out.println(" are ok.");
 			return false;
 		}
-		//move:
+		// move:
 		double optDistance = 10; // optimal distance between 2 nodes
 		if (right.getEdgeCount() > 0) {
 			double halfDistance = ((endLeft + optDistance - startRight) / 2);
@@ -631,13 +596,44 @@ public class PDTGraphViewJ extends PDTGraphView {
 			normalizeCellCoordinates(graph);
 			resetEdges(graph); // to relayout edges by deleting and adding them
 			// and computing ports
+			boolean isInferredCallsVisible = false; // TODO
+			boolean isMetaCallsVisible = false; // TODO
+			hideEdges(graph, isInferredCallsVisible, isMetaCallsVisible);
 
-			graph.getModel().load(focusFilePath);
+			// graph.getModel().load(focusFilePath);
 		} finally {
 			graph.getModel().endUpdate();
 		}
 
 		graph.getModel().addLabel(label);
+	}
+
+	private void hideEdges(mxGraph graph, boolean isInferredCallsVisible, boolean isMetaCallsVisible) {
+		Object[] roots = graph.getRootCells();
+		Object[] edges = graph.getAllEdges(roots);
+		int n = edges.length;
+		// System.out.println("Number of edges=" + n);
+		for (int i = 0; i < n; i++) {
+			mxCell edge = (mxCell) edges[i]; // cast
+			if (!edge.isVisible()) {
+				continue; // nothing to hide
+			}
+			// System.out.println("source: "+ edge.getSource().getValue());
+
+			String metadata = edge.getAttribute("metadata");
+			// System.out.println("metadata: " + metadata);
+			if (metadata == null) {
+				edge.setVisible(true);
+				continue;
+			}
+			if (metadata.equals("database")) {
+				edge.setVisible(isInferredCallsVisible);
+			}
+			if (metadata.equals("metacall")) {
+				edge.setVisible(isMetaCallsVisible);
+			}
+		}
+
 	}
 
 }
