@@ -265,6 +265,9 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	 * @see com.mxgraph.model.mxICell#setVisible(boolean)
 	 */
 	public void setVisible(boolean visible) {
+		if (this.visible == visible) {
+			return;
+		}
 		this.visible = visible; // no effect
 
 		// graph.getModel().setVisible(edgeParent, false); //does not work
@@ -282,9 +285,11 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
 		String style = getStyle();
 		if (visible) {
-			style.replaceAll(invisibleStyle, "");
-			style += mxConstants.STYLE_STROKECOLOR + "=grey;"; // for inferred
-																// calls
+			if (style.contains(invisibleStyle)) {
+				style = style.replaceAll(invisibleStyle, "");
+				style += mxConstants.STYLE_STROKECOLOR + "=grey;"; // for inferred
+																	// calls
+			}
 		} else {
 			style += invisibleStyle;
 		}
