@@ -17,6 +17,7 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.IllegalPathStateException;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,7 +44,7 @@ import y.view.Graph2DViewMouseWheelZoomListener;
 import y.view.NavigationMode;
 import y.view.ViewMode;
 
-public class PDTGraphView extends  JPanel {
+public class PDTGraphView extends JPanel {
 	final ViewBase focusView;
 	final Graph2DView view;
 	GraphModel graphModel;
@@ -51,7 +52,7 @@ public class PDTGraphView extends  JPanel {
 	GraphMLReader reader;
 
 	GraphLayout layoutModel;
-	
+
 	EditMode editMode;
 	NavigationMode navigationMode;
 	Graph2DViewMouseWheelZoomListener wheelZoomListener;
@@ -61,40 +62,41 @@ public class PDTGraphView extends  JPanel {
 
 	private static final long serialVersionUID = -611433500513523511L;
 
-	public PDTGraphView(ViewBase focusView, String path) //added path for constructing PDTGraphViewJ
+	public PDTGraphView(ViewBase focusView) // added path for constructing PDTGraphViewJ
 	{
 		setLayout(new BorderLayout());
-		
+
 		this.focusView = focusView;
-		
-		layoutModel = new  GraphLayout();
+
+		layoutModel = new GraphLayout();
 
 		reader = new GraphMLReader();
+		//System.out.println(this.getClass().getName() + " got a reader for " + this);
 		view = new Graph2DView();
 
 		initEditMode();
-		
+
 		initNavigationMode();
-		
+
 		initMouseZoomSupport();
 
 		initKeyListener();
-		
+
 		recalculateMode();
-		
+
 		add(view);
 	}
 
-	private void  initEditMode() {
+	private void initEditMode() {
 		editMode = new EditMode();
 		editMode.allowNodeCreation(false);
 		editMode.allowEdgeCreation(false);
-		//editMode.setPopupMode(new HierarchicPopupMode());
+		// editMode.setPopupMode(new HierarchicPopupMode());
 		editMode.setMoveSelectionMode(new MoveSelectedSelectionMode(new OrthogonalEdgeRouter()));
-		
+
 		view.addViewMode(editMode);
 		view.addViewMode(new ToggleOpenClosedStateViewMode());
-		
+
 	}
 
 	protected void initNavigationMode() {
@@ -106,14 +108,13 @@ public class PDTGraphView extends  JPanel {
 	private void initMouseZoomSupport() {
 		wheelZoomListener = new Graph2DViewMouseWheelZoomListener();
 		wheelScroller = new WheelScroller(view);
-		
+
 		view.getCanvasComponent().addMouseWheelListener(wheelScroller);
 	}
-	
+
 	private void initKeyListener() {
 		view.getCanvasComponent().addKeyListener(new KeyListener() {
-			
-			
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
@@ -129,74 +130,75 @@ public class PDTGraphView extends  JPanel {
 			}
 
 			@Override
-			public void keyTyped(KeyEvent arg0) { }
+			public void keyTyped(KeyEvent arg0) {
+			}
 		});
 	}
-	
+
 	public GraphModel getGraphModel() {
 		return graphModel;
 	}
-	
+
 	public void recalculateMode() {
 		navigation = calculateMode(navigation, false, focusView.isNavigationModeEnabled());
 	}
-	
+
 	private boolean calculateMode(boolean isEditorInNavigation, boolean isCtrlPressed, boolean isNavigationModeEnabled) {
-		
+
 		boolean setNavitaionMode = isCtrlPressed ^ isNavigationModeEnabled;
-		
+
 		// If mode was not changed
 		if (setNavitaionMode == isEditorInNavigation) {
 			return setNavitaionMode;
 		}
-		
-		if (setNavitaionMode) { 
+
+		if (setNavitaionMode) {
 			// Navigation mode
 			view.removeViewMode(editMode);
 			view.addViewMode(navigationMode);
-			
+
 			view.getCanvasComponent().removeMouseWheelListener(wheelScroller);
 			view.getCanvasComponent().addMouseWheelListener(wheelZoomListener);
 		}
-		else { 
+		else {
 			// Edit mode
 			view.removeViewMode(navigationMode);
 			view.addViewMode(editMode);
-			
+
 			view.getCanvasComponent().removeMouseWheelListener(wheelZoomListener);
 			view.getCanvasComponent().addMouseWheelListener(wheelScroller);
 		}
-		
+
 		return setNavitaionMode;
 	}
 
 	public GraphDataHolder getDataHolder() {
 		return graphModel.getDataHolder();
 	}
-	
+
 	public Graph2D getGraph2D() {
 		return graph;
 	}
 
-	public void addViewMode(ViewMode viewMode){
+	public void addViewMode(ViewMode viewMode) {
 		view.addViewMode(viewMode);
 	}
 
-	public void setModel(GraphModel model){
+	public void setModel(GraphModel model) {
 		this.graphModel = model;
 	}
 
-	public void loadGraph(File helpFile) throws MalformedURLException { 
-		//postponed URL convertion because not needed in PDTGraphViewJ
-		loadGraph(reader.readFile(helpFile.toURI().toURL())); 
+	public void loadGraph(File helpFile) throws MalformedURLException {
+		// postponed URL convertion because not needed in PDTGraphViewJ
+		loadGraph(reader.readFile(helpFile.toURI().toURL()));
 	}
-	
+
 	public void loadGraph(GraphModel model) {
 		graphModel = model;
 		if (focusView instanceof CallGraphViewBase)
 		{
-			CallGraphViewBase callGraphView = (CallGraphViewBase)focusView;
-			graphModel.setMetapredicateCallsVisisble(callGraphView.isMetapredicateCallsVisible());
+			CallGraphViewBase callGraphView = (CallGraphViewBase) focusView;
+			graphModel.setMetapredicateCallsVisible(callGraphView.isMetapredicateCallsVisible());
 			graphModel.setInferredCallsVisible(callGraphView.isInferredCallsVisible());
 		}
 		graphModel.categorizeData();
@@ -206,31 +208,35 @@ public class PDTGraphView extends  JPanel {
 
 		updateView();
 	}
-	
+
 	protected void updateView() {
-		for (Node node: graph.getNodeArray()) {
+		for (Node node : graph.getNodeArray()) {
 			String labelText = graphModel.getLabelTextForNode(node);
-			graph.setLabelText(node,labelText);
+			graph.setLabelText(node, labelText);
 		}
-		
+
 		calcLayout();
 	}
 
 	public boolean isEmpty() {
-		return graph == null 
-			|| graph.getNodeArray().length == 0;
+		return graph == null
+				|| graph.getNodeArray().length == 0;
 	}
 
 	public void calcLayout() {
 		view.applyLayout(layoutModel.getLayouter());
-		
-		//		layoutModel.getLayouter().doLayout(graph);
-		//		graph.updateViews();
-		
-		view.fitContent();
+
+		// layoutModel.getLayouter().doLayout(graph);
+		// graph.updateViews();
+
+		try {
+			view.fitContent();
+		} catch (IllegalPathStateException e) {
+			System.out.println("graphicalviews/main/PDTGraphView.java: IllegalPathStateException");
+		}
 		view.updateView();
 	}
-	
+
 	public void updateLayout() {
 		if (Util.isMacOS()) {
 			view.applyLayout(layoutModel.getLayouter());
@@ -241,5 +247,3 @@ public class PDTGraphView extends  JPanel {
 		view.updateView();
 	}
 }
-
-

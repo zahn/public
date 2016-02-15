@@ -60,14 +60,14 @@ public class GraphModel {
 	private int nodesMedianWidth;
 	private int nodesHeight;
 	
-	private boolean metapredicateCallsVisisble;
+	private boolean metapredicateCallsVisible;
 	private boolean inferredCallsVisible;
 
-	public boolean isMetapredicateCallsVisisble() {
-		return metapredicateCallsVisisble;
+	public boolean isMetapredicateCallsVisible() {
+		return metapredicateCallsVisible;
 	}
-	public void setMetapredicateCallsVisisble(boolean metapredicateCallsVisisble) {
-		this.metapredicateCallsVisisble = metapredicateCallsVisisble;
+	public void setMetapredicateCallsVisible(boolean metapredicateCallsVisisble) {
+		this.metapredicateCallsVisible = metapredicateCallsVisisble;
 	}
 	
 	public boolean isInferredCallsVisible() {
@@ -100,8 +100,8 @@ public class GraphModel {
 		graph.setMultigraph(true);
 
 		graph.setGridEnabled(true); // Use the Grid (but don't make it Visible)
-		graph.setGridSize(3); // pixel
-
+		graph.setGridSize(3); //pixel
+		
 		// Set the Tolerance to 2 Pixel
 		// graph.setTolerance(2); //does not exist
 		// Accept edits if click on background
@@ -207,7 +207,7 @@ public class GraphModel {
 				boolean isInferredCall = isMetaCall || isDatabaseCall;
 				
 				newCallEdgeRealizer.setVisible(!isMetaPredicateCall && !isInferredCall
-						|| isMetaPredicateCall && metapredicateCallsVisisble
+						|| isMetaPredicateCall && metapredicateCallsVisible
 						|| isInferredCall && inferredCallsVisible);
 			} else if (dataHolder.isLogtalkGraphEdge(edge)){
 				LogtalkEdgeRealizer logtalkEdgeRealizer = new LogtalkEdgeRealizer();
