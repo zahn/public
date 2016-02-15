@@ -2566,6 +2566,9 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 		ArrayList<String> filenames = new ArrayList<String>();
 		for (String key : cells.keySet()) {
 			mxCell cell = (mxCell) cells.get(key);
+			if (!cell.isVertex()) {
+				continue;
+			}
 			String value = (String) cell.getValue();
 			if (value == null) {
 				continue;
@@ -2583,7 +2586,7 @@ public class mxGraphModel extends mxEventSource implements mxIGraphModel {
 		filenamesString = filenamesString.substring(1, filenamesString.length() - 1); // [...]
 		filenamesString = filenamesString.replace(", ", "-");
 		fileName = focusFilePath + filenamesString.hashCode() + ".ser";
-		//System.out.println(fileName);
+		//System.out.println("Geometry is stored in: " + fileName);
 	}
 
 
