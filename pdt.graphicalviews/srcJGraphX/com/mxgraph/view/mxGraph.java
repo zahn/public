@@ -8001,7 +8001,7 @@ public class mxGraph extends mxEventSource
 			mxCell source = (mxCell) edge.getTerminal(true);
 			mxCell target = (mxCell) edge.getTerminal(false);
 
-			mxCell resetEdge = (mxCell) insertEdge(parent, null, null, source,
+			mxCell resetEdge = (mxCell) insertEdge(parent, null, edge.getValue(), source,
 					target, null); // i);
 			removeCell(edge);
 
