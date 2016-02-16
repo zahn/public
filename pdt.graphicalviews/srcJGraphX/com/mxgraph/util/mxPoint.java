@@ -160,4 +160,12 @@ public class mxPoint implements Serializable, Cloneable
 	{
 		return getClass().getName() + "[" + x + ", " + y + "]";
 	}
+
+	public boolean samePosition(mxPoint targetHelper) {
+		if (getX() == targetHelper.getX()
+				&& getY() == targetHelper.getY()) {
+			return true;
+		}
+		return false;
+	}
 }

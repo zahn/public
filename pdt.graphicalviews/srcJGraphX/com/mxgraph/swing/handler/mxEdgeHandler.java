@@ -20,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
@@ -702,54 +703,81 @@ public class mxEdgeHandler extends mxCellHandler
 
 	/**
 	 * Moves the edges control point with the given index to the given point.
+	 * Wenn man einen Abknickpunkt eines Pfeiles bewegt, wird automatisch ein
+	 * Hilfspunkt 10 Pixel über der Pfeilspitze der Geometrie hinzugefügt, damit
+	 * das Pfeilende immer von der richtigen Seite (von oben) kommt.
 	 */
-	protected void movePoint(Object edge, int pointIndex, mxPoint point)
-	{
+	protected void movePoint(Object edge, int pointIndex, mxPoint point) {
 		mxIGraphModel model = graphComponent.getGraph().getModel();
 		mxGeometry geometry = model.getGeometry(edge);
-
-		if (geometry != null)
-		{
+		if (geometry != null) {
 			model.beginUpdate();
-			try
-			{
+			try {
 				geometry = (mxGeometry) geometry.clone();
-
-				if (isSource(index) || isTarget(index))
-				{
+				if (isSource(index) || isTarget(index)) {
 					connect(edge, null, isSource(index), false);
 					geometry.setTerminalPoint(point, isSource(index));
-				}
-				else
-				{
+				} else {
 					List<mxPoint> pts = geometry.getPoints();
-
-					if (pts == null)
-					{
+					if (pts == null) {
 						pts = new ArrayList<mxPoint>();
 						geometry.setPoints(pts);
 					}
-
-					if (pts != null)
-					{
-						if (pointIndex <= pts.size())
-						{
-							pts.set(pointIndex - 1, point);
-						}
-						else if (pointIndex - 1 <= pts.size())
-						{
-							pts.add(pointIndex - 1, point);
+					mxPoint targetHelper = computeTargetHelper(edge, geometry);
+					int nPoints = pts.size();
+					if (nPoints > 0) {
+						mxPoint lastPoint = pts.get(nPoints - 1);
+						if (lastPoint.samePosition(targetHelper)) {
+							pts.remove(nPoints - 1);
+							nPoints--;
 						}
 					}
+					if (pointIndex <= nPoints) {
+						pts.set(pointIndex - 1, point);
+					} /*
+					 * else if (pointIndex - 1 == nPoints) { pts.add(pointIndex
+					 * - 1, point); }
+					 */else {
+						pts.add(point);
+						//System.out.println(pointIndex);
+					}
+					// insert at the end because they are ordered in the way
+					// they occur from source to target
+					pts.add(targetHelper);
+					// Sonst werden nur (Abknick-)Punkte gespeichert, die
+					// der Benutzer verschoben hat. Die restlichen Punkte werden
+					// immer neu berechnet. Es kann also passieren, dass durch
+					// das Hinzufügen des Hilfspunkts ein anderer Punkt neu
+					// positioniert wird, obwohl man eigentlich die alte
+					// Position besser fand. Der Benutzer muss dann also
+					// hinterher den neu berechneten Punkt wieder an die alte
+					// Position schieben.
 				}
-
 				model.setGeometry(edge, geometry);
-			}
-			finally
-			{
+			} finally {
 				model.endUpdate();
 			}
 		}
+	}
+
+	/**
+	 * @param edge
+	 * @param geometry
+	 * @return a point that is 10 pixels on top of the target point in order to
+	 *         let the arc point downwards
+	 */
+	private mxPoint computeTargetHelper(Object edge, mxGeometry geometry) {
+		mxCell edgeCell = (mxCell) edge;
+		mxCell targetCell = (mxCell) edgeCell.getTarget();
+		double port = targetCell.computePort(edgeCell, false);
+		double width = targetCell.getGeometry().getWidth();
+		double x = targetCell.getAbsX() + port * width;
+		double y = targetCell.getAbsY();
+		mxPoint target = new mxPoint(x, y);
+		geometry.setTargetPoint(target);
+		y -= 10; // TODO replace hard code by maximal arc length
+		mxPoint targetHelper = new mxPoint(x, y);
+		return targetHelper;
 	}
 
 	/**
