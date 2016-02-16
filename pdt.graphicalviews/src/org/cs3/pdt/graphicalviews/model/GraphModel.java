@@ -26,6 +26,7 @@ import org.cs3.pdt.graphicalviews.model.realizer.nodes.NodeRealizerBase;
 import org.cs3.pdt.graphicalviews.model.realizer.nodes.PredicateNodeRealizer;
 import org.cs3.pdt.graphicalviews.model.realizer.nodes.UMLClassNodeRealizer;
 
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
 import y.base.Edge;
@@ -101,6 +102,8 @@ public class GraphModel {
 
 		graph.setGridEnabled(true); // Use the Grid (but don't make it Visible)
 		graph.setGridSize(3); //pixel
+		
+		graph.getStylesheet().getDefaultEdgeStyle().put(mxConstants.STYLE_NOLABEL, "1");
 		
 		// Set the Tolerance to 2 Pixel
 		// graph.setTolerance(2); //does not exist
