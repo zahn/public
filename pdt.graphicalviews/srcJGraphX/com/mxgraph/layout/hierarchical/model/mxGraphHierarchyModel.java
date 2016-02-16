@@ -240,7 +240,7 @@ public class mxGraphHierarchyModel
 
 							// Resets all point on the edge and disables the edge style
 							// without deleting it from the cell style
-							graph.removeEdgeControlPoints(edge);
+							graph.resetControlPoints(edge);
 
 							if (layout.isDisableEdgeStyle())
 							{
