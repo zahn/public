@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.view.TerminalNotFoundException;
 import com.mxgraph.view.mxConnectionConstraint;
@@ -62,10 +63,12 @@ public class mxGraphMlGraph {
 	 */
 	public mxGraphMlGraph(Element graphElement) {
 		this.id = graphElement.getAttribute(mxGraphMlConstants.ID);
-		this.edgedefault = graphElement.getAttribute(mxGraphMlConstants.EDGE_DEFAULT);
+		this.edgedefault = graphElement
+				.getAttribute(mxGraphMlConstants.EDGE_DEFAULT);
 
 		// Adds node elements
-		List<Element> nodeElements = mxGraphMlUtils.childsTags(graphElement, mxGraphMlConstants.NODE);
+		List<Element> nodeElements = mxGraphMlUtils.childsTags(graphElement,
+				mxGraphMlConstants.NODE);
 
 		for (Element nodeElem : nodeElements) {
 			mxGraphMlNode node = new mxGraphMlNode(nodeElem);
@@ -74,7 +77,8 @@ public class mxGraphMlGraph {
 		}
 
 		// Adds edge elements
-		List<Element> edgeElements = mxGraphMlUtils.childsTags(graphElement, mxGraphMlConstants.EDGE);
+		List<Element> edgeElements = mxGraphMlUtils.childsTags(graphElement,
+				mxGraphMlConstants.EDGE);
 
 		for (Element edgeElem : edgeElements) {
 			mxGraphMlEdge edge = new mxGraphMlEdge(edgeElem);
@@ -82,7 +86,8 @@ public class mxGraphMlGraph {
 			if (edge.getEdgeDirected().equals("")) {
 				if (edgedefault.equals(mxGraphMlConstants.EDGE_DIRECTED)) {
 					edge.setEdgeDirected("true");
-				} else if (edgedefault.equals(mxGraphMlConstants.EDGE_UNDIRECTED)) {
+				} else if (edgedefault
+						.equals(mxGraphMlConstants.EDGE_UNDIRECTED)) {
 					edge.setEdgeDirected("false");
 				}
 			}
@@ -100,8 +105,8 @@ public class mxGraphMlGraph {
 	 *            Parent of the cells to be added.
 	 */
 	public void addGraph(mxGraph graph, Object parent) {
-		//savedCells = graph.getModel().load();
-		
+		// savedCells = graph.getModel().load();
+
 		List<mxGraphMlNode> nodeList = getNodes();
 		/*
 		 * nodeList ArrayList<E> (id=207) . elementData Object[10] (id=209) .
@@ -123,7 +128,11 @@ public class mxGraphMlGraph {
 		List<mxGraphMlEdge> edgeList = getEdges();
 
 		for (mxGraphMlEdge edge : edgeList) {
-			addEdge(graph, parent, edge);
+			try {
+				addEdge(graph, parent, edge);
+			} catch (TerminalNotFoundException e) {
+				// TODO Auto-generated catch block
+			}
 		}
 	}
 
@@ -163,8 +172,9 @@ public class mxGraphMlGraph {
 		// This node is rather a whole graph... is the nesting too deep?
 
 		String keyId = "";
-		HashMap<String, mxGraphMlKey> keyMap = mxGraphMlKeyManager.getInstance().getKeyMap(); // hello:
-																								// empty
+		HashMap<String, mxGraphMlKey> keyMap = mxGraphMlKeyManager
+				.getInstance().getKeyMap(); // hello:
+											// empty
 		// Do all graphml data need a key definition? What about predefined
 		// keys?
 
@@ -196,7 +206,8 @@ public class mxGraphMlGraph {
 	 */
 	public static mxGraphMlData dataEdgeKey(mxGraphMlEdge edge) {
 		String keyId = "";
-		HashMap<String, mxGraphMlKey> keyMap = mxGraphMlKeyManager.getInstance().getKeyMap();
+		HashMap<String, mxGraphMlKey> keyMap = mxGraphMlKeyManager
+				.getInstance().getKeyMap();
 		for (mxGraphMlKey key : keyMap.values()) {
 			if (key.getKeyName().equals(mxGraphMlConstants.KEY_EDGE_NAME)) {
 				keyId = key.getKeyId();
@@ -305,13 +316,11 @@ public class mxGraphMlGraph {
 			sb.append(" [Unused]");
 		}
 
-		if (isMetaPredicate(dataMap)) {
-			if (isInferred(dataMap)) {
-				sb.append(" [Inferred]");
-			}
+		if (isInferredPredicate(dataMap)) {
+			sb.append(" [Inferred]");
 		}
 
-		if (isMetaCall(dataMap)) {
+		if (isInferredCall(dataMap)) {
 			sb.append(getLabel(dataMap)); // aspect_action(...,...,grossvater(...,...))
 		}
 
@@ -320,6 +329,10 @@ public class mxGraphMlGraph {
 		 * setLabelText(model.getLabelTextForNode() + " [Inferred]"); }
 		 */
 		return sb.toString();
+	}
+	
+	private static boolean isInferredCall(HashMap<String, mxGraphMlData> dataMap) {
+		return isMetaCall(dataMap) || isDatabaseCall(dataMap);
 	}
 
 	private static boolean isMetaCall(HashMap<String, mxGraphMlData> dataMap) {
@@ -332,6 +345,16 @@ public class mxGraphMlGraph {
 		return false;
 	}
 
+	private static boolean isDatabaseCall(HashMap<String, mxGraphMlData> dataMap) {
+		mxGraphMlData metadataEntry = dataMap.get("metadata");
+		if (metadataEntry != null) {
+			if (metadataEntry.getDataValue().equals("database")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private boolean isFile(HashMap<String, mxGraphMlData> dataMap) {
 		String kindValue = dataMap.get("kind").getDataValue();
 		if (kindValue.equals("file")) {
@@ -373,7 +396,7 @@ public class mxGraphMlGraph {
 	}
 	
 
-	private boolean isInferred(HashMap<String, mxGraphMlData> dataMap) {
+	private boolean isInferredPredicate(HashMap<String, mxGraphMlData> dataMap) {
 		if (isPredicate(dataMap)) {
 			mxGraphMlData isUnusedLocalEntry = dataMap.get("metaPredicateType");
 			if (isUnusedLocalEntry != null) {
@@ -424,7 +447,7 @@ public class mxGraphMlGraph {
 		if (isUnusedLocal(dataMap)) {
 			return "red";
 		}
-		if (isInferred(dataMap)) {
+		if (isMetaPredicate(dataMap)) {
 			return "grey";
 		}
 		return "black";
@@ -564,8 +587,9 @@ public class mxGraphMlGraph {
 	 * @param edge
 	 *            Gml Edge
 	 * @return The inserted edge cell.
+	 * @throws TerminalNotFoundException 
 	 */
-	private static mxCell addEdge(mxGraph graph, Object parent,
+	private mxCell addEdge(mxGraph graph, Object parent,
 			mxGraphMlEdge edge) throws TerminalNotFoundException {
 		// Get source and target vertex
 		mxPoint fromConstraint = null;
@@ -573,12 +597,12 @@ public class mxGraphMlGraph {
 		Object source = cellsMap.get(edge.getEdgeSource());
 		Object target = cellsMap.get(edge.getEdgeTarget());
 
-		mxGraphMlData data = dataEdgeKey(edge);
-
 		String style = "";
 		String label = "";
-
 		String toolTip = "";
+		String metadata = "";
+		
+		mxGraphMlData data = dataEdgeKey(edge);
 		if (data != null) { // Why is the data null for my call graphs?
 			mxGraphMlShapeEdge shEdge = data.getDataShapeEdge();
 			if (shEdge != null) {
@@ -609,11 +633,16 @@ public class mxGraphMlGraph {
 			// System.out.println(style);
 
 			toolTip = getLabel(dataMap);
+			metadata = getMetadata(dataMap);
 		}
 		// Insert new edge.
 		mxCell e = (mxCell) graph.insertEdge(parent, null, label, source,
 				target, style);
 		e.setToolTip(toolTip);
+		//e.setValue(new SerializableIIOMetadataNode());
+		Document doc = mxDomUtils.createDocument();
+		e.setValue(doc.createElement(mxGraphMlConstants.EDGE));
+		e.setAttribute("metadata", metadata);
 		insertParentsEdge(graph, parent, source, target);
 		mxConnectionConstraint ccSource = new mxConnectionConstraint(
 				fromConstraint, false);
@@ -636,22 +665,14 @@ public class mxGraphMlGraph {
 		mxICell targetParent = ((mxCell) target).getParent();
 		if (sourceParent != targetParent) { // for parent node's rank
 											// computation
-			graph.insertEdge(parent, null, null, sourceParent, targetParent,
-			// mxConstants.STYLE_STROKEWIDTH + "=0; //still visible, destroys
-			// dashing
-			// mxConstants.ARROW_SIZE + "=100;" + //no effect
-			// mxConstants.ARROW_WIDTH + "=10;" + //no effect
-					mxConstants.STYLE_STROKECOLOR + "=EEEEEE;" + // use the back
-																	// ground
-																	// color
-							mxConstants.STYLE_DASHED + "=1;" // invisible
-			);
-			// graph.getModel().setVisible(edgeParent, false); //does not work
+			mxCell edge = (mxCell) graph.insertEdge(parent, null, null, sourceParent, targetParent, "");
+			
+			edge.setVisible(false);
 		}
 	}
 
 	private static String getEdgeColor(HashMap<String, mxGraphMlData> dataMap) {
-		if (isMetaCall(dataMap)) {
+		if (isInferredCall(dataMap)) {
 			return "grey";
 		}
 		return "black";
@@ -663,14 +684,22 @@ public class mxGraphMlGraph {
 
 	/**
 	 * @param dataMap
-	 * @return 
+	 * @return
 	 */
-	private static  String getFrequency(HashMap<String, mxGraphMlData> dataMap) {
+	private static String getFrequency(HashMap<String, mxGraphMlData> dataMap) {
 		mxGraphMlData frequencyEntry = dataMap.get("frequency");
 		if (frequencyEntry != null) {
 			return frequencyEntry.getDataValue();
 		}
 		return "1";
+	}
+	
+	private static String getMetadata(HashMap<String, mxGraphMlData> dataMap) {
+		mxGraphMlData metadata = dataMap.get("metadata");
+		if (metadata != null) {
+			return metadata.getDataValue();
+		}
+		return "";
 	}
 
 	public String getEdgedefault() {

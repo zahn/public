@@ -1,8 +1,7 @@
-package com.mxgraph.model;
-
 /**
  * Copyright (c) 2007, Gaudenz Alder
  */
+package com.mxgraph.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,17 +16,25 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 
 /**
- * Cells are the elements of the graph model. They represent the state of the groups, vertices and edges in a graph.
+ * Cells are the elements of the graph model. They represent the state of the
+ * groups, vertices and edges in a graph.
  *
  * <h4>Edge Labels</h4>
  * 
- * Using the x- and y-coordinates of a cell's geometry it is possible to position the label on edges on a specific location on the actual edge shape as it appears on the screen. The x-coordinate of an edge's geometry is used to describe the distance
- * from the center of the edge from -1 to 1 with 0 being the center of the edge and the default value. The y-coordinate of an edge's geometry is used to describe the absolute, orthogonal distance in pixels from that point. In addition, the
- * mxGeometry.offset is used as a absolute offset vector from the resulting point.
+ * Using the x- and y-coordinates of a cell's geometry it is possible to
+ * position the label on edges on a specific location on the actual edge shape
+ * as it appears on the screen. The x-coordinate of an edge's geometry is used
+ * to describe the distance from the center of the edge from -1 to 1 with 0
+ * being the center of the edge and the default value. The y-coordinate of an
+ * edge's geometry is used to describe the absolute, orthogonal distance in
+ * pixels from that point. In addition, the mxGeometry.offset is used as a
+ * absolute offset vector from the resulting point.
  * 
  * The width and height of an edge geometry are ignored.
  * 
- * To add more than one edge label, add a child vertex with a relative geometry. The x- and y-coordinates of that geometry will have the same semantiv as the above for edge labels.
+ * To add more than one edge label, add a child vertex with a relative geometry.
+ * The x- and y-coordinates of that geometry will have the same semantiv as the
+ * above for edge labels.
  */
 public class mxCell implements mxICell, Cloneable, Serializable {
 
@@ -57,12 +64,15 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	protected mxGeometry geometry;
 
 	/**
-	 * Holds the style as a string of the form stylename[;key=value]. Default is null.
+	 * Holds the style as a string of the form stylename[;key=value]. Default is
+	 * null.
 	 */
 	protected String style;
 
 	/**
-	 * Specifies whether the cell is a vertex or edge and whether it is connectable, visible and collapsed. Default values are false, false, true, true and false respectively.
+	 * Specifies whether the cell is a vertex or edge and whether it is
+	 * connectable, visible and collapsed. Default values are false, false,
+	 * true, true and false respectively.
 	 */
 	protected boolean vertex = false, edge = false, connectable = true,
 			visible = true, collapsed = false;
@@ -287,8 +297,15 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 		if (visible) {
 			if (style.contains(invisibleStyle)) {
 				style = style.replaceAll(invisibleStyle, "");
-				style += mxConstants.STYLE_STROKECOLOR + "=grey;"; // for inferred
-																	// calls
+				style += mxConstants.STYLE_STROKECOLOR;
+				String metadata = getAttribute("metadata");
+				if (metadata != null
+						&& (metadata.equals("metacall") || metadata
+								.equals("inferred"))) {
+					style += "=grey;"; 
+				} else {
+					style += "=black;";
+				}
 			}
 		} else {
 			style += invisibleStyle;
@@ -378,7 +395,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mxgraph.model.mxICell#setTerminal(com.mxgraph.model.mxICell, boolean)
+	 * @see com.mxgraph.model.mxICell#setTerminal(com.mxgraph.model.mxICell,
+	 * boolean)
 	 */
 	public mxICell setTerminal(mxICell terminal, boolean isSource) {
 		if (isSource) {
@@ -453,7 +471,10 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 			} else {
 				// NEW compute index TODO do not overwrite a parameter!
 				/*
-				 * double x = child.getGeometry().getCenterX(); for (index = 0; index < children.size(); index++) { mxICell oldChild = (mxICell) children.get(index); if (oldChild.getGeometry().getCenterX() > x) { break; } }
+				 * double x = child.getGeometry().getCenterX(); for (index = 0;
+				 * index < children.size(); index++) { mxICell oldChild =
+				 * (mxICell) children.get(index); if
+				 * (oldChild.getGeometry().getCenterX() > x) { break; } }
 				 */// problem: moving an edge might break the order
 				children.add(index, child);
 			}
@@ -533,7 +554,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mxgraph.model.mxICell#insertEdge(com.mxgraph.model.mxICell, boolean)
+	 * @see com.mxgraph.model.mxICell#insertEdge(com.mxgraph.model.mxICell,
+	 * boolean)
 	 */
 	public mxICell insertEdge(mxICell edge, boolean isOutgoing) {
 		if (edge != null) {
@@ -556,7 +578,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mxgraph.model.mxICell#removeEdge(com.mxgraph.model.mxICell, boolean)
+	 * @see com.mxgraph.model.mxICell#removeEdge(com.mxgraph.model.mxICell,
+	 * boolean)
 	 */
 	public mxICell removeEdge(mxICell edge, boolean isOutgoing) {
 		if (edge != null) {
@@ -584,7 +607,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	}
 
 	/**
-	 * Returns the specified attribute from the user object if it is an XML node.
+	 * Returns the specified attribute from the user object if it is an XML
+	 * node.
 	 * 
 	 * @param name
 	 *            Name of the attribute whose value should be returned.
@@ -595,7 +619,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	}
 
 	/**
-	 * Returns the specified attribute from the user object (stored in this.value) if it is an XML node.
+	 * Returns the specified attribute from the user object (stored in
+	 * this.value) if it is an XML node.
 	 * 
 	 * @param name
 	 *            Name of the attribute whose value should be returned.
@@ -665,7 +690,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	}
 
 	/**
-	 * Returns a clone of the user object. This implementation clones any XML nodes or otherwise returns the same user object instance.
+	 * Returns a clone of the user object. This implementation clones any XML
+	 * nodes or otherwise returns the same user object instance.
 	 */
 	protected Object cloneValue() {
 		Object value = getValue();
@@ -678,7 +704,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	}
 
 	/*
-	 * public void setDataMap(HashMap<String, mxGraphMlData> dataMap) { this.dataMap = dataMap; }
+	 * public void setDataMap(HashMap<String, mxGraphMlData> dataMap) {
+	 * this.dataMap = dataMap; }
 	 */
 
 	@Override
@@ -767,7 +794,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	}
 
 	/**
-	 * sorts edges and then divides the index of edge through all incoming/outgoing edges
+	 * sorts edges and then divides the index of edge through all
+	 * incoming/outgoing edges
 	 * 
 	 * @param edge
 	 *            that is connected to this cell
@@ -804,19 +832,25 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 	}
 
 	/*
-	 * public mxPoint getTargetPoint() { mxCell targetCell = (mxCell) getTarget(); double port = targetCell.computePort(this, false); double width = targetCell.getGeometry().getWidth(); double x = targetCell.getAbsX() + port * width; double y =
-	 * targetCell.getAbsY(); return new mxPoint(x, y); }
+	 * public mxPoint getTargetPoint() { mxCell targetCell = (mxCell)
+	 * getTarget(); double port = targetCell.computePort(this, false); double
+	 * width = targetCell.getGeometry().getWidth(); double x =
+	 * targetCell.getAbsX() + port * width; double y = targetCell.getAbsY();
+	 * return new mxPoint(x, y); }
 	 * 
-	 * public mxPoint getSourcePoint() { mxCell sourceCell = (mxCell) getSource(); double port = sourceCell.computePort(this, true); double width = sourceCell.getGeometry().getWidth(); double x = sourceCell.getAbsX() + port * width; double y =
-	 * sourceCell.getAbsY(); return new mxPoint(x, y); }
+	 * public mxPoint getSourcePoint() { mxCell sourceCell = (mxCell)
+	 * getSource(); double port = sourceCell.computePort(this, true); double
+	 * width = sourceCell.getGeometry().getWidth(); double x =
+	 * sourceCell.getAbsX() + port * width; double y = sourceCell.getAbsY();
+	 * return new mxPoint(x, y); }
 	 */
 
 	public mxPoint getTerminalPoint(boolean isSource) {
 		mxCell terminalCell = (mxCell) getTerminal(isSource);
 		double port = terminalCell.computePort(this, isSource);
 		double width = terminalCell.getGeometry().getWidth();
-		double x = terminalCell.getAbsX() + port * width;
-		double y = terminalCell.getAbsY();
+		double x = terminalCell.getGeometry().getX() + port * width;
+		double y = terminalCell.getGeometry().getY();
 		return new mxPoint(x, y);
 	}
 
