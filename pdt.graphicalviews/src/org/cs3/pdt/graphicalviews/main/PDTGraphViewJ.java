@@ -82,10 +82,15 @@ public class PDTGraphViewJ extends PDTGraphView {
 
 	public void loadGraph(GraphModel model) {
 		graphModel = model;
-		/*
-		 * if (focusView instanceof CallGraphViewBase) { CallGraphViewBase callGraphView = (CallGraphViewBase) focusView; graphModel.setMetapredicateCallsVisisble(callGraphView.isMetapredicateCallsVisible());
-		 * graphModel.setInferredCallsVisible(callGraphView.isInferredCallsVisible()); } graphModel.categorizeData(); graphModel.assignPortsToEdges();
-		 */
+
+		if (focusView instanceof CallGraphViewBase) {
+			CallGraphViewBase callGraphView = (CallGraphViewBase) focusView;
+			graphModel.setMetapredicateCallsVisible(callGraphView.isMetapredicateCallsVisible());
+			graphModel.setInferredCallsVisible(callGraphView.isInferredCallsVisible());
+		}
+		//graphModel.categorizeData();
+		//graphModel.assignPortsToEdges();
+
 		// private void categorizeEdges() {
 		/*
 		 * for (Edge edge: graph.getEdgeArray()) { if (dataHolder.isLoadingEdge(edge)) { LoadEdgeRealizer newLoadEdgeRealizer = new LoadEdgeRealizer(loadEdgeRealizer); graph.setRealizer(edge, newLoadEdgeRealizer);
@@ -596,9 +601,8 @@ public class PDTGraphViewJ extends PDTGraphView {
 			normalizeCellCoordinates(graph);
 			resetEdges(graph); // to relayout edges by deleting and adding them
 			// and computing ports
-			boolean isInferredCallsVisible = false; // TODO
-			boolean isMetaCallsVisible = false; // TODO
-			hideEdges(graph, isInferredCallsVisible, isMetaCallsVisible);
+
+			hideEdges(graph, this.graphModel.isInferredCallsVisible(), this.graphModel.isMetapredicateCallsVisible());
 
 			// graph.getModel().load(focusFilePath);
 		} finally {
@@ -608,7 +612,8 @@ public class PDTGraphViewJ extends PDTGraphView {
 		graph.getModel().addLabel(label);
 	}
 
-	private void hideEdges(mxGraph graph, boolean isInferredCallsVisible, boolean isMetaCallsVisible) {
+	private void hideEdges(mxGraph graph, boolean isInferredCallsVisible,
+			boolean isMetaCallsVisible) {
 		Object[] roots = graph.getRootCells();
 		Object[] edges = graph.getAllEdges(roots);
 		int n = edges.length;
@@ -616,24 +621,28 @@ public class PDTGraphViewJ extends PDTGraphView {
 		for (int i = 0; i < n; i++) {
 			mxCell edge = (mxCell) edges[i]; // cast
 			if (!edge.isVisible()) {
-				continue; // nothing to hide
+				continue; //nothing to hide
 			}
 			// System.out.println("source: "+ edge.getSource().getValue());
 
+			mxCell target = (mxCell) edge.getTarget();
 			String metadata = edge.getAttribute("metadata");
+			//String isMetaPredicate = target.getAttribute("isMetaPredicate");
+			boolean isMetaPredicate = target.getStyle().contains("grey");
 			// System.out.println("metadata: " + metadata);
 			if (metadata == null) {
-				edge.setVisible(true);
 				continue;
 			}
-			if (metadata.equals("database")) {
+			if (metadata.equals("database") || metadata.equals("metacall")) {
 				edge.setVisible(isInferredCallsVisible);
 			}
-			if (metadata.equals("metacall")) {
+			//if (isMetaPredicate != null && isMetaPredicate.equals("true")) {
+			if (isMetaPredicate) {
 				edge.setVisible(isMetaCallsVisible);
 			}
-		}
 
+		}
 	}
+
 
 }
