@@ -440,6 +440,9 @@ public class mxGraphMlGraph {
 		if (isMetaPredicate(dataMap)) {
 			return mxConstants.SHAPE_HEXAGON;
 		}
+		if (isTransparent(dataMap)) {
+			return mxConstants.SHAPE_ELLIPSE;
+		}
 		return mxConstants.SHAPE_RECTANGLE;
 	}
 
@@ -474,6 +477,17 @@ public class mxGraphMlGraph {
 		}
 	}
 
+	private boolean isTransparent(HashMap<String, mxGraphMlData> dataMap) {
+		mxGraphMlData isTransparentEntry = dataMap.get("isTransparent");
+		if (isTransparentEntry != null) {
+			String isTransparentValue = isTransparentEntry.getDataValue();
+			if (isTransparentValue.equals("true")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private boolean isExported(HashMap<String, mxGraphMlData> dataMap) {
 		mxGraphMlData isExportedEntry = dataMap.get("isExported");
 		if (isExportedEntry != null) {
